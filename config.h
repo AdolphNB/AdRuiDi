@@ -56,6 +56,11 @@
 #define MANUAL_INPUT_IO						PD5
 
 
+
+#define TRUE (1)
+#define FALSE (0)
+
+
 typedef enum{
 	OPEN,
 	CLOSE = !OPEN
