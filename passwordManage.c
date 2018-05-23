@@ -36,7 +36,8 @@ typedef enum{
 	
 	WRONG = 0,
 	RIGHT = 1,
-	IGNORE = 3
+	IGNORE = 3,
+	DELETE = 4
 	
 }StatusReturn_t;
 
@@ -85,6 +86,8 @@ static uint8_t ComparePassWord(uint8_t pic, PassWordManage_t *pw)
 	return FALSE;
 }
 
+
+
 StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 {
 
@@ -111,6 +114,8 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 				pw->cnt -= 1;
 			
 			}else pw->cnt = 0;
+			
+			return DELETE;
 			
 			break;
 
@@ -154,8 +159,10 @@ void handle_function()
 	}else if (val == WRONG){
 
 		// hint error, and retry password
-	}else {
+	}else if (val == DELETE){
 		// can continue receive message and store it to buffer.
+	}else{
+
 	}
 	
 	
