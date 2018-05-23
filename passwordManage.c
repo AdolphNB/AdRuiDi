@@ -3,7 +3,7 @@
 #include "config.h"
 #include "peripherals.h"
 #include "user_hmi.h"
-
+#include "string.h"
 
 
 
@@ -48,14 +48,14 @@ typedef enum{
 #define SYSTEM_PASSWORD 	0
 #define PURCHASE_PASSWORD 	1
 
-static bool ReadPassWord(uint8_t pic, uint8_t * data)
+static uint8_t ReadPassWord(uint8_t pic, uint8_t * data)
 {
 	
 	return FALSE;
 }
 
 
-static bool ComparePassWord(uint8_t pic, PassWordManage_t *pw)
+static uint8_t ComparePassWord(uint8_t pic, PassWordManage_t *pw)
 {
 	uint8_t data[8];
 	
@@ -64,7 +64,7 @@ static bool ComparePassWord(uint8_t pic, PassWordManage_t *pw)
 		case SYSTEM_PASSWORD: 
 			
 			if(TRUE == ReadPassWord(SYSTEM_PASSWORD, data)){
-				if(0 == strncmp(data, pw->data, 8))
+				if(0 == strncmp((char *)data, (char *)pw->data, 8))
 					return TRUE;
 			}
 			break;
@@ -73,7 +73,7 @@ static bool ComparePassWord(uint8_t pic, PassWordManage_t *pw)
 		case PURCHASE_PASSWORD:
 			
 			if(TRUE == ReadPassWord(PURCHASE_PASSWORD, data)){
-				if(0 == strncmp(data, pw->data, 8))
+				if(0 == strncmp((char *)data, (char *)pw->data, 8))
 					return TRUE;
 			}
 			break;
@@ -90,8 +90,10 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 
 	switch(ch){
 
-		case 0..9:
-
+		case 0:case 1:case 2:case 3:
+		case 4:case 5:case 6:case 7:
+		case 8:case 9:
+			
 			if(pw->cnt < 8){
 				
 				pw->data[pw->cnt] = ch;  // store this char.
