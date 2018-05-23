@@ -13,7 +13,7 @@ extern unsigned char gToggleValue;
 const unsigned int g_energy_PWM_array[10]= {1023,900,800,700,600,500,400,300,200,100};
 //const unsigned int g_energy_PWM_array[11]= {0,100,200,300,400,500,600,700,800,900,1000};
 
-static void SendToMonitor(uint8_t *buf, uint8_t len)
+void SendToMonitor(uint8_t *buf, uint8_t len)
 {
 	uint8_t i;
 	

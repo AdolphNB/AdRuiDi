@@ -1,5 +1,5 @@
-#ifndef __MSG_QUEUE_H__
-#define __MSG_QUEUE_H__
+#ifndef __PASS_WORD_MANAGE_H__
+#define __PASS_WORD_MANAGE_H__
 
 
 

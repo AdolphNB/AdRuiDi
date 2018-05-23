@@ -3,7 +3,7 @@
 #include "config.h"
 #include "peripherals.h"
 #include "user_hmi.h"
-
+#include "eepromManage.h"
 
 
 volatile ShowParam_Def cure = {
@@ -38,8 +38,42 @@ void delay_ms(unsigned int ms)
 
 int main(void) 
 { 
-	MSG_BufferTypeDef msg;
+//	MSG_BufferTypeDef msg;
+	uint8_t buff[8] = {0,1,2,3,4,5,6,7};
+	uint8_t buff2[8];
+	uint8_t i;
+
+	USART_Init();
+
+	while(1)
+	{
+		delay_ms(5000);
+		memset(buff2, 0 , 8);
+		SendToMonitor(buff2,8);
+
+		for(i = 0; i < 8; i++) buff[i] += 1;
 		
+		EepromWrite_PassWord(EEPROM_ADDRESS_SYSTEM_PASSWORD, buff);
+		delay_ms(5000);
+		
+		EepromRead_PassWord(EEPROM_ADDRESS_SYSTEM_PASSWORD, buff2);
+		SendToMonitor(buff2,8);
+
+		EepromWrite_PassWord(EEPROM_ADDRESS_USER_PASSWORD, buff);
+		delay_ms(5000);
+		EepromRead_PassWord(EEPROM_ADDRESS_USER_PASSWORD, buff2);
+		SendToMonitor(buff2,8);
+		
+		EepromRead_PassWord(EEPROM_ADDRESS_SYSTEM_PASSWORD, buff2);
+		SendToMonitor(buff2,8);
+	};
+
+
+
+
+#if 0
+
+
 
 	DevInit_PWMOut();
 	DevInit_TickTimer();
@@ -218,6 +252,8 @@ int main(void)
 			}
 		}
 	} 
+
+#endif	
 }
 
 

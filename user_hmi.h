@@ -34,6 +34,7 @@ void Status_SendtoMonitor(uint8_t show_sta);
 void CounterValue_SendToMonitor();
 void Status_SendtoMonitor(StatusBar_Show_t sta);
 void Poweron_InitConsig(void);
+void SendToMonitor(uint8_t *buf, uint8_t len);
 
 
 #endif //__MSG_QUEUE_H__
