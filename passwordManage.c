@@ -136,9 +136,6 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 			
 			break;
 
-
-		default:
-			break;
 	}
 	
 

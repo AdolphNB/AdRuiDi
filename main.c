@@ -52,6 +52,11 @@ typedef enum{
 System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE; 
 
 
+void Sys_RebootMCU()
+{
+	// infinite loop, cause watch dog timer ---> timeout, and reboot
+	while(1);
+}
 
 
 /******************************************************************
@@ -225,6 +230,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 int main()
 {
 	MSG_BufferTypeDef msg;
+	StatusReturn_t val = IGNORE;
 	
 	DevInit_PWMOut();
 	DevInit_TickTimer();
@@ -266,19 +272,50 @@ int main()
 					switch(msg.pic){
 						
 
+
 						case CFG_PICTURE_LOGO_ID:
+
 							if (TRUE == EnterSettingPage_Login(msg.c)){
 
 								// if the pass word is true, Enter system login page
+								Pic_SwitchTo(CFG_PICTURE_PASSWORD_ID);
 							}
 							break;
 
 
+
 						case CFG_PICTURE_PASSWORD_ID:
+
+							val = PassWordPrase(msg.pic, &sysPassword, msg.c);
+
+							if (val == RIGHT){
+								//enter amortsize pay page
+								Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID);
+							
+							}else if (val == WRONG){
+
+								// hint error, and retry password
+								//display "ENTER ERROR, PLEASE RETRY"
+								
+							}else if (val == DELETE){
+							
+								// can continue receive message and store it to buffer.
+								//backspace and delete a "   *   " 
+							
+							}else{
+							
+								//do nothing, it is mean that pass word is not enough, must continue
+							}
+								
 							break;
 
 
+
 						case CFG_PICTURE_PUR_SETTING_ID:
+							
+							//if set seccuss ---> reboot
+							Sys_RebootMCU();
+							
 							break;
 
 					}
@@ -292,7 +329,27 @@ int main()
 					# 1. receive char, compare pass word and decide to start next period;
 					# 2. change eeprom  flag about setting, and store to eeprom
 				*/
-					
+					val = PassWordPrase(msg.pic, &sysPassword, msg.c);
+				
+					if (val == RIGHT){
+						//enter amortsize pay page
+						Pic_SwitchTo(SYSTEM_WORK_MODE);
+
+					}else if (val == WRONG){
+
+						// hint error, and retry password
+						//display "ENTER ERROR, PLEASE RETRY"
+						
+					}else if (val == DELETE){
+
+						// can continue receive message and store it to buffer.
+						//backspace and delete a "   *   " 
+
+					}else{
+
+						//do nothing, it is mean that pass word is not enough, must continue
+					}
+
 					break;
 
 
