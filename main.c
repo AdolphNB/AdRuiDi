@@ -36,6 +36,91 @@ void delay_ms(unsigned int ms)
 	}
 }
 
+
+typedef enum{
+	
+	PASSWORD_MANAGE_MODE,
+	AMORTIZE_MANAGE_MODE,
+	SYSTEM_WORK_MODE
+	
+}System_WorkMode_t;
+
+
+
+//set to pass word manage mode, when start machine.
+System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE; 
+
+
+int main()
+{
+	MSG_BufferTypeDef msg;
+	
+	DevInit_PWMOut();
+	DevInit_TickTimer();
+	DevInit_OutputIO();
+	DevInit_InputIO();
+	USART_Init();
+	Poweron_InitConsig();
+	//delay_ms(5000);
+	InitStatus_Show();
+	//delay_ms(5000);
+	InitStatus_Show();
+	MSG_QueueInit();
+	
+	while(1)
+	{
+
+		if(!MSG_QueueIsEmpty())
+		{
+
+			MSG_QueueGet(&msg);
+			//we must confire this message come from current picture
+			//some times, may be occur interrupe or send to montor time-delay, 
+			//locate picture is change, and the screen not, because of sync need time
+			//if (msg.picture != current_picture)
+			//	continue;
+			
+
+			switch(WorkMode){
+
+
+				case PASSWORD_MANAGE_MODE:
+
+
+					//switch(msg.pic)
+					break;
+
+
+				case AMORTIZE_MANAGE_MODE:
+					break;
+
+
+				case SYSTEM_WORK_MODE:
+					break;
+
+
+				default:
+					break;
+				
+			}
+		}
+	}
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#if STORE
 int main(void) 
 { 
 //	MSG_BufferTypeDef msg;
@@ -69,7 +154,7 @@ int main(void)
 	};
 
 
-
+#endif
 
 #if 0
 
