@@ -170,8 +170,53 @@ void handle_function()
 #endif
 
 
+typedef struct{
+
+	uint8_t cnt;
+	uint8_t data[4];
+}Logo_EnterSystemLogin_t;
+
+static Logo_EnterSystemLogin_t LogoLogin = {
+	.cnt = 0,
+	.data[0] = 0
+};
+
+uint8_t EnterSettingPage_Login(uint8_t ch)
+{
+	
+	uint8_t ret =  FALSE;
+
+	
+	LogoLogin.data[LogoLogin.cnt] = ch;
+	LogoLogin.cnt++;
 
 
+	if (LogoLogin.cnt == 4){
+
+		if (LogoLogin.data[0] == 0x01 && LogoLogin.data[1] == 0x02 && \
+			LogoLogin.data[2] == 0x03 && LogoLogin.data[3] == 0x04){
+			
+			ret = TRUE;
+		}
+		
+		memset(&LogoLogin, 0, sizeof(Logo_EnterSystemLogin_t));
+	}
+
+
+	return ret;
+}
+
+
+/*************************************************************
+* if time out in logo page, you must clear the buffer of store keys;
+*/
+uint8_t EnterSettingPage_Login_Timeout(void)
+{
+
+	memset(&LogoLogin, 0, sizeof(Logo_EnterSystemLogin_t));
+	
+	return 0;
+}
 
 
 

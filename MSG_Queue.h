@@ -52,6 +52,7 @@
 
 
 typedef struct {
+	unsigned char pic;
 	unsigned char c;
 }MSG_BufferTypeDef;
 

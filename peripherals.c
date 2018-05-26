@@ -8,6 +8,14 @@ volatile unsigned char tick = 0;
 volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
+static volatile uint32_t System_Tick = 0;
+
+
+uint32_t Get_SystemTick()
+{
+	return System_Tick;
+}
+
 
 void key_scan()
 {
@@ -29,6 +37,9 @@ void key_scan()
 ISR(TIMER1_COMPA_vect)
 {
 	MSG_BufferTypeDef q_tim;
+
+	System_Tick++;
+	
     if(tick++ > gToggleValue){
 		//q_tim.c = 0x10;
 		q_tim.c = MSG_LCD_COUNTER_SHOW;
@@ -43,31 +54,60 @@ volatile uint8_t usart_cnt = 0,usart_len;
 ISR(USART0_RX_vect)
 {
 	uint8_t temp;
-	MSG_BufferTypeDef usart_q;
+	static MSG_BufferTypeDef usart_q;
+
+	
 	temp = UDR0;
+	
 	switch(usart_cnt)
 	{
+
+	
 		case 0:
+			
 			if(temp == 0x5a) 
 				usart_cnt++;
 			else usart_cnt = 0;
+			
 			break;
+
+			
 		case 1:
+			
 			if(temp == 0xa5) 
 				usart_cnt++;
 			else usart_cnt = 0;
+			
 			break;
+
+			
 		case 2:
+			
 			usart_len = temp + 2;
 			usart_cnt++;
+			
 			break;
+
+			
 		default:
-			if(usart_cnt == usart_len){
+						
+			if(usart_cnt == (usart_len - 1)){
+				
+				usart_cnt++;
+				usart_q.pic = temp;
+				
+			}else if(usart_cnt == usart_len){
+			
 				usart_q.c = temp;
 				MSG_QueuePut(&usart_q);
 				usart_cnt = 0;
-			}else if(usart_cnt++ > 14)
+				
+			}else if(usart_cnt++ > 14){
+			
 				usart_cnt = 0;
+
+			}
+			
 			break;
 		
 	}
