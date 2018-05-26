@@ -85,17 +85,44 @@ int main()
 
 
 				case PASSWORD_MANAGE_MODE:
+				/**************************************************
+					*in this case complete pass word manage, include:
+					# 1.how to enter manage page from logo page;
+					# 2. enter pass word be enter to system, compare, retry, and enter;
+					# 3.set amortize, and store to eeprom
+				*/
+
+					switch(msg.pic){
+
+						case CFG_PICTURE_LOGO_ID:
+							break;
 
 
-					//switch(msg.pic)
+						case CFG_PICTURE_PASSWORD_ID:
+							break;
+
+
+						case CFG_PICTURE_PUR_SETTING_ID:
+							break;
+
+					}
+					
 					break;
 
 
 				case AMORTIZE_MANAGE_MODE:
+				/*************************************************
+					# enter password to system and start next work period;
+					# 1. receive char, compare pass word and decide to start next period;
+					# 2. change eeprom  flag about setting, and store to eeprom
+				*/
 					break;
 
 
 				case SYSTEM_WORK_MODE:
+				/**************************************************
+					*normal work, cure mode
+				*/
 					break;
 
 
@@ -153,7 +180,7 @@ int main(void)
 		SendToMonitor(buff2,8);
 	};
 
-
+}
 #endif
 
 #if 0
@@ -338,8 +365,8 @@ int main(void)
 		}
 	} 
 
-#endif	
 }
+#endif	
 
 
 

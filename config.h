@@ -15,10 +15,29 @@
 
 #define CFG_ENERGY_PWM_OUTPUT_SWTICH		(0X01)
 
+
+
+/*  the case of pass word manage mode */
+#define CFG_PICTURE_LOGO_ID 				(0x00)
+#define CFG_PICTURE_PASSWORD_ID				(0x22)
+#define CFG_PICTURE_PUR_SETTING_ID			(0x23)
+
+
+
+/*  the case of amortize mode  */
+#define CFG_AMORTIZE_PW_ENTER_ID			(0x00)
+
+
+
+/*  the case is normal work mode picture id */
 #define CFG_PICTURE_MAIN_ID					(0X00)
 #define CFG_PICTURE_ENERGY_ID				(0X02)
 #define CFG_PICTURE_FREQUENCY_ID			(0X03)
 #define CFG_PICTURE_TIMES_ID				(0X04)
+
+
+
+
 
 
 
