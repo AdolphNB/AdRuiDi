@@ -4,6 +4,7 @@
 #include "peripherals.h"
 #include "user_hmi.h"
 #include "eepromManage.h"
+#include "passwordManage.h"
 
 
 volatile ShowParam_Def cure = {
@@ -46,6 +47,12 @@ typedef enum{
 	
 }System_WorkMode_t;
 
+
+//system password
+PassWordManage_t sysPassword;
+
+//user password
+PassWordManage_t userPassword;
 
 
 //set to pass word manage mode, when start machine.
@@ -357,7 +364,11 @@ int main()
 				/**************************************************
 					*normal work, cure mode
 				*/
-					RunCureMode(msg.pic, msg.c);
+					if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
+
+						RunCureMode(msg.pic, msg.c);
+						
+					}
 				
 					break;
 

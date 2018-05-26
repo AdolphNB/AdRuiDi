@@ -53,3 +53,42 @@ uint8_t EepromRead_Byte(uint32_t *addr, uint8_t *data)
 
 
 
+uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
+{
+
+	static uint8_t setAmortize = 0;
+	
+	switch(ch){
+
+		case 0:
+		case 3:
+		case 6:
+		case 12:
+			
+			setAmortize = ch;
+			//change display color;
+			
+
+			break;
+
+		case 0xff: //confirm completed set
+		
+			EepromWrite_Byte(EEPROM_ADDRESS_FLAG_STATUS1, setAmortize);
+			setAmortize = 0;
+
+			return TRUE;
+				
+			break;
+
+	}	
+
+	return FALSE;
+}
+
+
+
+
+
+
+
+

@@ -4,43 +4,12 @@
 #include "peripherals.h"
 #include "user_hmi.h"
 #include "string.h"
-
+#include "passwordManage.h"
 
 
 
 #define ENTER_DELETE	0X0A
 #define ENTER_ENTER		0X0B
-
-
-
-
-/***************************************************************
-	*define a structure to store chars, these chars will be store user password.
-	* @the para cnt is a couter, store current sequence-number;
-*/
-#define PASSWORD_LEN	(8)
-typedef struct{
-	uint8_t cnt;
-	uint8_t data[PASSWORD_LEN];
-}PassWordManage_t;
-
-//system password
-PassWordManage_t sysPassword;
-
-//user password
-PassWordManage_t userPassword;
-
-
-
-typedef enum{
-	
-	WRONG = 0,
-	RIGHT = 1,
-	IGNORE = 3,
-	DELETE = 4
-	
-}StatusReturn_t;
-
 
 
 
