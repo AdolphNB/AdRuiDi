@@ -27,6 +27,7 @@ StructInput_flag_t InFlag = {
 	.temp = 0,
 };
 
+
 void delay_ms(unsigned int ms)
 {
 	unsigned int i = 192;
@@ -49,6 +50,176 @@ typedef enum{
 
 //set to pass word manage mode, when start machine.
 System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE; 
+
+
+
+
+/******************************************************************
+	* this function complete all of cure-setting and curing operate;
+	*maybe next mode will be change
+*/
+void RunCureMode(uint8_t pic, uint8_t ch)
+{
+
+	switch(ch)
+	{
+	/*********************************************************/
+			case MSG_LCD_COUNTER_SHOW:
+				TOGGLE_ENERGY_START();
+				CounterValue_SendToMonitor();
+				delay_ms(19);
+				TOGGLE_ENERGY_STOP();
+				break;
+	/*********************************************************/
+			case MSG_SHOW_ENERGY_SET:
+				if(WorkStatus.SetEnum != SET_ENERGY){
+					WorkStatus.SetEnum = SET_ENERGY;
+					Pic_SwitchTo(CFG_PICTURE_ENERGY_ID);
+					WorkStatus.pic_id = CFG_PICTURE_ENERGY_ID;
+					Status_SendtoMonitor(OPT_STATUS_BAR_ENERGY_SET);
+				}else{
+					WorkStatus.SetEnum = SET_IDLE;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
+					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
+				}
+				break;
+				
+			case MSG_SHOW_FREQUENCY_SET:
+				if(WorkStatus.SetEnum != SET_FRQ){
+					WorkStatus.SetEnum = SET_FRQ;
+					Pic_SwitchTo(CFG_PICTURE_FREQUENCY_ID);
+					WorkStatus.pic_id = CFG_PICTURE_FREQUENCY_ID;
+					Status_SendtoMonitor(OPT_STATUS_BAR_FREQUENCY_SET);
+				}else{
+					WorkStatus.SetEnum = SET_IDLE;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
+					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
+				}
+				break;
+				
+			case MSG_SHOW_TIMES_SET:
+				if(WorkStatus.SetEnum != SET_TIMES){
+					WorkStatus.SetEnum = SET_TIMES;
+					Pic_SwitchTo(CFG_PICTURE_TIMES_ID);
+					WorkStatus.pic_id = CFG_PICTURE_TIMES_ID;
+					Status_SendtoMonitor(OPT_STATUS_BAR_TIMES_SET);
+				}else{
+					WorkStatus.SetEnum = SET_IDLE;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
+					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
+				}
+				break;
+			case MSG_SHOW_CLEAR_SET:
+				Key_ClearCounter();
+				break;
+	/*********************************************************/
+			case MSG_PARAM_SET_ADD:
+				ParamSet_Add();
+				break;
+			case MSG_PARAM_SET_DEC:
+				ParamSet_Dec();
+				break;
+	/*********************************************************/
+			case MSG_CTRL_TOGGLE_OPEN_CLOSE:
+				if((OPEN == WorkStatus.kv_flag) && (TROGGLE_IDLE== WorkStatus.trg)){
+					Status_SendtoMonitor(OPT_STATUS_BAR_TOGGLING_SET);
+					WorkStatus.trg = TROGGLE_TING;
+				}else {
+					Status_SendtoMonitor(OPT_STATUS_BAR_TEMP_TOGGLE_SET);
+					WorkStatus.trg = TROGGLE_IDLE;
+				}
+				break;
+
+			case MSG_CTRL_KV_OPEN:
+				Status_SendtoMonitor(OPT_STATUS_BAR_KVOPEN_SET);
+				OPEN_KV_ENERGY();
+				WorkStatus.kv_flag = OPEN;
+				break;
+
+			case MSG_CTRL_KV_CLOSE:
+				Status_SendtoMonitor(OPT_STATUS_BAR_KVCLOSE_SET);
+				Status_SendtoMonitor(OPT_STATUS_BAR_TEMP_TOGGLE_SET);
+				CLOSE_KV_ENERGY();
+				WorkStatus.kv_flag = CLOSE;
+				WorkStatus.trg = TROGGLE_IDLE;
+				break;
+
+	/***********************************************************/					
+	/***********************************************************/
+			case MSG_CTRL_ADD_WATER_OPEN:
+				TOUCH_ADD_WATER_OPEN();
+				Status_SendtoMonitor(OPT_STATUS_BAR_ADD_WATER_SET);
+				break;
+
+			case MSG_CTRL_ADD_WATER_STOP:
+				TOUCH_ADD_WATER_STOP();
+				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
+				break;
+	/***********************************************************/
+	/***********************************************************/
+
+			case MSG_CTRL_DEC_WATER_OPEN:
+				TOUCH_DEC_WATER_OPEN();
+				Status_SendtoMonitor(OPT_STATUS_BAR_DEC_WATER_SET);
+				break;
+
+			case MSG_CTRL_DEC_WATER_STOP:
+				TOUCH_DEC_WATER_STOP();
+				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
+				break;
+	/***********************************************************/
+	/***********************************************************/
+
+			case MSG_CTRL_DEWATER_OPEN:
+				TOUCH_DEWATER_OPEN();
+				Status_SendtoMonitor(OPT_STATUS_BAR_DEWATERING_SET);
+				break;
+
+			case MSG_CTRL_DEWATER_STOP:
+				TOUCH_DEWATER_STOP();
+				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
+				break;
+	/***********************************************************/
+	/***********************************************************/
+				
+			case MSG_CTRL_WATERFLOODING_OPEN:
+				TOUCH_WATERFLOODING_OPEN();
+				Status_SendtoMonitor(OPT_STATUS_BAR_WATER_INJECTION_SET);
+				break;
+				
+			case MSG_CTRL_WATERFLOODING_STOP:
+				TOUCH_WATERFLOODING_STOP();
+				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
+				break;
+	/***********************************************************/
+	/***********************************************************/
+
+			case MSG_CTRL_ALERT_OPEN:
+				OVER_TEMPERATURE_ALERT_OPEN();
+				Status_SendtoMonitor(OPT_STATUS_BAR_ALERTING_SET);
+				break;
+
+			case MSG_CTRL_ALERT_CLOSE:
+				OVER_TEMPERATURE_ALERT_STOP();
+				Status_SendtoMonitor(OPT_STATUS_BAR_ALERTCLEAR_SET);
+				break;
+	/***********************************************************/
+	/***********************************************************/
+
+			case MSG_CTRL_ENERGY_OPEN:
+				break;
+
+			case MSG_CTRL_ENERGY_CLOSE:
+				break;
+	/*********************************************************/
+			default:
+				break;
+		}
+}
+
 
 
 int main()
@@ -93,8 +264,13 @@ int main()
 				*/
 
 					switch(msg.pic){
+						
 
 						case CFG_PICTURE_LOGO_ID:
+							if (TRUE == EnterSettingPage_Login(msg.c)){
+
+								// if the pass word is true, Enter system login page
+							}
 							break;
 
 
@@ -116,6 +292,7 @@ int main()
 					# 1. receive char, compare pass word and decide to start next period;
 					# 2. change eeprom  flag about setting, and store to eeprom
 				*/
+					
 					break;
 
 
@@ -123,6 +300,8 @@ int main()
 				/**************************************************
 					*normal work, cure mode
 				*/
+					RunCureMode(msg.pic, msg.c);
+				
 					break;
 
 

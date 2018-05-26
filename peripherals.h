@@ -37,6 +37,7 @@ uint8_t DevInit_OutputIO(void);
 uint8_t DevInit_InputIO(void);
 uint8_t USART_Init(void);
 void USART_Transmit( unsigned char data);
+uint32_t Get_SystemTick();
 
 
 #endif //__PERIPHERALS_H__

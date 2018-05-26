@@ -8,6 +8,14 @@ volatile unsigned char tick = 0;
 volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
+static volatile uint32_t System_Tick = 0;
+
+
+uint32_t Get_SystemTick()
+{
+	return System_Tick;
+}
+
 
 void key_scan()
 {
@@ -29,6 +37,9 @@ void key_scan()
 ISR(TIMER1_COMPA_vect)
 {
 	MSG_BufferTypeDef q_tim;
+
+	System_Tick++;
+	
     if(tick++ > gToggleValue){
 		//q_tim.c = 0x10;
 		q_tim.c = MSG_LCD_COUNTER_SHOW;
