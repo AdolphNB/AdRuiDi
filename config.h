@@ -137,6 +137,19 @@ typedef struct{
 	
 }Misc_Pram_t;
 
+
+
+
+typedef struct{
+
+	uint8_t flag;
+	uint8_t data[31];
+	
+}Date_ReadBack_t;
+
+extern Date_ReadBack_t CurDate;
+
+
 #endif //__CONFIG_H__
 
 

@@ -114,28 +114,6 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 
 
 
-#if DEBUG
-void handle_function()
-{
-	StatusReturn_t val = PassWordPrase(pic, &sysPassword,  char);
-	
-	if (val == RIGHT){
-
-		//ENTER NEXT PAGE
-	}else if (val == WRONG){
-
-		// hint error, and retry password
-	}else if (val == DELETE){
-		// can continue receive message and store it to buffer.
-	}else{
-
-	}
-	
-	
-}
-#endif
-
-
 typedef struct{
 
 	uint8_t cnt;
@@ -187,11 +165,66 @@ uint8_t EnterSettingPage_Login_Timeout(void)
 }
 
 
+
+
+
+/***************************************************************************
+*	Blow code is about read flag, and judge whether enter AMORTIZE MODE.
+*	these codes include:
+*	#	1.read the SWITCH about whether amortize-pay is OVER;
+*	#	2.judge current data whether is the time-node  that enter password unlock next period;
+***************************************************************************/
+
+Date_ReadBack_t CurDate;
+static uint8_t Judge_PasswordTimeNode()
+{
+	
+	CurDate.flag = TRUE;
+
+	//time1 = ReadDateFromScreen();
+	//time2 = ReadEEpromData()
+
+	
+#if DEBUG
+
+	/***********************************************************
+		if the date is equal to UNLOCKDate    or    more than  UNLOCKDate,
+		and the LOCK_FLAG is not be clear,    will return TRUE
+	*/
+	if (time2 <= tim1 && flag !=  0 ){
+
+		return TRUE;
+
+	}
+#endif
+
+	return FALSE;
+}
+
+
+
 uint8_t IS_Popup_AmortizePassWordPage(void)
 {
 
+	uint8_t MasterSwitch = ;
+	uint8_t RemainTimes  = ;
 
-	return FALSE;
+	if (MasterSwitch ==  0 || RemainTimes == 0){
+
+		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
+		return FALSE;
+	}
+		
+
+	if (FALSE == Judge_PasswordTimeNode()){
+
+		// it isn't time to unlock the next proid 
+		return FALSE;
+	}
+
+	
+	return TRUE;
+	
 }
 
 
