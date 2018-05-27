@@ -277,16 +277,35 @@ int main()
 				*/
 
 					switch(msg.pic){
-						
-
 
 						case CFG_PICTURE_LOGO_ID:
 
-							if (TRUE == EnterSettingPage_Login(msg.c)){
+							if (msg.c == CFG_LOGO_PAGE_TIMEOUT_ENVET){
+								
+								//logo page timeout
+								if (TRUE == IS_Popup_AmortizePassWordPage()){
+									
+									WorkMode = AMORTIZE_MANAGE_MODE;
+									Pic_SwitchTo(CFG_AMORTIZE_PW_ENTER_ID);
+									
+								}else{
+								
+									WorkMode = SYSTEM_WORK_MODE;;
+									Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+								}
+								
+								EnterSettingPage_Login_Timeout();
 
-								// if the pass word is true, Enter system login page
-								Pic_SwitchTo(CFG_PICTURE_PASSWORD_ID);
+
+							}else{
+							
+								if (TRUE == EnterSettingPage_Login(msg.c)){
+
+									// if the pass word is true, Enter system login page
+									Pic_SwitchTo(CFG_PICTURE_PASSWORD_ID);
+								}
 							}
+							
 							break;
 
 
@@ -321,7 +340,11 @@ int main()
 						case CFG_PICTURE_PUR_SETTING_ID:
 							
 							//if set seccuss ---> reboot
-							Sys_RebootMCU();
+							if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
+
+								Sys_RebootMCU();
+								
+							}
 							
 							break;
 
@@ -336,11 +359,13 @@ int main()
 					# 1. receive char, compare pass word and decide to start next period;
 					# 2. change eeprom  flag about setting, and store to eeprom
 				*/
-					val = PassWordPrase(msg.pic, &sysPassword, msg.c);
+				
+					val = PassWordPrase(msg.pic, &userPassword, msg.c);
 				
 					if (val == RIGHT){
-						//enter amortsize pay page
-						Pic_SwitchTo(SYSTEM_WORK_MODE);
+						
+						WorkMode = SYSTEM_WORK_MODE;;
+						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
 
 					}else if (val == WRONG){
 
@@ -364,11 +389,10 @@ int main()
 				/**************************************************
 					*normal work, cure mode
 				*/
-					if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
+					
 
 						RunCureMode(msg.pic, msg.c);
 						
-					}
 				
 					break;
 
@@ -428,9 +452,6 @@ int main(void)
 	};
 
 }
-#endif
-
-#if 0
 
 
 

@@ -147,6 +147,8 @@ static Logo_EnterSystemLogin_t LogoLogin = {
 	.data[0] = 0
 };
 
+
+
 uint8_t EnterSettingPage_Login(uint8_t ch)
 {
 	
@@ -185,7 +187,12 @@ uint8_t EnterSettingPage_Login_Timeout(void)
 }
 
 
+uint8_t IS_Popup_AmortizePassWordPage(void)
+{
 
+
+	return FALSE;
+}
 
 
 
