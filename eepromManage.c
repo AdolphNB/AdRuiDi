@@ -6,6 +6,7 @@
 #include <avr/interrupt.h>
 
 
+AmortizeDataBase_t EepromDB;
 
 uint8_t EepromRead_PassWord(uint32_t *addr, uint8_t *data)
 {
@@ -55,7 +56,7 @@ uint8_t EepromRead_Byte(uint32_t *addr, uint8_t *data)
 
 uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 {
-
+	uint8_t i;
 	static uint8_t setAmortize = 0;
 	
 	switch(ch){
@@ -73,7 +74,11 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 		case 0xff: //confirm completed set
 		
-			EepromWrite_Byte(EEPROM_ADDRESS_FLAG_STATUS1, setAmortize);
+			EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
+
+			for(i = 0; i < setAmortize; i++){
+				
+			}
 			setAmortize = 0;
 
 			return TRUE;

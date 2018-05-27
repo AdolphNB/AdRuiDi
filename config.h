@@ -150,6 +150,47 @@ typedef struct{
 extern Date_ReadBack_t CurDate;
 
 
+
+
+#define EEPROM_ADDRESS_TOTAL_NUMBER				(0x000000f0)
+
+#define EEPROM_ADDRESS_DATE_1ST					(0x00000100)
+#define EEPROM_ADDRESS_DATE_2ST					(0x00000110)
+#define EEPROM_ADDRESS_DATE_3ST					(0x00000120)
+#define EEPROM_ADDRESS_DATE_4ST					(0x00000130)
+#define EEPROM_ADDRESS_DATE_5ST					(0x00000140)
+#define EEPROM_ADDRESS_DATE_6ST					(0x00000150)
+#define EEPROM_ADDRESS_DATE_7ST					(0x00000160)
+#define EEPROM_ADDRESS_DATE_8ST					(0x00000170)
+#define EEPROM_ADDRESS_DATE_9ST					(0x00000180)
+#define EEPROM_ADDRESS_DATE_10ST				(0x00000190)
+#define EEPROM_ADDRESS_DATE_11ST				(0x000001A0)
+#define EEPROM_ADDRESS_DATE_12ST				(0x000001B0)
+
+
+typedef struct {
+
+	uint8_t flag;
+	uint8_t year;
+	uint8_t month;
+	uint8_t day;
+	
+}RepayDate_t;
+
+
+
+#define MAX_AMORTIZE_NUMBER		12
+typedef struct {
+
+	uint8_t step;
+	RepayDate_t datebase[MAX_AMORTIZE_NUMBER];
+	
+}AmortizeDataBase_t;
+
+
+
+
+
 #endif //__CONFIG_H__
 
 

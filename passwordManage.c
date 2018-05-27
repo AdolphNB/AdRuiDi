@@ -206,8 +206,8 @@ static uint8_t Judge_PasswordTimeNode()
 uint8_t IS_Popup_AmortizePassWordPage(void)
 {
 
-	//uint8_t MasterSwitch = ;
-	//uint8_t RemainTimes  = ;
+	uint8_t MasterSwitch = 1;
+	uint8_t RemainTimes  =1 ;
 
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
