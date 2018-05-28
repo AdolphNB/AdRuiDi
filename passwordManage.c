@@ -175,28 +175,72 @@ uint8_t EnterSettingPage_Login_Timeout(void)
 *	#	2.judge current data whether is the time-node  that enter password unlock next period;
 ***************************************************************************/
 
+
+uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t &data)
+{
+    switch(times){
+
+        case 1:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_1ST, data, 4);
+            break;
+        case 2:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_2ST, data, 4);
+            break;
+        case 3:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_3ST, data, 4);
+            break;
+        case 4:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_4ST, data, 4);
+            break;
+        case 5:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_5ST, data, 4);
+            break;
+        case 6:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_6ST, data, 4);
+            break;
+        case 7:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_7ST, data, 4);
+            break;
+        case 8:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_8ST, data, 4);
+            break;
+        case 9:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_9ST, data, 4);
+            break;
+        case 10:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_10ST, data, 4);
+            break;
+        case 11:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_11ST, data, 4);
+            break;
+        case 12:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_12ST, data, 4);
+            break;
+        
+    }
+    
+    return FALSE;
+}
+
+
+
 Date_ReadBack_t CurDate;
-static uint8_t Judge_PasswordTimeNode()
+static uint8_t Judge_PasswordTimeNode(uint8_t times)
 {
 	
-	CurDate.flag = TRUE;
-
-	//time1 = ReadDateFromScreen();
-	//time2 = ReadEEpromData()
-
-	
-#if DEBUG
+	//CurDate.flag = TRUE;
+	RepayDate_t data;
+    ReadEEprom_DateData(times, &data);
 
 	/***********************************************************
 		if the date is equal to UNLOCKDate    or    more than  UNLOCKDate,
 		and the LOCK_FLAG is not be clear,    will return TRUE
 	*/
-	if (time2 <= tim1 && flag !=  0 ){
+	//if (time2 <= tim1 && flag !=  0 ){
 
-		return TRUE;
+		//return TRUE;
 
-	}
-#endif
+	//}
 
 	return FALSE;
 }
@@ -206,9 +250,12 @@ static uint8_t Judge_PasswordTimeNode()
 uint8_t IS_Popup_AmortizePassWordPage(void)
 {
 
-	uint8_t MasterSwitch = 1;
-	uint8_t RemainTimes  =1 ;
+	uint8_t MasterSwitch;
+	uint8_t RemainTimes;
 
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
 		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
@@ -216,7 +263,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 	}
 		
 
-	if (FALSE == Judge_PasswordTimeNode()){
+	if (FALSE == Judge_PasswordTimeNode(RemainTimes)){
 
 		// it isn't time to unlock the next proid 
 		return FALSE;

@@ -8,6 +8,28 @@
 
 AmortizeDataBase_t EepromDB;
 
+uint8_t EepromRead_Block(uint32_t *addr, uint8_t *data, uint8_t num)
+{
+
+	eeprom_busy_wait(); 
+	eeprom_read_block(data,  addr, num);
+
+	return TRUE;
+}
+
+
+
+
+uint8_t EepromWrite_Block(uint32_t *addr, uint8_t *data, uint8_t num)
+{
+
+	eeprom_busy_wait();
+	cli();
+	eeprom_write_block(data,  addr, num);
+	sei();
+	return TRUE;
+}
+
 uint8_t EepromRead_PassWord(uint32_t *addr, uint8_t *data, uint8_t num)
 {
 
@@ -88,40 +110,40 @@ void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
     switch(eepromNum){
 
         case 1:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_1ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_1ST, &data, 4);
             break;
         case 2:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_2ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_2ST, &data, 4);
             break;
         case 3:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_3ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_3ST, &data, 4);
             break;
         case 4:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_4ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_4ST, &data, 4);
             break;
         case 5:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_5ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_5ST, &data, 4);
             break;
         case 6:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_6ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_6ST, &data, 4);
             break;
         case 7:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_7ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_7ST, &data, 4);
             break;
         case 8:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_8ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_8ST, &data, 4);
             break;
         case 9:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_9ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_9ST, &data, 4);
             break;
         case 10:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_10ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_10ST, &data, 4);
             break;
         case 11:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_11ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_11ST, &data, 4);
             break;
         case 12:
-            EepromWrite_PassWord(EEPROM_ADDRESS_DATE_12ST, &data, 4);
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_12ST, &data, 4);
             break;
         
     }
