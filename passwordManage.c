@@ -223,9 +223,8 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t &data)
 }
 
 
-
 //Date_ReadBack_t CurDate;
-CurDate_t CurDate;
+extern volatile CurDate_t CurDate;
 static uint8_t Judge_PasswordTimeNode(uint8_t times)
 {
 	

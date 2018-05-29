@@ -149,8 +149,6 @@ typedef struct{
 
 extern Date_ReadBack_t CurDate;
 
-
-
 #define EEPROM_ADDRESS_TOTAL_SWITCH				(0x000000f0)
 #define EEPROM_ADDRESS_TOTAL_NUMBER				(0x000000f0
 
