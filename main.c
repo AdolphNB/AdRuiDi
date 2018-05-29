@@ -367,7 +367,9 @@ int main()
 					val = PassWordPrase(msg.pic, &userPassword, msg.c);
 				
 					if (val == RIGHT){
-						
+
+                        //clear this data in eeprom that about the flag, the date.etc
+                        AlreadyPaid_ClearCurrentStore();
 						WorkMode = SYSTEM_WORK_MODE;;
 						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
 

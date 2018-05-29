@@ -224,7 +224,8 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t &data)
 
 
 
-Date_ReadBack_t CurDate;
+//Date_ReadBack_t CurDate;
+CurDate_t CurDate;
 static uint8_t Judge_PasswordTimeNode(uint8_t times)
 {
 	
@@ -236,11 +237,12 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 		if the date is equal to UNLOCKDate    or    more than  UNLOCKDate,
 		and the LOCK_FLAG is not be clear,    will return TRUE
 	*/
-	//if (time2 <= tim1 && flag !=  0 ){
+	if (data.flag == 0)
+        return FALSE
 
-		//return TRUE;
-
-	//}
+    if (CurDate.day == data.day && CurDate.month == data.month && CurDate.year == data.year){
+        return TRUE;
+    }
 
 	return FALSE;
 }
@@ -276,7 +278,74 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
 
 
+uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t &data)
+{
+    switch(times){
 
+        case 1:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_1ST, data, 4);
+            break;
+        case 2:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_2ST, data, 4);
+            break;
+        case 3:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_3ST, data, 4);
+            break;
+        case 4:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_4ST, data, 4);
+            break;
+        case 5:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_5ST, data, 4);
+            break;
+        case 6:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_6ST, data, 4);
+            break;
+        case 7:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_7ST, data, 4);
+            break;
+        case 8:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_8ST, data, 4);
+            break;
+        case 9:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_9ST, data, 4);
+            break;
+        case 10:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_10ST, data, 4);
+            break;
+        case 11:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_11ST, data, 4);
+            break;
+        case 12:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_12ST, data, 4);
+            break;
+        
+    }
+    
+    return FALSE;
+}
+
+
+
+
+void AlreadyPaid_ClearCurrentStore(void)
+{
+    uint8_t MasterSwitch;
+	uint8_t RemainTimes;
+    RepayDate_t data;
+
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+
+    memset(&data, 0, sizeof(RepayDate_t));
+    ClearEEprom_DateData(RemainTimes, &data);
+    
+    RemainTimes--;
+    if(RemainTimes == 0){
+        EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0x00);
+    }
+    EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    
+}
 
 
 

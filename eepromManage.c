@@ -54,7 +54,7 @@ uint8_t EepromWrite_PassWord(uint32_t *addr, uint8_t *data, uint8_t num)
 
 
 
-uint8_t EepromWrite_Byte(uint32_t *addr, uint8_t *data)
+uint8_t EepromWrite_Byte(uint32_t addr, uint8_t data)
 {
 
 	eeprom_busy_wait();
@@ -65,7 +65,7 @@ uint8_t EepromWrite_Byte(uint32_t *addr, uint8_t *data)
 
 
 
-uint8_t EepromRead_Byte(uint32_t *addr, uint8_t *data)
+uint8_t EepromRead_Byte(uint32_t addr, uint8_t *data)
 {
 
 	eeprom_busy_wait();

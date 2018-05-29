@@ -175,7 +175,7 @@ typedef struct {
 	uint8_t month;
 	uint8_t day;
 	
-}RepayDate_t;
+}RepayDate_t, CurDate_t;
 
 
 
