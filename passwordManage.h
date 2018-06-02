@@ -25,7 +25,7 @@ typedef enum{
 	
 }StatusReturn_t;
 
-uint8_t EnterSettingPage_Login_Timeout(void);
+uint8_t EnterSettingPage_Login_TimeoutClear(void);
 
 uint8_t EnterSettingPage_Login(uint8_t ch);
 

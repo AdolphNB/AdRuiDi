@@ -234,6 +234,26 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int main()
 {
 	MSG_BufferTypeDef msg;
@@ -296,7 +316,7 @@ int main()
 									Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
 								}
 								
-								EnterSettingPage_Login_Timeout();
+								EnterSettingPage_Login_TimeoutClear();
 
 
 							}else{

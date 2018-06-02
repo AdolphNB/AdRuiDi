@@ -156,7 +156,7 @@ uint8_t EnterSettingPage_Login(uint8_t ch)
 /*************************************************************
 * if time out in logo page, you must clear the buffer of store keys;
 */
-uint8_t EnterSettingPage_Login_Timeout(void)
+uint8_t EnterSettingPage_Login_TimeoutClear(void)
 {
 
 	memset(&LogoLogin, 0, sizeof(Logo_EnterSystemLogin_t));
@@ -230,6 +230,8 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 	
 	//CurDate.flag = TRUE;
 	RepayDate_t data;
+
+	
     ReadEEprom_DateData(times, &data);
 
 	/***********************************************************

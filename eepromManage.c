@@ -169,6 +169,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 		case 0xff: //confirm completed set
 		
 			EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
+			EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0xff);
 
 			for(i = setAmortize, j = 1; i > 0; i--, j++){
 				WriteEEprom_RepaymentDate(i, j);
