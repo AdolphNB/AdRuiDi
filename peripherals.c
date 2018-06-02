@@ -9,7 +9,7 @@ volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
 static volatile uint32_t System_Tick = 0;
-volatile CurDate_t CurDate;
+CurDate_t CurDate;
 
 
 uint32_t Get_SystemTick()
@@ -197,10 +197,11 @@ uint8_t USART_Init(void)
 
 
 
-void ReadEEprom_DateData(RepayDate_t &data)
+void ReadScreen_CurrentDate(RepayDate_t &data)
 {
+	uint8_t Buf[14];
+	
     CurDate.flag = 1;
-    uint8_t Buf[14];
 
     Buf[4]  = 0x02;Buf[5]  = 0x00;
     Buf[6]  = 0xC4;Buf[7]  = 0xDC;//
@@ -208,6 +209,11 @@ void ReadEEprom_DateData(RepayDate_t &data)
     Buf[10] = 0xC9;Buf[11] = 0xE8;
     Buf[12] = 0xD6;Buf[13] = 0xC3;
     SendToMonitor(Buf,14);
+
+	while(CurDate.flag);
+	CurDate.year = `18;
+	CurDate.month = 6;
+	CurDate.day = 2;	
 }
 
 
