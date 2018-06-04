@@ -148,6 +148,7 @@ void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
         
     }
 }
+
 uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 {
 	uint8_t i, j;

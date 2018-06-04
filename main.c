@@ -362,11 +362,11 @@ int main()
 						case CFG_PICTURE_PUR_SETTING_ID:
 							
 							//if set seccuss ---> reboot
-							if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
+							//if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
 
-								Sys_RebootMCU();
+							//	Sys_RebootMCU();
 								
-							}
+							//}
 							
 							break;
 
@@ -430,6 +430,10 @@ int main()
 				
 			}
 		}
+
+
+		/* this function can generate some timeout event, and  put its to queue*/
+		TimeoutTask_PutToQueue();
 	}
 
 	return 0;

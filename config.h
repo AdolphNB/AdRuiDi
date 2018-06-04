@@ -147,10 +147,10 @@ typedef struct{
 	
 }Date_ReadBack_t;
 
-extern Date_ReadBack_t CurDate;
+//extern Date_ReadBack_t CurDate;
 
 #define EEPROM_ADDRESS_TOTAL_SWITCH				(0x000000f0)
-#define EEPROM_ADDRESS_TOTAL_NUMBER				(0x000000f0
+#define EEPROM_ADDRESS_TOTAL_NUMBER				(0x000000f0)
 
 #define EEPROM_ADDRESS_DATE_1ST					(0x00000100)
 #define EEPROM_ADDRESS_DATE_2ST					(0x00000110)
@@ -173,7 +173,7 @@ typedef struct {
 	uint8_t month;
 	uint8_t day;
 	
-}RepayDate_t, CurDate_t;
+}RepayDate_t;
 
 
 

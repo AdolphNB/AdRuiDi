@@ -176,7 +176,7 @@ uint8_t EnterSettingPage_Login_TimeoutClear(void)
 ***************************************************************************/
 
 
-uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t &data)
+uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t *data)
 {
     switch(times){
 
@@ -224,7 +224,7 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t &data)
 
 
 //Date_ReadBack_t CurDate;
-extern volatile CurDate_t CurDate;
+extern volatile RepayDate_t CurDate;
 static uint8_t Judge_PasswordTimeNode(uint8_t times)
 {
 	
@@ -239,7 +239,7 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 		and the LOCK_FLAG is not be clear,    will return TRUE
 	*/
 	if (data.flag == 0)
-        return FALSE
+        return FALSE;
 
     if (CurDate.day == data.day && CurDate.month == data.month && CurDate.year == data.year){
         return TRUE;
@@ -279,7 +279,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
 
 
-uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t &data)
+uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t *data)
 {
     switch(times){
 
