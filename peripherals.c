@@ -9,6 +9,7 @@ volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
 static volatile uint32_t System_Tick = 0;
+RepayDate_t CurDate;
 
 
 uint32_t Get_SystemTick()
@@ -58,7 +59,9 @@ ISR(USART0_RX_vect)
 
 	
 	temp = UDR0;
-	
+
+    if (CurDate.flag){}//receive screen date and time
+        
 	switch(usart_cnt)
 	{
 
@@ -191,4 +194,74 @@ uint8_t USART_Init(void)
 	sei();   
 	return 0;
 }
+
+
+
+void ReadScreen_CurrentDate(RepayDate_t *data)
+{
+	uint8_t Buf[14];
+	
+    CurDate.flag = 1;
+
+    Buf[4]  = 0x02;Buf[5]  = 0x00;
+    Buf[6]  = 0xC4;Buf[7]  = 0xDC;//
+    Buf[8]  = 0xC1;Buf[9]  = 0xBF;//
+    Buf[10] = 0xC9;Buf[11] = 0xE8;
+    Buf[12] = 0xD6;Buf[13] = 0xC3;
+    SendToMonitor(Buf,14);
+
+	while(CurDate.flag);
+	CurDate.year = 18;
+	CurDate.month = 6;
+	CurDate.day = 2;	
+}
+
+
+
+
+
+TimeoutTask_t TimeoutTask = {
+	.flag = 0,
+};
+
+
+
+void StartTimeout_Task(uint8_t pic, uint16_t dly)
+{
+	TimeoutTask.flag =  1;
+	TimeoutTask.pic = pic;
+	TimeoutTask.period = dly;
+	TimeoutTask.timeStamp = Get_SystemTick();
+}
+
+
+
+void DestroyTimeout_Task()
+{
+	memset(&TimeoutTask, 0, sizeof(TimeoutTask_t));
+}
+
+
+
+void TimeoutTask_PutToQueue()
+{
+	uint32_t systime = Get_SystemTick();
+	MSG_BufferTypeDef q;
+
+
+	if(TimeoutTask.flag){
+
+		if((systime - TimeoutTask.timeStamp) >= TimeoutTask.period){
+
+			q.pic = TimeoutTask.pic;
+			q.c = 0xff;
+			MSG_QueuePut(&q);
+
+			TimeoutTask.flag = 0;
+		}
+		
+	}
+}
+
+
 

@@ -31,6 +31,17 @@
 #define IN_GET_TEMPERATURE_SIG()
 
 
+
+
+typedef struct{
+	uint8_t flag;
+	uint8_t pic;
+	uint16_t period;
+	uint32_t timeStamp;
+}TimeoutTask_t;
+
+
+
 uint8_t DevInit_TickTimer(void);
 uint8_t DevInit_PWMOut(void);
 uint8_t DevInit_OutputIO(void);
@@ -38,6 +49,10 @@ uint8_t DevInit_InputIO(void);
 uint8_t USART_Init(void);
 void USART_Transmit( unsigned char data);
 uint32_t Get_SystemTick();
+
+void StartTimeout_Task(uint8_t pic, uint16_t dly);
+void DestroyTimeout_Task();
+void TimeoutTask_PutToQueue();
 
 
 #endif //__PERIPHERALS_H__

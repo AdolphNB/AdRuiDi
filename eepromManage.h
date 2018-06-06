@@ -7,10 +7,15 @@
 #include <avr/eeprom.h>
 
 
-uint8_t EepromRead_PassWord(uint32_t *addr, uint8_t *dst);
-uint8_t EepromWrite_PassWord(uint32_t *addr, uint8_t *src);
-uint8_t EepromWrite_Byte(uint32_t *addr, uint8_t *data);
-uint8_t EepromRead_Byte(uint32_t *addr, uint8_t *data);
+extern AmortizeDataBase_t EepromDB;
+
+uint8_t EepromRead_Block(uint32_t *addr, uint8_t *data, uint8_t num);
+uint8_t EepromWrite_Block(uint32_t *addr, uint8_t *data, uint8_t num);
+uint8_t EepromRead_PassWord(uint32_t *addr, uint8_t *dst, uint8_t num);
+uint8_t EepromWrite_PassWord(uint32_t *addr, uint8_t *src, uint8_t num);
+uint8_t EepromWrite_Byte(uint32_t addr, uint8_t data);
+uint8_t EepromRead_Byte(uint32_t addr, uint8_t *data);
+uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch);
 
 
 #endif

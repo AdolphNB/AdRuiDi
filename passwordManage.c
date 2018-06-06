@@ -4,43 +4,12 @@
 #include "peripherals.h"
 #include "user_hmi.h"
 #include "string.h"
-
+#include "passwordManage.h"
 
 
 
 #define ENTER_DELETE	0X0A
 #define ENTER_ENTER		0X0B
-
-
-
-
-/***************************************************************
-	*define a structure to store chars, these chars will be store user password.
-	* @the para cnt is a couter, store current sequence-number;
-*/
-#define PASSWORD_LEN	(8)
-typedef struct{
-	uint8_t cnt;
-	uint8_t data[PASSWORD_LEN];
-}PassWordManage_t;
-
-//system password
-PassWordManage_t sysPassword;
-
-//user password
-PassWordManage_t userPassword;
-
-
-
-typedef enum{
-	
-	WRONG = 0,
-	RIGHT = 1,
-	IGNORE = 3,
-	DELETE = 4
-	
-}StatusReturn_t;
-
 
 
 
@@ -136,9 +105,6 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 			
 			break;
 
-
-		default:
-			break;
 	}
 	
 
@@ -146,28 +112,6 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 }
 
 
-
-
-#if DEBUG
-void handle_function()
-{
-	StatusReturn_t val = PassWordPrase(pic, &sysPassword,  char);
-	
-	if (val == RIGHT){
-
-		//ENTER NEXT PAGE
-	}else if (val == WRONG){
-
-		// hint error, and retry password
-	}else if (val == DELETE){
-		// can continue receive message and store it to buffer.
-	}else{
-
-	}
-	
-	
-}
-#endif
 
 
 typedef struct{
@@ -180,6 +124,8 @@ static Logo_EnterSystemLogin_t LogoLogin = {
 	.cnt = 0,
 	.data[0] = 0
 };
+
+
 
 uint8_t EnterSettingPage_Login(uint8_t ch)
 {
@@ -210,7 +156,7 @@ uint8_t EnterSettingPage_Login(uint8_t ch)
 /*************************************************************
 * if time out in logo page, you must clear the buffer of store keys;
 */
-uint8_t EnterSettingPage_Login_Timeout(void)
+uint8_t EnterSettingPage_Login_TimeoutClear(void)
 {
 
 	memset(&LogoLogin, 0, sizeof(Logo_EnterSystemLogin_t));
@@ -222,8 +168,185 @@ uint8_t EnterSettingPage_Login_Timeout(void)
 
 
 
+/***************************************************************************
+*	Blow code is about read flag, and judge whether enter AMORTIZE MODE.
+*	these codes include:
+*	#	1.read the SWITCH about whether amortize-pay is OVER;
+*	#	2.judge current data whether is the time-node  that enter password unlock next period;
+***************************************************************************/
 
 
+uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t *data)
+{
+    switch(times){
+
+        case 1:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_1ST, data, 4);
+            break;
+        case 2:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_2ST, data, 4);
+            break;
+        case 3:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_3ST, data, 4);
+            break;
+        case 4:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_4ST, data, 4);
+            break;
+        case 5:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_5ST, data, 4);
+            break;
+        case 6:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_6ST, data, 4);
+            break;
+        case 7:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_7ST, data, 4);
+            break;
+        case 8:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_8ST, data, 4);
+            break;
+        case 9:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_9ST, data, 4);
+            break;
+        case 10:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_10ST, data, 4);
+            break;
+        case 11:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_11ST, data, 4);
+            break;
+        case 12:
+            EepromRead_Block(EEPROM_ADDRESS_DATE_12ST, data, 4);
+            break;
+        
+    }
+    
+    return FALSE;
+}
+
+
+//Date_ReadBack_t CurDate;
+extern volatile RepayDate_t CurDate;
+static uint8_t Judge_PasswordTimeNode(uint8_t times)
+{
+	
+	//CurDate.flag = TRUE;
+	RepayDate_t data;
+
+	
+    ReadEEprom_DateData(times, &data);
+
+	/***********************************************************
+		if the date is equal to UNLOCKDate    or    more than  UNLOCKDate,
+		and the LOCK_FLAG is not be clear,    will return TRUE
+	*/
+	if (data.flag == 0)
+        return FALSE;
+
+    if (CurDate.day == data.day && CurDate.month == data.month && CurDate.year == data.year){
+        return TRUE;
+    }
+
+	return FALSE;
+}
+
+
+
+uint8_t IS_Popup_AmortizePassWordPage(void)
+{
+
+	uint8_t MasterSwitch;
+	uint8_t RemainTimes;
+
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    
+	if (MasterSwitch ==  0 || RemainTimes == 0){
+
+		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
+		return FALSE;
+	}
+		
+
+	if (FALSE == Judge_PasswordTimeNode(RemainTimes)){
+
+		// it isn't time to unlock the next proid 
+		return FALSE;
+	}
+
+	
+	return TRUE;
+	
+}
+
+
+
+uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t *data)
+{
+    switch(times){
+
+        case 1:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_1ST, data, 4);
+            break;
+        case 2:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_2ST, data, 4);
+            break;
+        case 3:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_3ST, data, 4);
+            break;
+        case 4:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_4ST, data, 4);
+            break;
+        case 5:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_5ST, data, 4);
+            break;
+        case 6:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_6ST, data, 4);
+            break;
+        case 7:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_7ST, data, 4);
+            break;
+        case 8:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_8ST, data, 4);
+            break;
+        case 9:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_9ST, data, 4);
+            break;
+        case 10:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_10ST, data, 4);
+            break;
+        case 11:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_11ST, data, 4);
+            break;
+        case 12:
+            EepromWrite_Block(EEPROM_ADDRESS_DATE_12ST, data, 4);
+            break;
+        
+    }
+    
+    return FALSE;
+}
+
+
+
+
+void AlreadyPaid_ClearCurrentStore(void)
+{
+    uint8_t MasterSwitch;
+	uint8_t RemainTimes;
+    RepayDate_t data;
+
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
+    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+
+    memset(&data, 0, sizeof(RepayDate_t));
+    ClearEEprom_DateData(RemainTimes, &data);
+    
+    RemainTimes--;
+    if(RemainTimes == 0){
+        EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0x00);
+    }
+    EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    
+}
 
 
 
