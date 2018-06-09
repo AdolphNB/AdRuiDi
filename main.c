@@ -5,7 +5,7 @@
 #include "user_hmi.h"
 #include "eepromManage.h"
 #include "passwordManage.h"
-
+#include <avr/wdt.h>
 
 volatile ShowParam_Def cure = {
 	.frq = 10,
@@ -267,9 +267,10 @@ int main()
 	Poweron_InitConsig();
 	//delay_ms(5000);
 	InitStatus_Show();
-	//delay_ms(5000);
+	delay_ms(5000);
 	InitStatus_Show();
 	MSG_QueueInit();
+	wdt_enable(WDTO_2S);
 	
 	while(1)
 	{
@@ -434,6 +435,7 @@ int main()
 
 		/* this function can generate some timeout event, and  put its to queue*/
 		TimeoutTask_PutToQueue();
+		wdt_reset();
 	}
 
 	return 0;
