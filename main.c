@@ -264,8 +264,12 @@ int main()
 	DevInit_OutputIO();
 	DevInit_InputIO();
 	USART_Init();
+#if DEBUG_TEST
+	uart1_init();
+#endif
 	Poweron_InitConsig();
-	//delay_ms(5000);
+	delay_ms(5000);
+	ReadCurrentDate();
 	InitStatus_Show();
 	delay_ms(5000);
 	InitStatus_Show();

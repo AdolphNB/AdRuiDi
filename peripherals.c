@@ -3,6 +3,8 @@
 #include "avr/io.h"
 #include <avr/interrupt.h>
 #include "MSG_Queue.h"
+#include "config.h"
+
 
 volatile unsigned char tick = 0;
 volatile unsigned char gToggleValue = 0;
@@ -59,8 +61,6 @@ ISR(USART0_RX_vect)
 
 	
 	temp = UDR0;
-
-    if (CurDate.flag){}//receive screen date and time
         
 	switch(usart_cnt)
 	{
@@ -91,9 +91,52 @@ ISR(USART0_RX_vect)
 			
 			break;
 
+
+		case 3:
+			
+			usart_cnt++;
+			if(temp == 0x81){
+				CurDate.flag = 1;
+			}
+			
+			break;
+
+
+		case 4:
+			
+			usart_cnt++;
+			if(temp == 0x20){
+				CurDate.flag = 2;
+			}
+			
+			break;
+
+
+		case 5:
+			
+			usart_cnt++;
+			
+			break;
 			
 		default:
-						
+
+			if(CurDate.flag == 2){ //read current date
+				
+				usart_cnt++;
+				if(usart_cnt == 6){
+					CurDate.year = temp;
+				}else if(usart_cnt == 7){
+					CurDate.month = temp;
+				}else if(usart_cnt == 8){
+					CurDate.day = temp;
+					CurDate.flag = 0xaa;
+					usart_cnt = 0;
+				}
+				
+				break;
+			}
+
+
 			if(usart_cnt == (usart_len - 1)){
 				
 				usart_cnt++;
@@ -262,6 +305,59 @@ void TimeoutTask_PutToQueue()
 		
 	}
 }
+
+
+
+void ReadCurrentDate()
+{
+	uint8_t tx_buff[6] = {0x5A,0xA5,0x03,0x81,0x20,0x03};
+	SendToMonitor(tx_buff, 6);
+}
+
+
+
+#if DEBUG_TEST
+
+#define fosc 8000000  //晶振8MHZ
+#define baud 1152  //波特率
+
+void uart1_init(void) //USART1初始化
+{
+ UCSR1B = 0x00;   //关闭USART1
+ UCSR1A = 0x00;   //不适使用倍速发送
+ UCSR1C = (1<<UCSZ11)|(1<<UCSZ10);//数据位为八位
+ UBRR1L=(fosc/16/(baud+1))%256;//异步正常模式下，UBRR的计算公式
+ UBRR1H=(fosc/16/(baud+1))/256;
+ UCSR1B =(1<<RXEN1)|(1<<TXEN1); //接收使能，传送使能
+}
+
+
+
+void putchar1(unsigned char c)//串口1发送字符
+ {  
+     while (!(UCSR1A&(1<<UDRE1)));//表明发送器一准备就绪
+  UDR1=c;    
+ }
+
+
+
+void puts1(char *s, uint8_t c)
+{
+#if DEBUG_TEST
+
+	while (*s)
+	{
+		putchar1(*s);
+		s++;
+	} 
+	putchar1(c);
+	putchar1(0x0a);//回车换行
+  	putchar1(0x0d);
+#endif	
+} 
+
+
+#endif // DEBUG1_TEST
 
 
 

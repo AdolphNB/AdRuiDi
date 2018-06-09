@@ -53,6 +53,13 @@ uint32_t Get_SystemTick();
 void StartTimeout_Task(uint8_t pic, uint16_t dly);
 void DestroyTimeout_Task();
 void TimeoutTask_PutToQueue();
+void ReadCurrentDate();
 
+
+
+#if DEBUG1_TEST
+void uart1_init(void);
+void puts1(char *s, uint8_t c);
+#endif
 
 #endif //__PERIPHERALS_H__

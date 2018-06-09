@@ -5,6 +5,12 @@
 #include "avr/io.h"
 
 
+
+#define DEBUG_TEST (1)
+
+
+
+
 #define VER_CH 0
 #define VER_EN 1
 
