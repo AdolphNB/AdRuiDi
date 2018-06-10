@@ -20,8 +20,10 @@
 
 static uint8_t ReadPassWord(uint8_t pic, uint8_t * data)
 {
+	data[0] = 1;data[1] = 2;data[2] = 3;data[3] = 4;
+	data[4] = 5;data[5] = 6;data[6] = 7;data[7] = 8;
 	
-	return FALSE;
+	return TRUE;
 }
 
 
@@ -273,6 +275,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+	return TRUE;
 
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
