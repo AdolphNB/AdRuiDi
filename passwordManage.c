@@ -15,14 +15,29 @@
 
 
 
-#define SYSTEM_PASSWORD 	0
-#define PURCHASE_PASSWORD 	1
+#define SYSTEM_PASSWORD 	CFG_PICTURE_PASSWORD_ID
+#define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID
 
 static uint8_t ReadPassWord(uint8_t pic, uint8_t * data)
 {
 	
 	return FALSE;
 }
+
+
+
+
+
+static uint8_t GetSystePassWord(uint8_t pic, uint8_t * data)
+{
+
+	data[0] = 1;data[1] = 2;data[2] = 3;data[3] = 4;
+	data[4] = 5;data[5] = 6;data[6] = 7;data[7] = 8;
+
+	return TRUE;
+
+}
+
 
 
 static uint8_t ComparePassWord(uint8_t pic, PassWordManage_t *pw)
@@ -33,7 +48,7 @@ static uint8_t ComparePassWord(uint8_t pic, PassWordManage_t *pw)
 
 		case SYSTEM_PASSWORD: 
 			
-			if(TRUE == ReadPassWord(SYSTEM_PASSWORD, data)){
+			if(TRUE == GetSystePassWord(SYSTEM_PASSWORD, data)){
 				if(0 == strncmp((char *)data, (char *)pw->data, 8))
 					return TRUE;
 			}

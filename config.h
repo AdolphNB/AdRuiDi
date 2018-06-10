@@ -28,7 +28,7 @@
 /*  the case of pass word manage mode */
 #define CFG_PICTURE_LOGO_ID 				(0x00)
 #define CFG_PICTURE_PASSWORD_ID				(0x0a)
-#define CFG_PICTURE_PUR_SETTING_ID			(0x23)
+#define CFG_PICTURE_PUR_SETTING_ID			(0x0b)
 
 
 /*  the case of amortize mode  */
