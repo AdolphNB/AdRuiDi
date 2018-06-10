@@ -122,11 +122,12 @@ ISR(USART0_RX_vect)
 
 			if(CurDate.flag == 2){ //read current date
 				
-				usart_cnt++;
 				if(usart_cnt == 6){
 					CurDate.year = temp;
+					usart_cnt++;
 				}else if(usart_cnt == 7){
 					CurDate.month = temp;
+					usart_cnt++;
 				}else if(usart_cnt == 8){
 					CurDate.day = temp;
 					CurDate.flag = 0xaa;

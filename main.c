@@ -270,10 +270,12 @@ int main()
 	Poweron_InitConsig();
 	delay_ms(5000);
 	ReadCurrentDate();
-	InitStatus_Show();
-	delay_ms(5000);
-	InitStatus_Show();
+	//InitStatus_Show();
+	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
+	delay_ms(50);
+	//InitStatus_Show();
 	MSG_QueueInit();
+	WorkMode = PASSWORD_MANAGE_MODE; 
 	wdt_enable(WDTO_2S);
 	
 	while(1)
@@ -438,7 +440,7 @@ int main()
 
 
 		/* this function can generate some timeout event, and  put its to queue*/
-		TimeoutTask_PutToQueue();
+		//TimeoutTask_PutToQueue();
 		wdt_reset();
 	}
 
