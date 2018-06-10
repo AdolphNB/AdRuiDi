@@ -152,6 +152,7 @@ void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
 uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 {
 	uint8_t i, j;
+	uint8_t ret = FALSE;
 	static uint8_t setAmortize = 0;
 	
 	switch(ch){
@@ -167,6 +168,12 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 			break;
 
+
+		case 0xfe:
+			ret = TRUE;
+			break;
+
+			
 		case 0xff: //confirm completed set
 		
 			EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
@@ -177,7 +184,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 			}
 			setAmortize = 0;
 
-			return TRUE;
+			ret = TRUE;;
 				
 			break;
 

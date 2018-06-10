@@ -32,12 +32,12 @@
 
 
 /*  the case of amortize mode  */
-#define CFG_AMORTIZE_PW_ENTER_ID			(0x00)
+#define CFG_AMORTIZE_PW_ENTER_ID			(20)
 
 
 
 /*  the case is normal work mode picture id */
-#define CFG_PICTURE_MAIN_ID					(0X00)
+#define CFG_PICTURE_MAIN_ID					(51)
 #define CFG_PICTURE_ENERGY_ID				(0X02)
 #define CFG_PICTURE_FREQUENCY_ID			(0X03)
 #define CFG_PICTURE_TIMES_ID				(0X04)
