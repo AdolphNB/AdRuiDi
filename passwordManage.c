@@ -275,7 +275,6 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
-	return TRUE;
 
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 

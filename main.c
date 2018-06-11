@@ -343,6 +343,7 @@ int main()
 								if (TRUE == EnterSettingPage_Login(msg.c)){
 
 									// if the pass word is true, Enter system login page
+									DestroyTimeout_Task();
 									Pic_SwitchTo(CFG_PICTURE_PASSWORD_ID);
 								}
 							}
