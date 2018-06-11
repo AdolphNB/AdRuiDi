@@ -319,17 +319,24 @@ void ReadCurrentDate()
 
 #if DEBUG_TEST
 
-#define fosc 8000000  //晶振8MHZ
+#define fosc 7372800UL  //晶振8MHZ
 #define baud 1152  //波特率
 
 void uart1_init(void) //USART1初始化
 {
- UCSR1B = 0x00;   //关闭USART1
- UCSR1A = 0x00;   //不适使用倍速发送
- UCSR1C = (1<<UCSZ11)|(1<<UCSZ10);//数据位为八位
- UBRR1L=(fosc/16/(baud+1))%256;//异步正常模式下，UBRR的计算公式
- UBRR1H=(fosc/16/(baud+1))/256;
- UCSR1B =(1<<RXEN1)|(1<<TXEN1); //接收使能，传送使能
+
+	PORTD |= (1 << PD2);
+	DDRD  &= ~( 1<< PD2);
+
+	PORTD &= ~(1 << PD3);
+	DDRD  |= (1 << PD3);
+
+	UCSR1B = 0x00;   //关闭USART1
+	UCSR1A = 0x00;   //不适使用倍速发送
+	UCSR1C = (1<<UCSZ11)|(1<<UCSZ10);//数据位为八位
+	UBRR1H = 0x00;  
+	UBRR1L = 0x03;  //115200 baud
+	UCSR1B =(1<<TXEN1); //接收使能，传送使能
 }
 
 
@@ -346,14 +353,19 @@ void puts1(char *s, uint8_t c)
 {
 #if DEBUG_TEST
 
+	char q;
+
 	while (*s)
 	{
 		putchar1(*s);
 		s++;
 	} 
-	putchar1(c);
-	putchar1(0x0a);//回车换行
-  	putchar1(0x0d);
+	q = c / 100 + '0';putchar1(q);
+	q = c % 100; q = q / 10 + '0';putchar1(q);
+	q = c % 10+ '0';putchar1(q);
+	
+	putchar1('\n');//回车换行
+  	putchar1('\n');
 #endif	
 } 
 

@@ -57,8 +57,9 @@ void ReadCurrentDate();
 
 
 
-#if DEBUG1_TEST
+#if DEBUG_TEST
 void uart1_init(void);
+void putchar1(unsigned char c);
 void puts1(char *s, uint8_t c);
 #endif
 
