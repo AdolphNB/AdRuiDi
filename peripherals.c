@@ -317,6 +317,30 @@ void ReadCurrentDate()
 
 
 
+void ADC_Init(void)
+{
+    ADMUX = (1<<6); //ADC参考电压为AVCC，使用ADC0通道，单端输入模式
+    //16MHz主频下采样率125KSPS、连续转换模式，立即开始转换，不使用中断
+    ADCSRA = (1<<7) | (1<<6) | (1<<5) | (1<<2) | (1<<1) | (1<<0);
+    while(!(ADCSRA&0X40)); //等待转换结束，初始化阶段测试作用
+}
+
+
+unsigned short ADC_read(void)
+{
+    while(!(ADCSRA&0X40)); //等待转换结束，初始化阶段测试作用
+    return ADC;
+}
+
+
+
+
+
+
+
+
+
+
 #if DEBUG_TEST
 
 #define fosc 7372800UL  //晶振8MHZ

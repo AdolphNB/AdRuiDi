@@ -54,6 +54,8 @@ void StartTimeout_Task(uint8_t pic, uint16_t dly);
 void DestroyTimeout_Task();
 void TimeoutTask_PutToQueue();
 void ReadCurrentDate();
+void ADC_Init(void);
+unsigned short ADC_read(void);
 
 
 

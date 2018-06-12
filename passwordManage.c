@@ -30,7 +30,7 @@ static uint8_t ReadPassWord(uint8_t pic, uint8_t * data)
 
 	if(num1 == 0 && num == 0){
 		
-		srand(System_Tick);
+		srand(ADC_read());
 		num = rand();
 		num1 = rand();
 		data[0] = num % 10; data[1] = (num >> 1) % 10; data[2] = (num >> 2) % 10; data[3] = (num >> 3) % 10;

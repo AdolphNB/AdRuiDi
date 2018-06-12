@@ -270,6 +270,7 @@ int main()
 	uart1_init();
 #endif
 	Poweron_InitConsig();
+	ADC_Init();
 	delay_ms(500);
 	ReadCurrentDate();
 	delay_ms(500);
