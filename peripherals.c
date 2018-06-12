@@ -10,7 +10,7 @@ volatile unsigned char tick = 0;
 volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
-static volatile uint32_t System_Tick = 0;
+volatile uint32_t System_Tick = 0;
 RepayDate_t CurDate;
 
 
