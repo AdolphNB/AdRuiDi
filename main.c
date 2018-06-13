@@ -5,7 +5,7 @@
 #include "user_hmi.h"
 #include "eepromManage.h"
 #include "passwordManage.h"
-
+#include <avr/wdt.h>
 
 volatile ShowParam_Def cure = {
 	.frq = 10,
@@ -58,6 +58,7 @@ PassWordManage_t userPassword;
 //set to pass word manage mode, when start machine.
 System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE; 
 
+extern RepayDate_t CurDate;
 
 void Sys_RebootMCU()
 {
@@ -256,6 +257,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 
 int main()
 {
+	uint8_t i;
 	MSG_BufferTypeDef msg;
 	StatusReturn_t val = IGNORE;
 	
@@ -264,13 +266,30 @@ int main()
 	DevInit_OutputIO();
 	DevInit_InputIO();
 	USART_Init();
+#if 1  //EBUG_TEST
+	uart1_init();
+#endif
 	Poweron_InitConsig();
-	//delay_ms(5000);
-	InitStatus_Show();
-	//delay_ms(5000);
-	InitStatus_Show();
-	MSG_QueueInit();
+	ADC_Init();
+	delay_ms(500);
+	ReadCurrentDate();
+	delay_ms(500);
+	//InitStatus_Show();
+	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
+	delay_ms(500);
+	//InitStatus_Show();
+
+#if 1
+	puts1("YY: ", CurDate.year);delay_ms(5);
+	puts1("MM: ", CurDate.month);delay_ms(5);
+	puts1("DD: ", CurDate.day);delay_ms(5);
+#endif
 	
+	MSG_QueueInit();
+	WorkMode = PASSWORD_MANAGE_MODE; 
+	StartTimeout_Task(CFG_PICTURE_LOGO_ID, 500);
+	wdt_enable(WDTO_2S);
+
 	while(1)
 	{
 
@@ -283,7 +302,8 @@ int main()
 			//locate picture is change, and the screen not, because of sync need time
 			//if (msg.picture != current_picture)
 			//	continue;
-			
+			puts1("PIC: ", msg.pic);delay_ms(5);
+			puts1("CMD: ", msg.c);delay_ms(5);
 
 			switch(WorkMode){
 
@@ -309,6 +329,9 @@ int main()
 									
 									WorkMode = AMORTIZE_MANAGE_MODE;
 									Pic_SwitchTo(CFG_AMORTIZE_PW_ENTER_ID);
+									//display rand code
+									DisplayRandomCodeToScreen();
+									DisplayRandomCodeToScreen();
 									
 								}else{
 								
@@ -324,6 +347,7 @@ int main()
 								if (TRUE == EnterSettingPage_Login(msg.c)){
 
 									// if the pass word is true, Enter system login page
+									DestroyTimeout_Task();
 									Pic_SwitchTo(CFG_PICTURE_PASSWORD_ID);
 								}
 							}
@@ -362,11 +386,11 @@ int main()
 						case CFG_PICTURE_PUR_SETTING_ID:
 							
 							//if set seccuss ---> reboot
-							//if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
+							if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
 
-							//	Sys_RebootMCU();
+								Sys_RebootMCU();
 								
-							//}
+							}
 							
 							break;
 
@@ -434,6 +458,7 @@ int main()
 
 		/* this function can generate some timeout event, and  put its to queue*/
 		TimeoutTask_PutToQueue();
+		wdt_reset();
 	}
 
 	return 0;
@@ -451,39 +476,6 @@ int main()
 
 
 #if STORE
-int main(void) 
-{ 
-//	MSG_BufferTypeDef msg;
-	uint8_t buff[8] = {0,1,2,3,4,5,6,7};
-	uint8_t buff2[8];
-	uint8_t i;
-
-	USART_Init();
-
-	while(1)
-	{
-		delay_ms(5000);
-		memset(buff2, 0 , 8);
-		SendToMonitor(buff2,8);
-
-		for(i = 0; i < 8; i++) buff[i] += 1;
-		
-		EepromWrite_PassWord(EEPROM_ADDRESS_SYSTEM_PASSWORD, buff);
-		delay_ms(5000);
-		
-		EepromRead_PassWord(EEPROM_ADDRESS_SYSTEM_PASSWORD, buff2);
-		SendToMonitor(buff2,8);
-
-		EepromWrite_PassWord(EEPROM_ADDRESS_USER_PASSWORD, buff);
-		delay_ms(5000);
-		EepromRead_PassWord(EEPROM_ADDRESS_USER_PASSWORD, buff2);
-		SendToMonitor(buff2,8);
-		
-		EepromRead_PassWord(EEPROM_ADDRESS_SYSTEM_PASSWORD, buff2);
-		SendToMonitor(buff2,8);
-	};
-
-}
 
 
 

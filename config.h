@@ -5,6 +5,12 @@
 #include "avr/io.h"
 
 
+
+#define DEBUG_TEST (1)
+
+
+
+
 #define VER_CH 0
 #define VER_EN 1
 
@@ -21,17 +27,17 @@
 
 /*  the case of pass word manage mode */
 #define CFG_PICTURE_LOGO_ID 				(0x00)
-#define CFG_PICTURE_PASSWORD_ID				(0x22)
-#define CFG_PICTURE_PUR_SETTING_ID			(0x23)
+#define CFG_PICTURE_PASSWORD_ID				(0x0a)
+#define CFG_PICTURE_PUR_SETTING_ID			(0x0b)
 
 
 /*  the case of amortize mode  */
-#define CFG_AMORTIZE_PW_ENTER_ID			(0x00)
+#define CFG_AMORTIZE_PW_ENTER_ID			(20)
 
 
 
 /*  the case is normal work mode picture id */
-#define CFG_PICTURE_MAIN_ID					(0X00)
+#define CFG_PICTURE_MAIN_ID					(51)
 #define CFG_PICTURE_ENERGY_ID				(0X02)
 #define CFG_PICTURE_FREQUENCY_ID			(0X03)
 #define CFG_PICTURE_TIMES_ID				(0X04)
@@ -80,13 +86,6 @@
 #define TRUE (1)
 #define FALSE (0)
 
-
-
-
-#define EEPROM_ADDRESS_SYSTEM_PASSWORD  0X00000000
-#define EEPROM_ADDRESS_USER_PASSWORD    0X00000010
-#define EEPROM_ADDRESS_FLAG_STATUS1     0X00000020
-#define EEPROM_ADDRESS_FLAG_STATUS2     0X00000030
 
 
 
@@ -149,8 +148,10 @@ typedef struct{
 
 //extern Date_ReadBack_t CurDate;
 
-#define EEPROM_ADDRESS_TOTAL_SWITCH				(0x000000f0)
-#define EEPROM_ADDRESS_TOTAL_NUMBER				(0x000000f0)
+
+
+#define EEPROM_ADDRESS_TOTAL_SWITCH				(0x00000010)
+#define EEPROM_ADDRESS_TOTAL_NUMBER				(0x00000020)
 
 #define EEPROM_ADDRESS_DATE_1ST					(0x00000100)
 #define EEPROM_ADDRESS_DATE_2ST					(0x00000110)

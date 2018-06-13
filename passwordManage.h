@@ -26,14 +26,11 @@ typedef enum{
 }StatusReturn_t;
 
 uint8_t EnterSettingPage_Login_TimeoutClear(void);
-
 uint8_t EnterSettingPage_Login(uint8_t ch);
-
 StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch);
-
 uint8_t IS_Popup_AmortizePassWordPage(void);
-
 void AlreadyPaid_ClearCurrentStore(void);
+void DisplayRandomCodeToScreen();
 
 
 

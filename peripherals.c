@@ -3,12 +3,14 @@
 #include "avr/io.h"
 #include <avr/interrupt.h>
 #include "MSG_Queue.h"
+#include "config.h"
+
 
 volatile unsigned char tick = 0;
 volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
-static volatile uint32_t System_Tick = 0;
+volatile uint32_t System_Tick = 0;
 RepayDate_t CurDate;
 
 
@@ -59,8 +61,6 @@ ISR(USART0_RX_vect)
 
 	
 	temp = UDR0;
-
-    if (CurDate.flag){}//receive screen date and time
         
 	switch(usart_cnt)
 	{
@@ -91,9 +91,53 @@ ISR(USART0_RX_vect)
 			
 			break;
 
+
+		case 3:
+			
+			usart_cnt++;
+			if(temp == 0x81){
+				CurDate.flag = 1;
+			}
+			
+			break;
+
+
+		case 4:
+			
+			usart_cnt++;
+			if(temp == 0x20){
+				CurDate.flag = 2;
+			}
+			
+			break;
+
+
+		case 5:
+			
+			usart_cnt++;
+			
+			break;
 			
 		default:
-						
+
+			if(CurDate.flag == 2){ //read current date
+				
+				if(usart_cnt == 6){
+					CurDate.year = temp;
+					usart_cnt++;
+				}else if(usart_cnt == 7){
+					CurDate.month = temp;
+					usart_cnt++;
+				}else if(usart_cnt == 8){
+					CurDate.day = temp;
+					CurDate.flag = 0xaa;
+					usart_cnt = 0;
+				}
+				
+				break;
+			}
+
+
 			if(usart_cnt == (usart_len - 1)){
 				
 				usart_cnt++;
@@ -262,6 +306,95 @@ void TimeoutTask_PutToQueue()
 		
 	}
 }
+
+
+
+void ReadCurrentDate()
+{
+	uint8_t tx_buff[6] = {0x5A,0xA5,0x03,0x81,0x20,0x03};
+	SendToMonitor(tx_buff, 6);
+}
+
+
+
+void ADC_Init(void)
+{
+    ADMUX = (1<<6); //ADC参考电压为AVCC，使用ADC0通道，单端输入模式
+    //16MHz主频下采样率125KSPS、连续转换模式，立即开始转换，不使用中断
+    ADCSRA = (1<<7) | (1<<6) | (1<<5) | (1<<2) | (1<<1) | (1<<0);
+    while(!(ADCSRA&0X40)); //等待转换结束，初始化阶段测试作用
+}
+
+
+unsigned short ADC_read(void)
+{
+    while(!(ADCSRA&0X40)); //等待转换结束，初始化阶段测试作用
+    return ADC;
+}
+
+
+
+
+
+
+
+
+
+
+#if DEBUG_TEST
+
+#define fosc 7372800UL  //晶振8MHZ
+#define baud 1152  //波特率
+
+void uart1_init(void) //USART1初始化
+{
+
+	PORTD |= (1 << PD2);
+	DDRD  &= ~( 1<< PD2);
+
+	PORTD &= ~(1 << PD3);
+	DDRD  |= (1 << PD3);
+
+	UCSR1B = 0x00;   //关闭USART1
+	UCSR1A = 0x00;   //不适使用倍速发送
+	UCSR1C = (1<<UCSZ11)|(1<<UCSZ10);//数据位为八位
+	UBRR1H = 0x00;  
+	UBRR1L = 0x03;  //115200 baud
+	UCSR1B =(1<<TXEN1); //接收使能，传送使能
+}
+
+
+
+void putchar1(unsigned char c)//串口1发送字符
+ {  
+     while (!(UCSR1A&(1<<UDRE1)));//表明发送器一准备就绪
+        UDR1=c;    
+ }
+
+
+
+void puts1(char *s, uint8_t c)
+{
+#if DEBUG_TEST
+
+	char q;
+
+	while (*s)
+	{
+		putchar1(*s);
+		s++;
+	} 
+	q = c / 100 + '0';putchar1(q);
+	q = c % 100; q = q / 10 + '0';putchar1(q);
+	q = c % 10+ '0';putchar1(q);
+	
+	putchar1('\n');//回车换行
+  	putchar1('\n');
+#endif	
+} 
+
+
+#endif // DEBUG1_TEST
 
 
 

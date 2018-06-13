@@ -7,6 +7,7 @@
 
 
 AmortizeDataBase_t EepromDB;
+extern RepayDate_t CurDate;
 
 uint8_t EepromRead_Block(uint32_t *addr, uint8_t *data, uint8_t num)
 {
@@ -75,29 +76,25 @@ uint8_t EepromRead_Byte(uint32_t addr, uint8_t *data)
 }
 
 
-uint8_t AgreementDate_year = 0;
-uint8_t AgreementDate_month = 0;
-uint8_t AgreementDate_day = 0;
-
 void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
 {
     uint8_t year, month, day;
     RepayDate_t data;
 
-    year  = ((AgreementDate_month + cnt) > 12) ? (AgreementDate_year + 1) : AgreementDate_year; 
+    year  = ((CurDate.month + cnt) > 12) ? (CurDate.year+ 1) : CurDate.year; 
     
-	month = ((AgreementDate_month + cnt) % 12 == 0) ? 12 : ((AgreementDate_month + cnt) % 12);
+	month = ((CurDate.month + cnt) % 12 == 0) ? 12 : ((CurDate.month + cnt) % 12);
 
-    if (AgreementDate_day >= 1 && AgreementDate_day <= 28){
-        day = AgreementDate_day;
+    if (CurDate.day >= 1 && CurDate.day <= 28){
+        day = CurDate.day;
     }else{
 
         if (month == 2 && day >= 29){
             day = 28;
         }else if (month == 4 || month == 6 ||month == 9 || month == 11){
-            day = AgreementDate_day > 30 ? 30 : AgreementDate_day;
+            day = CurDate.day > 30 ? 30 : CurDate.day;
         }else{
-            day = AgreementDate_day;
+            day = CurDate.day;
         }
         
     }
@@ -152,6 +149,7 @@ void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
 uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 {
 	uint8_t i, j;
+	uint8_t ret = FALSE;
 	static uint8_t setAmortize = 0;
 	
 	switch(ch){
@@ -167,23 +165,35 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 			break;
 
-		case 0xff: //confirm completed set
-		
-			EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
-			EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0xff);
 
-			for(i = setAmortize, j = 1; i > 0; i--, j++){
-				WriteEEprom_RepaymentDate(i, j);
+		case 0xfe:
+			ret = TRUE;
+			break;
+
+			
+		case 0xff: //confirm completed set
+
+			if(setAmortize == 0){
+				//all pay
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0x00);
+			}else{
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0xff);
+
+				for(i = setAmortize, j = 1; i > 0; i--, j++){
+					WriteEEprom_RepaymentDate(i, j);
+				}
 			}
 			setAmortize = 0;
 
-			return TRUE;
+			ret = TRUE;;
 				
 			break;
 
 	}	
 
-	return FALSE;
+	return ret;
 }
 
 

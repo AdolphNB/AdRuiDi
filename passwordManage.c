@@ -5,6 +5,8 @@
 #include "user_hmi.h"
 #include "string.h"
 #include "passwordManage.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 
@@ -15,14 +17,52 @@
 
 
 
-#define SYSTEM_PASSWORD 	0
-#define PURCHASE_PASSWORD 	1
+#define SYSTEM_PASSWORD 	CFG_PICTURE_PASSWORD_ID
+#define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID
 
+
+extern uint32_t System_Tick;
 static uint8_t ReadPassWord(uint8_t pic, uint8_t * data)
 {
+	static uint32_t num = 0;
+	static uint32_t num1 = 0;
+
+
+	if(num1 == 0 && num == 0){
+		
+		srand(ADC_read());
+		num = rand();
+		num1 = rand();
+		data[0] = num % 10; data[1] = (num >> 1) % 10; data[2] = (num >> 2) % 10; data[3] = (num >> 3) % 10;
+		data[4] = num1 % 10; data[5] = (num1 >> 1) % 10; data[6] = (num1 >> 2) % 10; data[7] = (num1 >> 3) % 10;
+		//36898947
+		//42423480
+	}else{ 
+		// +  * * /
+		data[0] = ((num % 10) + 1) % 10; data[1] = (((num >> 1) % 10) * 2) % 10;
+		data[2] = (((num >> 2) % 10) * 3) % 10; data[3] = (((num >> 3) % 10) / 4) % 10;
+		// +  * * /
+		data[4] = ((num1 % 10) + 5) % 10; data[5] = (((num1 >> 1) % 10) * 6) % 10; 
+		data[6] = (((num1 >> 2) % 10)* 7) % 10; data[7] = (((num1 >> 3) % 10) / 8) % 10;
+	}
 	
-	return FALSE;
+	return TRUE;
 }
+
+
+
+
+
+static uint8_t GetSystePassWord(uint8_t pic, uint8_t * data)
+{
+
+	data[0] = 1;data[1] = 2;data[2] = 3;data[3] = 4;
+	data[4] = 5;data[5] = 6;data[6] = 7;data[7] = 8;
+
+	return TRUE;
+
+}
+
 
 
 static uint8_t ComparePassWord(uint8_t pic, PassWordManage_t *pw)
@@ -33,7 +73,7 @@ static uint8_t ComparePassWord(uint8_t pic, PassWordManage_t *pw)
 
 		case SYSTEM_PASSWORD: 
 			
-			if(TRUE == ReadPassWord(SYSTEM_PASSWORD, data)){
+			if(TRUE == GetSystePassWord(SYSTEM_PASSWORD, data)){
 				if(0 == strncmp((char *)data, (char *)pw->data, 8))
 					return TRUE;
 			}
@@ -258,7 +298,9 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
-    
+
+	return TRUE;
+
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
 		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
@@ -348,6 +390,24 @@ void AlreadyPaid_ClearCurrentStore(void)
     
 }
 
+
+
+
+void DisplayRandomCodeToScreen()
+{
+	uint8_t data[8];
+
+	ReadPassWord(PURCHASE_PASSWORD, data);
+
+	puts1("0:", data[0]);delay_ms(20);
+	puts1("1:", data[1]);delay_ms(20);
+	puts1("2:", data[2]);delay_ms(20);
+	puts1("3:", data[3]);delay_ms(20);
+	puts1("4:", data[4]);delay_ms(20);
+	puts1("5:", data[5]);delay_ms(20);
+	puts1("6:", data[6]);delay_ms(20);
+	puts1("7:", data[7]);delay_ms(20);
+}
 
 
 
