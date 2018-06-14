@@ -38,9 +38,9 @@
 
 /*  the case is normal work mode picture id */
 #define CFG_PICTURE_MAIN_ID					(51)
-#define CFG_PICTURE_ENERGY_ID				(0X02)
-#define CFG_PICTURE_FREQUENCY_ID			(0X03)
-#define CFG_PICTURE_TIMES_ID				(0X04)
+#define CFG_PICTURE_ENERGY_ID				(53)
+#define CFG_PICTURE_FREQUENCY_ID			(54)
+#define CFG_PICTURE_TIMES_ID				(55)
 
 
 
