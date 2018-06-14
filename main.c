@@ -302,8 +302,8 @@ int main()
 			//locate picture is change, and the screen not, because of sync need time
 			//if (msg.picture != current_picture)
 			//	continue;
-			puts1("PIC: ", msg.pic);delay_ms(5);
-			puts1("CMD: ", msg.c);delay_ms(5);
+			puts1("PIC-->: ", msg.pic);delay_ms(5);
+			puts1("CMD-->: ", msg.c);delay_ms(5);
 
 			switch(WorkMode){
 
