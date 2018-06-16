@@ -31,7 +31,7 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch);
 uint8_t IS_Popup_AmortizePassWordPage(void);
 void AlreadyPaid_ClearCurrentStore(void);
 void DisplayRandomCodeToScreen();
-void DisplayPasswordCharToScreen(uint8_t num);
+void DisplayPasswordCharToScreen(uint8_t pic, uint8_t num);
 
 
 

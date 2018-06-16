@@ -266,7 +266,7 @@ int main()
 	DevInit_OutputIO();
 	DevInit_InputIO();
 	USART_Init();
-#if 1  //EBUG_TEST
+#if DEBUG_TEST
 	uart1_init();
 #endif
 	Poweron_InitConsig();
@@ -274,12 +274,12 @@ int main()
 	delay_ms(500);
 	ReadCurrentDate();
 	delay_ms(500);
-	//InitStatus_Show();
+	InitStatus_Show();
 	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
 	delay_ms(500);
 	//InitStatus_Show();
 
-#if 1
+#if DEBUG_TEST
 	puts1("YY: ", CurDate.year);delay_ms(5);
 	puts1("MM: ", CurDate.month);delay_ms(5);
 	puts1("DD: ", CurDate.day);delay_ms(5);
@@ -302,9 +302,11 @@ int main()
 			//locate picture is change, and the screen not, because of sync need time
 			//if (msg.picture != current_picture)
 			//	continue;
+			
+#if DEBUG_TEST			
 			puts1("PIC-->: ", msg.pic);delay_ms(5);
 			puts1("CMD-->: ", msg.c);delay_ms(5);
-
+#endif
 			switch(WorkMode){
 
 
@@ -329,7 +331,7 @@ int main()
 									
 									WorkMode = AMORTIZE_MANAGE_MODE;
 									Pic_SwitchTo(CFG_AMORTIZE_PW_ENTER_ID);
-									DisplayPasswordCharToScreen(0);
+									DisplayPasswordCharToScreen(PURCHASE_PASSWORD,0);
 									DisplayRandomCodeToScreen();
 									
 								}else{
@@ -347,6 +349,7 @@ int main()
 
 									// if the pass word is true, Enter system login page
 									DestroyTimeout_Task();
+									DisplayPasswordCharToScreen(SYSTEM_PASSWORD, 0);
 									Pic_SwitchTo(CFG_PICTURE_PASSWORD_ID);
 								}
 							}

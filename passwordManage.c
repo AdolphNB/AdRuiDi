@@ -17,22 +17,27 @@
 
 
 
-#define SYSTEM_PASSWORD 	CFG_PICTURE_PASSWORD_ID
-#define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID
 
 
-
-void DisplayPasswordCharToScreen(uint8_t num)
+void DisplayPasswordCharToScreen(uint8_t pic, uint8_t num)
 {
 //5a a5 0b 82 0a 20 30 31 34 35 36 39 37 34	
 	uint8_t data[14] = {0x5a,0xa5,0x0b,0x82,0x0a,0x20,};
 	uint8_t i = 0;
+
+	if(pic == SYSTEM_PASSWORD){
+		data[5] = 0x00;
+	}else if(pic == PURCHASE_PASSWORD){
+		data[5] = 0x20;
+	}
+
 
 	for(i = 0; i < num; i++){
 		data[i+6] = data[i+6]+'*';
 	}
 	SendToMonitor(data,14);
 }
+
 
 
 
@@ -127,7 +132,7 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 				pw->cnt++;
 				
 			}
-			DisplayPasswordCharToScreen(pw->cnt);
+			DisplayPasswordCharToScreen(pic, pw->cnt);
 			break;		
 
 
@@ -138,7 +143,7 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 				pw->cnt -= 1;
 			
 			}else pw->cnt = 0;
-			DisplayPasswordCharToScreen(pw->cnt);
+			DisplayPasswordCharToScreen(pic, pw->cnt);
 			return DELETE;
 			
 			break;
@@ -156,7 +161,7 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 			}
 			
 			memset(pw, 0, sizeof(PassWordManage_t)); //ERROR: clear this data structure
-			DisplayPasswordCharToScreen(pw->cnt);
+			DisplayPasswordCharToScreen(pic, pw->cnt);
 			
 			return WRONG;
 			
@@ -310,20 +315,21 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 uint8_t IS_Popup_AmortizePassWordPage(void)
 {
 
-	uint8_t MasterSwitch;
-	uint8_t RemainTimes;
+	uint8_t MasterSwitch = 0;
+	uint8_t RemainTimes = 0;
 
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
+	delay_ms(10);
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
-
-	return TRUE;
-
+	delay_ms(10);
+	
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
 		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
 		return FALSE;
 	}
-		
+	puts1(">: ", MasterSwitch);delay_ms(10);
+	puts1(">: ", RemainTimes);delay_ms(10);
 
 	if (FALSE == Judge_PasswordTimeNode(RemainTimes)){
 
@@ -391,6 +397,7 @@ void AlreadyPaid_ClearCurrentStore(void)
 {
     uint8_t MasterSwitch;
 	uint8_t RemainTimes;
+	uint8_t val = 0;
     RepayDate_t data;
 
     EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
@@ -401,7 +408,8 @@ void AlreadyPaid_ClearCurrentStore(void)
     
     RemainTimes--;
     if(RemainTimes == 0){
-        EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0x00);
+		val = 0;
+        EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &val);
     }
     EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
     

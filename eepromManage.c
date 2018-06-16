@@ -55,22 +55,24 @@ uint8_t EepromWrite_PassWord(uint32_t *addr, uint8_t *data, uint8_t num)
 
 
 
-uint8_t EepromWrite_Byte(uint32_t addr, uint8_t data)
+uint8_t EepromWrite_Byte(uint32_t *addr, uint8_t *data)
 {
 
 	eeprom_busy_wait();
-	eeprom_write_byte(data,  addr);
-
+	cli();
+	eeprom_write_block(data,  addr, 1);
+	sei();
+	
 	return TRUE;
 }
 
 
 
-uint8_t EepromRead_Byte(uint32_t addr, uint8_t *data)
+uint8_t EepromRead_Byte(uint32_t *addr, uint8_t *data)
 {
-
-	eeprom_busy_wait();
-	eeprom_read_byte(data);
+	
+	eeprom_busy_wait(); 
+	eeprom_read_block(data,  addr, 1);
 
 	return TRUE;
 }
@@ -150,6 +152,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 {
 	uint8_t i, j;
 	uint8_t ret = FALSE;
+	uint8_t val = 0;
 	static uint8_t setAmortize = 0;
 	
 	switch(ch){
@@ -175,14 +178,21 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 			if(setAmortize == 0){
 				//all pay
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0x00);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &setAmortize);
+				delay_ms(10);
+				val = 0x00;
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &val);
+				delay_ms(10);
 			}else{
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 0xff);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &setAmortize);
+				delay_ms(10);
+				val = 0xff;
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &val);
+				delay_ms(10);
 
 				for(i = setAmortize, j = 1; i > 0; i--, j++){
 					WriteEEprom_RepaymentDate(i, j);
+					delay_ms(10);
 				}
 			}
 			setAmortize = 0;

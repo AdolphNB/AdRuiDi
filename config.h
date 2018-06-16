@@ -31,6 +31,10 @@
 #define CFG_PICTURE_PUR_SETTING_ID			(0x0b)
 
 
+#define SYSTEM_PASSWORD 	CFG_PICTURE_PASSWORD_ID
+#define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID
+
+
 /*  the case of amortize mode  */
 #define CFG_AMORTIZE_PW_ENTER_ID			(20)
 
@@ -146,7 +150,6 @@ typedef struct{
 	
 }Date_ReadBack_t;
 
-//extern Date_ReadBack_t CurDate;
 
 
 

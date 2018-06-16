@@ -11,7 +11,7 @@ volatile unsigned char gToggleValue = 0;
 extern StructParam_Def WorkStatus;
 extern StructInput_flag_t InFlag;
 volatile uint32_t System_Tick = 0;
-RepayDate_t CurDate;
+volatile RepayDate_t CurDate;
 
 
 uint32_t Get_SystemTick()
@@ -123,13 +123,13 @@ ISR(USART0_RX_vect)
 			if(CurDate.flag == 2){ //read current date
 				
 				if(usart_cnt == 6){
-					CurDate.year = temp;
+					CurDate.year = ((temp >> 4) & 0x0F) * 10 + (temp&0x0f);
 					usart_cnt++;
 				}else if(usart_cnt == 7){
-					CurDate.month = temp;
+					CurDate.month = ((temp >> 4) & 0x0F) * 10 + (temp&0x0f);
 					usart_cnt++;
 				}else if(usart_cnt == 8){
-					CurDate.day = temp;
+					CurDate.day = ((temp >> 4) & 0x0F) * 10 + (temp&0x0f);
 					CurDate.flag = 0xaa;
 					usart_cnt = 0;
 				}
@@ -312,6 +312,7 @@ void TimeoutTask_PutToQueue()
 void ReadCurrentDate()
 {
 	uint8_t tx_buff[6] = {0x5A,0xA5,0x03,0x81,0x20,0x03};
+	memset(&CurDate, 0, sizeof(RepayDate_t));
 	SendToMonitor(tx_buff, 6);
 }
 
