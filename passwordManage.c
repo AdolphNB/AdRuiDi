@@ -21,6 +21,21 @@
 #define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID
 
 
+
+void DisplayPasswordCharToScreen(uint8_t num)
+{
+//5a a5 0b 82 0a 20 30 31 34 35 36 39 37 34	
+	uint8_t data[14] = {0x5a,0xa5,0x0b,0x82,0x0a,0x20,};
+	uint8_t i = 0;
+
+	for(i = 0; i < num; i++){
+		data[i+6] = data[i+6]+'*';
+	}
+	SendToMonitor(data,14);
+}
+
+
+
 extern uint32_t System_Tick;
 static uint8_t ReadPassWord(uint8_t pic, uint8_t * data)
 {
@@ -112,7 +127,7 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 				pw->cnt++;
 				
 			}
-			
+			DisplayPasswordCharToScreen(pw->cnt);
 			break;		
 
 
@@ -123,7 +138,7 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 				pw->cnt -= 1;
 			
 			}else pw->cnt = 0;
-			
+			DisplayPasswordCharToScreen(pw->cnt);
 			return DELETE;
 			
 			break;
@@ -141,13 +156,15 @@ StatusReturn_t PassWordPrase(uint8_t pic, PassWordManage_t *pw, uint8_t ch)
 			}
 			
 			memset(pw, 0, sizeof(PassWordManage_t)); //ERROR: clear this data structure
+			DisplayPasswordCharToScreen(pw->cnt);
+			
 			return WRONG;
 			
 			break;
 
 	}
 	
-
+	
 	return IGNORE;
 }
 
@@ -395,10 +412,19 @@ void AlreadyPaid_ClearCurrentStore(void)
 
 void DisplayRandomCodeToScreen()
 {
-	uint8_t data[8];
+//5a a5 0b 82 0a 20 30 31 34 35 36 39 37 34	
+	uint8_t data[14] = {0x5a,0xa5,0x0b,0x82,0x0a,0x10,0x00,};
+	uint8_t i = 0;
 
-	ReadPassWord(PURCHASE_PASSWORD, data);
+	
+	ReadPassWord(PURCHASE_PASSWORD, &data[6]);
 
+	for(i = 0; i < 8; i++){
+		data[i+6] = data[i+6]+'0';
+	}
+	
+	SendToMonitor(data,14);
+#if 0
 	puts1("0:", data[0]);delay_ms(20);
 	puts1("1:", data[1]);delay_ms(20);
 	puts1("2:", data[2]);delay_ms(20);
@@ -407,7 +433,11 @@ void DisplayRandomCodeToScreen()
 	puts1("5:", data[5]);delay_ms(20);
 	puts1("6:", data[6]);delay_ms(20);
 	puts1("7:", data[7]);delay_ms(20);
+#endif	
 }
+
+
+
 
 
 

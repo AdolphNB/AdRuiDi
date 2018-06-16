@@ -329,8 +329,7 @@ int main()
 									
 									WorkMode = AMORTIZE_MANAGE_MODE;
 									Pic_SwitchTo(CFG_AMORTIZE_PW_ENTER_ID);
-									//display rand code
-									DisplayRandomCodeToScreen();
+									DisplayPasswordCharToScreen(0);
 									DisplayRandomCodeToScreen();
 									
 								}else{
