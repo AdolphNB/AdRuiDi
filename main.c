@@ -262,7 +262,6 @@ int main()
 	StatusReturn_t val = IGNORE;
 	
 	DevInit_PWMOut();
-	DevInit_TickTimer();
 	DevInit_OutputIO();
 	DevInit_InputIO();
 	USART_Init();
@@ -336,8 +335,9 @@ int main()
 									
 								}else{
 								
-									WorkMode = SYSTEM_WORK_MODE;;
+									WorkMode = SYSTEM_WORK_MODE;
 									Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+									DevInit_TickTimer(); //start system tick timer 
 								}
 								
 								EnterSettingPage_Login_TimeoutClear();
@@ -416,8 +416,9 @@ int main()
 
                         //clear this data in eeprom that about the flag, the date.etc
                         AlreadyPaid_ClearCurrentStore();
-						WorkMode = SYSTEM_WORK_MODE;;
+						WorkMode = SYSTEM_WORK_MODE;
 						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+						DevInit_TickTimer(); //start system tick timer 
 
 					}else if (val == WRONG){
 
