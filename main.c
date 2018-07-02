@@ -29,14 +29,7 @@ StructInput_flag_t InFlag = {
 };
 
 
-void delay_ms(unsigned int ms)
-{
-	unsigned int i = 192;
-	while(ms--)
-	{
-		for(i = 192; i > 0; i--);
-	}
-}
+
 
 
 typedef enum{
@@ -249,15 +242,40 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 
 
 
-
-
-
-
-
+#if 0
 
 int main()
 {
-	uint8_t i;
+
+ 	uint8_t qqq = 0, bb = 0;
+	
+	
+	uart1_init(); 
+	
+//	EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 155);
+	delay_ms(500);
+	qqq = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &bb);
+	delay_ms(5);
+	puts1("DD: ",qqq++);
+	EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, qqq);
+	
+	while(1);
+
+	return 0;
+}	
+#else
+
+/*******************************************************************************/
+/*******************************************************************************/
+/*******************************************************************************/
+/*******************************************************************************/
+/*******************************************************************************/
+/*******************************************************************************/
+/*******************************************************************************/
+/*******************************************************************************/
+int main()
+{
+	//uint8_t i;
 	MSG_BufferTypeDef msg;
 	StatusReturn_t val = IGNORE;
 	
@@ -265,6 +283,7 @@ int main()
 	DevInit_OutputIO();
 	DevInit_InputIO();
 	USART_Init();
+	DevInit_TickTimer(); //start system tick timer 
 #if DEBUG_TEST
 	uart1_init();
 #endif
@@ -301,11 +320,6 @@ int main()
 			//locate picture is change, and the screen not, because of sync need time
 			//if (msg.picture != current_picture)
 			//	continue;
-			
-#if DEBUG_TEST			
-			puts1("PIC-->: ", msg.pic);delay_ms(5);
-			puts1("CMD-->: ", msg.c);delay_ms(5);
-#endif
 			switch(WorkMode){
 
 
@@ -337,7 +351,6 @@ int main()
 								
 									WorkMode = SYSTEM_WORK_MODE;
 									Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-									DevInit_TickTimer(); //start system tick timer 
 								}
 								
 								EnterSettingPage_Login_TimeoutClear();
@@ -418,7 +431,7 @@ int main()
                         AlreadyPaid_ClearCurrentStore();
 						WorkMode = SYSTEM_WORK_MODE;
 						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-						DevInit_TickTimer(); //start system tick timer 
+						//DevInit_TickTimer(); //start system tick timer 
 
 					}else if (val == WRONG){
 
@@ -467,201 +480,7 @@ int main()
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-#if STORE
-
-
-
-	DevInit_PWMOut();
-	DevInit_TickTimer();
-	DevInit_OutputIO();
-	DevInit_InputIO();
-	USART_Init();
-	Poweron_InitConsig();
-	delay_ms(5000);
-	InitStatus_Show();
-	delay_ms(5000);
-	InitStatus_Show();
-	MSG_QueueInit();
-	while(1)
-	{
-
-           
-		if(!MSG_QueueIsEmpty())
-		{
-			MSG_QueueGet(&msg);
-			switch(msg.c)
-			{
-/*********************************************************/
-				case MSG_LCD_COUNTER_SHOW:
-					TOGGLE_ENERGY_START();
-					CounterValue_SendToMonitor();
-					delay_ms(19);
-					TOGGLE_ENERGY_STOP();
-					break;
-/*********************************************************/
-				case MSG_SHOW_ENERGY_SET:
-					if(WorkStatus.SetEnum != SET_ENERGY){
-						WorkStatus.SetEnum = SET_ENERGY;
-						Pic_SwitchTo(CFG_PICTURE_ENERGY_ID);
-						WorkStatus.pic_id = CFG_PICTURE_ENERGY_ID;
-						Status_SendtoMonitor(OPT_STATUS_BAR_ENERGY_SET);
-					}else{
-						WorkStatus.SetEnum = SET_IDLE;
-						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-						WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
-						Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
-					}
-					break;
-					
-				case MSG_SHOW_FREQUENCY_SET:
-					if(WorkStatus.SetEnum != SET_FRQ){
-						WorkStatus.SetEnum = SET_FRQ;
-						Pic_SwitchTo(CFG_PICTURE_FREQUENCY_ID);
-						WorkStatus.pic_id = CFG_PICTURE_FREQUENCY_ID;
-						Status_SendtoMonitor(OPT_STATUS_BAR_FREQUENCY_SET);
-					}else{
-						WorkStatus.SetEnum = SET_IDLE;
-						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-						WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
-						Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
-					}
-					break;
-					
-				case MSG_SHOW_TIMES_SET:
-					if(WorkStatus.SetEnum != SET_TIMES){
-						WorkStatus.SetEnum = SET_TIMES;
-						Pic_SwitchTo(CFG_PICTURE_TIMES_ID);
-						WorkStatus.pic_id = CFG_PICTURE_TIMES_ID;
-						Status_SendtoMonitor(OPT_STATUS_BAR_TIMES_SET);
-					}else{
-						WorkStatus.SetEnum = SET_IDLE;
-						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-						WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
-						Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
-					}
-					break;
-				case MSG_SHOW_CLEAR_SET:
-					Key_ClearCounter();
-					break;
-/*********************************************************/
-				case MSG_PARAM_SET_ADD:
-					ParamSet_Add();
-					break;
-				case MSG_PARAM_SET_DEC:
-					ParamSet_Dec();
-					break;
-/*********************************************************/
-				case MSG_CTRL_TOGGLE_OPEN_CLOSE:
-					if((OPEN == WorkStatus.kv_flag) && (TROGGLE_IDLE== WorkStatus.trg)){
-						Status_SendtoMonitor(OPT_STATUS_BAR_TOGGLING_SET);
-						WorkStatus.trg = TROGGLE_TING;
-					}else {
-						Status_SendtoMonitor(OPT_STATUS_BAR_TEMP_TOGGLE_SET);
-						WorkStatus.trg = TROGGLE_IDLE;
-					}
-					break;
-
-				case MSG_CTRL_KV_OPEN:
-					Status_SendtoMonitor(OPT_STATUS_BAR_KVOPEN_SET);
-					OPEN_KV_ENERGY();
-					WorkStatus.kv_flag = OPEN;
-					break;
-
-				case MSG_CTRL_KV_CLOSE:
-					Status_SendtoMonitor(OPT_STATUS_BAR_KVCLOSE_SET);
-					Status_SendtoMonitor(OPT_STATUS_BAR_TEMP_TOGGLE_SET);
-					CLOSE_KV_ENERGY();
-					WorkStatus.kv_flag = CLOSE;
-					WorkStatus.trg = TROGGLE_IDLE;
-					break;
-
-/***********************************************************/					
-/***********************************************************/
-				case MSG_CTRL_ADD_WATER_OPEN:
-					TOUCH_ADD_WATER_OPEN();
-					Status_SendtoMonitor(OPT_STATUS_BAR_ADD_WATER_SET);
-					break;
-
-				case MSG_CTRL_ADD_WATER_STOP:
-					TOUCH_ADD_WATER_STOP();
-					Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
-					break;
-/***********************************************************/
-/***********************************************************/
-
-				case MSG_CTRL_DEC_WATER_OPEN:
-					TOUCH_DEC_WATER_OPEN();
-					Status_SendtoMonitor(OPT_STATUS_BAR_DEC_WATER_SET);
-					break;
-
-				case MSG_CTRL_DEC_WATER_STOP:
-					TOUCH_DEC_WATER_STOP();
-					Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
-					break;
-/***********************************************************/
-/***********************************************************/
-
-				case MSG_CTRL_DEWATER_OPEN:
-					TOUCH_DEWATER_OPEN();
-					Status_SendtoMonitor(OPT_STATUS_BAR_DEWATERING_SET);
-					break;
-
-				case MSG_CTRL_DEWATER_STOP:
-					TOUCH_DEWATER_STOP();
-					Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
-					break;
-/***********************************************************/
-/***********************************************************/
-					
-				case MSG_CTRL_WATERFLOODING_OPEN:
-					TOUCH_WATERFLOODING_OPEN();
-					Status_SendtoMonitor(OPT_STATUS_BAR_WATER_INJECTION_SET);
-					break;
-					
-				case MSG_CTRL_WATERFLOODING_STOP:
-					TOUCH_WATERFLOODING_STOP();
-					Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
-					break;
-/***********************************************************/
-/***********************************************************/
-
-				case MSG_CTRL_ALERT_OPEN:
-					OVER_TEMPERATURE_ALERT_OPEN();
-					Status_SendtoMonitor(OPT_STATUS_BAR_ALERTING_SET);
-					break;
-
-				case MSG_CTRL_ALERT_CLOSE:
-					OVER_TEMPERATURE_ALERT_STOP();
-					Status_SendtoMonitor(OPT_STATUS_BAR_ALERTCLEAR_SET);
-					break;
-/***********************************************************/
-/***********************************************************/
-
-				case MSG_CTRL_ENERGY_OPEN:
-					break;
-
-				case MSG_CTRL_ENERGY_CLOSE:
-					break;
-/*********************************************************/
-				default:
-					break;
-			}
-		}
-	} 
-
-}
-#endif	
+#endif
 
 
 

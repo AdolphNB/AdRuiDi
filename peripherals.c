@@ -4,7 +4,7 @@
 #include <avr/interrupt.h>
 #include "MSG_Queue.h"
 #include "config.h"
-
+#include "user_hmi.h"
 
 volatile unsigned char tick = 0;
 volatile unsigned char gToggleValue = 0;
@@ -312,7 +312,7 @@ void TimeoutTask_PutToQueue()
 void ReadCurrentDate()
 {
 	uint8_t tx_buff[6] = {0x5A,0xA5,0x03,0x81,0x20,0x03};
-	memset(&CurDate, 0, sizeof(RepayDate_t));
+	memset((uint8_t *)&CurDate, 0, sizeof(RepayDate_t));
 	SendToMonitor(tx_buff, 6);
 }
 
@@ -390,7 +390,7 @@ void puts1(char *s, uint8_t c)
 	q = c % 10+ '0';putchar1(q);
 	
 	putchar1('\n');//»Ø³µ»»ÐÐ
-  	putchar1('\n');
+ // 	putchar1('\n');
 #endif	
 } 
 

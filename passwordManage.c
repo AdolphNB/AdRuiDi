@@ -1,6 +1,7 @@
 #include "avr/io.h"
 #include "MSG_Queue.h"
 #include "config.h"
+#include "eepromManage.h"
 #include "peripherals.h"
 #include "user_hmi.h"
 #include "string.h"
@@ -243,40 +244,40 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t *data)
     switch(times){
 
         case 1:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_1ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t *)data, 4);
             break;
         case 2:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_2ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_2ST, (uint8_t *)data, 4);
             break;
         case 3:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_3ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_3ST, (uint8_t *)data, 4);
             break;
         case 4:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_4ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_4ST, (uint8_t *)data, 4);
             break;
         case 5:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_5ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, (uint8_t *)data, 4);
             break;
         case 6:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_6ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)data, 4);
             break;
         case 7:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_7ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_7ST, (uint8_t *)data, 4);
             break;
         case 8:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_8ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_8ST, (uint8_t *)data, 4);
             break;
         case 9:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_9ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_9ST, (uint8_t *)data, 4);
             break;
         case 10:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_10ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_10ST, (uint8_t *)data, 4);
             break;
         case 11:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_11ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_11ST, (uint8_t *)data, 4);
             break;
         case 12:
-            EepromRead_Block(EEPROM_ADDRESS_DATE_12ST, data, 4);
+            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_12ST, (uint8_t *)data, 4);
             break;
         
     }
@@ -318,19 +319,19 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 	uint8_t MasterSwitch = 0;
 	uint8_t RemainTimes = 0;
 
-    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
+    MasterSwitch = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, NULL);
 	delay_ms(10);
-    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    RemainTimes = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, NULL);
 	delay_ms(10);
-	return TRUE;
-	
+	//return TRUE;
+
+	puts1(">: ", MasterSwitch);delay_ms(10);
+	puts1(">: ", RemainTimes);delay_ms(10);
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
 		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
 		return FALSE;
 	}
-	puts1(">: ", MasterSwitch);delay_ms(10);
-	puts1(">: ", RemainTimes);delay_ms(10);
 
 	if (FALSE == Judge_PasswordTimeNode(RemainTimes)){
 
@@ -350,40 +351,40 @@ uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t *data)
     switch(times){
 
         case 1:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_1ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t *)data, 4);
             break;
         case 2:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_2ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_2ST, (uint8_t *)data, 4);
             break;
         case 3:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_3ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_3ST, (uint8_t *)data, 4);
             break;
         case 4:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_4ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_4ST, (uint8_t *)data, 4);
             break;
         case 5:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_5ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, (uint8_t *)data, 4);
             break;
         case 6:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_6ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)data, 4);
             break;
         case 7:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_7ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_7ST, (uint8_t *)data, 4);
             break;
         case 8:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_8ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_8ST, (uint8_t *)data, 4);
             break;
         case 9:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_9ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_9ST, (uint8_t *)data, 4);
             break;
         case 10:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_10ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_10ST, (uint8_t *)data, 4);
             break;
         case 11:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_11ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_11ST, (uint8_t *)data, 4);
             break;
         case 12:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_12ST, data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_12ST, (uint8_t *)data, 4);
             break;
         
     }
@@ -410,9 +411,9 @@ void AlreadyPaid_ClearCurrentStore(void)
     RemainTimes--;
     if(RemainTimes == 0){
 		val = 0;
-        EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &val);
+        EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
     }
-    EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, RemainTimes);
     
 }
 

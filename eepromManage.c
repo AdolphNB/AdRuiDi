@@ -4,50 +4,48 @@
 #include <avr/eeprom.h>
 #include "eepromManage.h"
 #include <avr/interrupt.h>
-
+#include "user_hmi.h"
 
 AmortizeDataBase_t EepromDB;
 extern RepayDate_t CurDate;
 
-uint8_t EepromRead_Block(uint32_t *addr, uint8_t *data, uint8_t num)
+uint8_t EepromRead_Block(uint16_t *addr, uint8_t *data, uint8_t num)
 {
-
+	cli();
 	eeprom_busy_wait(); 
 	eeprom_read_block(data,  addr, num);
-
+	sei();
 	return TRUE;
 }
 
 
 
 
-uint8_t EepromWrite_Block(uint32_t *addr, uint8_t *data, uint8_t num)
+uint8_t EepromWrite_Block(uint16_t *addr, uint8_t *data, uint8_t num)
 {
-
-	eeprom_busy_wait();
 	cli();
+	eeprom_busy_wait();
 	eeprom_write_block(data,  addr, num);
 	sei();
 	return TRUE;
 }
 
-uint8_t EepromRead_PassWord(uint32_t *addr, uint8_t *data, uint8_t num)
+uint8_t EepromRead_PassWord(uint16_t *addr, uint8_t *data, uint8_t num)
 {
-
+	cli();
 	eeprom_busy_wait(); 
 	eeprom_read_block(data,  addr, num);
-
+	sei();
 	return TRUE;
 }
 
 
 
 
-uint8_t EepromWrite_PassWord(uint32_t *addr, uint8_t *data, uint8_t num)
+uint8_t EepromWrite_PassWord(uint16_t *addr, uint8_t *data, uint8_t num)
 {
-
-	eeprom_busy_wait();
 	cli();
+	eeprom_busy_wait();
 	eeprom_write_block(data,  addr, num);
 	sei();
 	return TRUE;
@@ -55,32 +53,31 @@ uint8_t EepromWrite_PassWord(uint32_t *addr, uint8_t *data, uint8_t num)
 
 
 
-uint8_t EepromWrite_Byte(uint32_t *addr, uint8_t *data)
+uint8_t EepromWrite_Byte(uint16_t uiAddress, uint8_t ucData)
 {
-
-	eeprom_busy_wait();
 	cli();
-	eeprom_write_block(data,  addr, 1);
+	eeprom_busy_wait();
+	eeprom_write_byte((uint8_t *)uiAddress, ucData);
 	sei();
-	
 	return TRUE;
 }
 
 
-
-uint8_t EepromRead_Byte(uint32_t *addr, uint8_t *data)
+uint8_t EepromRead_Byte(uint16_t uiAddress, uint8_t *data)
 {
+	uint8_t ret = 0;
 	
-	eeprom_busy_wait(); 
-	eeprom_read_block(data,  addr, 1);
-
-	return TRUE;
+	cli();
+	eeprom_busy_wait();
+	ret = eeprom_read_byte((uint8_t*)uiAddress);
+	sei();
+	return ret;
 }
 
 
 void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
 {
-    uint8_t year, month, day;
+    uint8_t year, month, day = 0;
     RepayDate_t data;
 
     year  = ((CurDate.month + cnt) > 12) ? (CurDate.year+ 1) : CurDate.year; 
@@ -109,40 +106,40 @@ void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
     switch(eepromNum){
 
         case 1:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_1ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t *)&data, 4);
             break;
         case 2:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_2ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_2ST, (uint8_t *)&data, 4);
             break;
         case 3:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_3ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_3ST, (uint8_t *)&data, 4);
             break;
         case 4:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_4ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_4ST, (uint8_t *)&data, 4);
             break;
         case 5:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_5ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, (uint8_t *)&data, 4);
             break;
         case 6:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_6ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)&data, 4);
             break;
         case 7:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_7ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_7ST, (uint8_t *)&data, 4);
             break;
         case 8:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_8ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_8ST, (uint8_t *)&data, 4);
             break;
         case 9:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_9ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_9ST, (uint8_t *)&data, 4);
             break;
         case 10:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_10ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_10ST, (uint8_t *)&data, 4);
             break;
         case 11:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_11ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_11ST, (uint8_t *)&data, 4);
             break;
         case 12:
-            EepromWrite_Block(EEPROM_ADDRESS_DATE_12ST, &data, 4);
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_12ST, (uint8_t *)&data, 4);
             break;
         
     }
@@ -175,19 +172,19 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 			
 		case 0xff: //confirm completed set
-
+			
 			if(setAmortize == 0){
 				//all pay
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &setAmortize);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
 				delay_ms(10);
 				val = 0x00;
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &val);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
 				delay_ms(10);
 			}else{
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &setAmortize);
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
 				delay_ms(10);
-				val = 0xff;
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &val);
+				val = 0xBB;
+				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
 				delay_ms(10);
 
 				for(i = setAmortize, j = 1; i > 0; i--, j++){
@@ -195,6 +192,8 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 					delay_ms(10);
 				}
 			}
+			//puts1("Qnum>: ", setAmortize);delay_ms(10);
+			//puts1("val>: ", val);delay_ms(10);
 			setAmortize = 0;
 
 			ret = TRUE;;
