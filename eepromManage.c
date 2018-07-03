@@ -187,7 +187,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
 				delay_ms(10);
 
-				for(i = setAmortize, j = 1; i > 0; i--, j++){
+				for(i = setAmortize, j = 0; i > 0; i--, j++){
 					WriteEEprom_RepaymentDate(i, j);
 					delay_ms(10);
 				}

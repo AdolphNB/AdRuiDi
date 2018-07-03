@@ -293,6 +293,8 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 	
 	//CurDate.flag = TRUE;
 	RepayDate_t data;
+    uint16_t uCurDate = 0;
+    uint16_t uEeDate = 0;
 
 	
     ReadEEprom_DateData(times, &data);
@@ -304,7 +306,9 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 	if (data.flag == 0)
         return FALSE;
 
-    if (CurDate.day == data.day && CurDate.month == data.month && CurDate.year == data.year){
+    uCurDate = CurDate.year * 365 + CurDate.month * 30 + CurDate.day;
+    uEeDate = data.year * 365 + data.month * 30 + data.day;
+    if ((uCurDate - uEeDate) >= 30){
         return TRUE;
     }
 
@@ -402,8 +406,8 @@ void AlreadyPaid_ClearCurrentStore(void)
 	uint8_t val = 0;
     RepayDate_t data;
 
-    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &MasterSwitch);
-    EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, &RemainTimes);
+    MasterSwitch = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, NULL);
+    RemainTimes = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, NULL);
 
     memset(&data, 0, sizeof(RepayDate_t));
     ClearEEprom_DateData(RemainTimes, &data);
