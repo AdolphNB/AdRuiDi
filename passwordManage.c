@@ -306,8 +306,8 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 	if (data.flag == 0)
         return FALSE;
 
-    uCurDate = CurDate.year * 365 + CurDate.month * 30 + CurDate.day;
-    uEeDate = data.year * 365 + data.month * 30 + data.day;
+    uCurDate = CurDate.year * 365 + (CurDate.month - 1) * 30 + CurDate.day;
+    uEeDate = data.year * 365 + (data.month - 1) * 30 + data.day;
     if ((uCurDate - uEeDate) >= 30){
         return TRUE;
     }
