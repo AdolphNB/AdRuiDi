@@ -15,7 +15,7 @@
 #define ENTER_ENTER		0X0B
 
 
-
+const GetMpnthDays[12] = {0,31,59,90,120,151,181,212,243,273,304,334};
 
 
 
@@ -306,8 +306,8 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 	if (data.flag == 0)
         return FALSE;
 
-    uCurDate = CurDate.year * 365 + (CurDate.month - 1) * 30 + CurDate.day;
-    uEeDate = data.year * 365 + (data.month - 1) * 30 + data.day;
+    uCurDate = CurDate.year * 365 + GetMpnthDays[CurDate.month - 1] + CurDate.day;
+    uEeDate = data.year * 365 + GetMpnthDays[data.month - 1] + data.day;
     if ((uCurDate - uEeDate) >= 30){
         return TRUE;
     }
