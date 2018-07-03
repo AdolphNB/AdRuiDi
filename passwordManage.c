@@ -15,7 +15,7 @@
 #define ENTER_ENTER		0X0B
 
 
-const GetMpnthDays[12] = {0,31,59,90,120,151,181,212,243,273,304,334};
+const uint16_t GetMpnthDays[12] = {0,31,59,90,120,151,181,212,243,273,304,334};
 
 
 
@@ -281,7 +281,7 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t *data)
             break;
         
     }
-    
+    delay_ms(50);
     return FALSE;
 }
 
@@ -298,6 +298,10 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 
 	
     ReadEEprom_DateData(times, &data);
+	puts1("1: ", data.flag);delay_ms(10);
+	puts1("2: ", data.year);delay_ms(10);
+	puts1("3: ", data.month);delay_ms(10);
+	puts1("4: ", data.day);delay_ms(10);
 
 	/***********************************************************
 		if the date is equal to UNLOCKDate    or    more than  UNLOCKDate,
@@ -308,7 +312,10 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 
     uCurDate = CurDate.year * 365 + GetMpnthDays[CurDate.month - 1] + CurDate.day;
     uEeDate = data.year * 365 + GetMpnthDays[data.month - 1] + data.day;
-    if ((uCurDate - uEeDate) >= 30){
+
+	if(uCurDate < uEeDate) return FALSE;
+	
+    if ((uCurDate - uEeDate) >= 0){
         return TRUE;
     }
 
