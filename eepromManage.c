@@ -13,7 +13,7 @@ uint8_t EepromRead_Block(uint16_t *addr, uint8_t *data, uint8_t num)
 {
 	cli();
 	eeprom_busy_wait(); 
-	eeprom_read_block(data,  addr, num);
+	eeprom_read_block(data,  addr, num);delay_ms(1);
 	sei();
 	return TRUE;
 }
@@ -25,7 +25,7 @@ uint8_t EepromWrite_Block(uint16_t *addr, uint8_t *data, uint8_t num)
 {
 	cli();
 	eeprom_busy_wait();
-	eeprom_write_block(data,  addr, num);
+	eeprom_write_block(data,  addr, num);delay_ms(1);
 	sei();
 	return TRUE;
 }
@@ -34,7 +34,7 @@ uint8_t EepromRead_PassWord(uint16_t *addr, uint8_t *data, uint8_t num)
 {
 	cli();
 	eeprom_busy_wait(); 
-	eeprom_read_block(data,  addr, num);
+	eeprom_read_block(data,  addr, num);delay_ms(1);
 	sei();
 	return TRUE;
 }
@@ -46,7 +46,7 @@ uint8_t EepromWrite_PassWord(uint16_t *addr, uint8_t *data, uint8_t num)
 {
 	cli();
 	eeprom_busy_wait();
-	eeprom_write_block(data,  addr, num);
+	eeprom_write_block(data,  addr, num);delay_ms(1);
 	sei();
 	return TRUE;
 }
@@ -57,7 +57,7 @@ uint8_t EepromWrite_Byte(uint16_t uiAddress, uint8_t ucData)
 {
 	cli();
 	eeprom_busy_wait();
-	eeprom_write_byte((uint8_t *)uiAddress, ucData);
+	eeprom_write_byte((uint8_t *)uiAddress, ucData);delay_ms(1);
 	sei();
 	return TRUE;
 }
@@ -69,7 +69,7 @@ uint8_t EepromRead_Byte(uint16_t uiAddress, uint8_t *data)
 	
 	cli();
 	eeprom_busy_wait();
-	ret = eeprom_read_byte((uint8_t*)uiAddress);
+	ret = eeprom_read_byte((uint8_t*)uiAddress);delay_ms(1);
 	sei();
 	return ret;
 }
@@ -198,6 +198,17 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 			ret = TRUE;;
 				
+			break;
+
+		case 0xa5:
+
+			val = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
+			if(val == TRUE){
+				EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, FALSE);
+			}else{
+				EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, TRUE);
+			}
+			delay_ms(1);
 			break;
 
 	}	

@@ -296,6 +296,7 @@ int main()
 	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
 	delay_ms(500);
 	//InitStatus_Show();
+	WorkStatus.EnChFlag = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
 
 #if DEBUG_TEST
 	puts1("YY: ", CurDate.year);delay_ms(5);
@@ -315,7 +316,7 @@ int main()
 		{
 
 			MSG_QueueGet(&msg);
-			//we must confire this message come from current picture
+			//we must confirm this message come from current picture
 			//some times, may be occur interrupe or send to montor time-delay, 
 			//locate picture is change, and the screen not, because of sync need time
 			//if (msg.picture != current_picture)
@@ -350,7 +351,11 @@ int main()
 								}else{
 								
 									WorkMode = SYSTEM_WORK_MODE;
-									Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+									if(WorkStatus.EnChFlag == TRUE){
+										Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+									}else{
+										Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+									}
 								}
 								
 								EnterSettingPage_Login_TimeoutClear();
@@ -378,6 +383,7 @@ int main()
 							if (val == RIGHT){
 								//enter amortsize pay page
 								Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID);
+								Display_CheseEnglish();
 							
 							}else if (val == WRONG){
 
@@ -430,7 +436,11 @@ int main()
                         //clear this data in eeprom that about the flag, the date.etc
                         AlreadyPaid_ClearCurrentStore();
 						WorkMode = SYSTEM_WORK_MODE;
-						Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
+						if(WorkStatus.EnChFlag == TRUE){
+							Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+						}else{
+							Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+						}
 						//DevInit_TickTimer(); //start system tick timer 
 
 					}else if (val == WRONG){

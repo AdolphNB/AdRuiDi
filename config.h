@@ -41,10 +41,10 @@
 
 
 /*  the case is normal work mode picture id */
-#define CFG_PICTURE_MAIN_ID					(51)
-#define CFG_PICTURE_ENERGY_ID				(53)
-#define CFG_PICTURE_FREQUENCY_ID			(54)
-#define CFG_PICTURE_TIMES_ID				(55)
+#define CFG_PICTURE_MAIN_CHINESE_ID			(51)
+#define CFG_PICTURE_CHINESE_CONFIRM_ID		(52)
+#define CFG_PICTURE_MAIN_ENGLISH_ID			(53)
+#define CFG_PICTURE_ENGLISH_CONFIRM_ID		(54)
 
 
 #define CFG_OPTION_ENERGY_ID			(0X00)
@@ -126,6 +126,7 @@ typedef enum{
 
 typedef struct{
 	uint8_t pic_id;
+	uint8_t EnChFlag;
 	ParamSet_flag_t SetEnum;
 	KVFlag_Def kv_flag;
 	TroggleStatus_t trg;
@@ -158,6 +159,8 @@ typedef struct{
 
 #define EEPROM_ADDRESS_TOTAL_SWITCH				(0x0010)
 #define EEPROM_ADDRESS_TOTAL_NUMBER				(0x0020)
+#define EEPROM_CHINESE_ENGLISH_FLAG				(0x0030)
+
 
 #define EEPROM_ADDRESS_DATE_1ST					(0x0100)
 #define EEPROM_ADDRESS_DATE_2ST					(0x0110)

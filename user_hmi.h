@@ -37,6 +37,7 @@ void Poweron_InitConsig(void);
 void SendToMonitor(uint8_t *buf, uint8_t len);
 void delay_ms(unsigned int ms);
 void Option_SelectChange(uint8_t opt, uint8_t color);
+void Display_CheseEnglish();
 
 
 #endif //__MSG_QUEUE_H__
