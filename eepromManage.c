@@ -208,6 +208,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 			}else{
 				EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, TRUE);
 			}
+			Display_CheseEnglish();
 			delay_ms(1);
 			break;
 

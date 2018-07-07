@@ -316,7 +316,7 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 void Display_CheseEnglish()
 {
 	uint8_t val;
-	StatusBar_StatusBuf[4]	= 0xF0;StatusBar_StatusBuf[5]  = 0x00;
+	StatusBar_StatusBuf[4]	= 0x0F;StatusBar_StatusBuf[5]  = 0x00;
 	memset(&StatusBar_StatusBuf[6], 0, 19);
 	val = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
 	if(val == TRUE){
