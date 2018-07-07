@@ -47,6 +47,9 @@
 #define CFG_PICTURE_TIMES_ID				(55)
 
 
+#define CFG_OPTION_ENERGY_ID			(0X00)
+#define CFG_OPTION_FREQUENCY_ID			(0X01)
+#define CFG_OPTION_TIMES_ID				(0X02)
 
 
 

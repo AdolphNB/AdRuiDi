@@ -23,6 +23,40 @@ void delay_ms(unsigned int ms)
 	}
 }
 
+void Option_SelectChange(uint8_t opt, uint8_t color)
+{
+	uint8_t tx_buff[8] = {0x5A, 0xA5, 0x05, 0x82, 0x10, 0x03, 0xF8, 0x00};
+
+	switch(opt){
+		case 0:
+			if(!color){
+				tx_buff[4] = 0x10; tx_buff[5] = 0x03; tx_buff[6] = 0x00; tx_buff[7] = 0x00;
+			}else{
+				tx_buff[4] = 0x10; tx_buff[5] = 0x03; tx_buff[6] = 0xF8; tx_buff[7] = 0x00;
+			}
+			break;
+
+		case 1:
+			if(!color){
+				tx_buff[4] = 0x11; tx_buff[5] = 0x03; tx_buff[6] = 0x00; tx_buff[7] = 0x00;
+			}else{
+				tx_buff[4] = 0x11; tx_buff[5] = 0x03; tx_buff[6] = 0xF8; tx_buff[7] = 0x00;
+			}
+			break;
+
+
+		case 2:
+			if(!color){
+				tx_buff[4] = 0x12; tx_buff[5] = 0x03; tx_buff[6] = 0x00; tx_buff[7] = 0x00;
+			}else{
+				tx_buff[4] = 0x12; tx_buff[5] = 0x03; tx_buff[6] = 0xF8; tx_buff[7] = 0x00;
+			}
+			break;
+			
+	}
+
+	SendToMonitor(tx_buff, 8);
+}
 
 
 void SendToMonitor(uint8_t *buf, uint8_t len)

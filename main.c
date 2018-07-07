@@ -80,13 +80,13 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_SHOW_ENERGY_SET:
 				if(WorkStatus.SetEnum != SET_ENERGY){
 					WorkStatus.SetEnum = SET_ENERGY;
-					Pic_SwitchTo(CFG_PICTURE_ENERGY_ID);
-					WorkStatus.pic_id = CFG_PICTURE_ENERGY_ID;
+					Option_SelectChange(CFG_OPTION_ENERGY_ID, TRUE);
+					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, FALSE);
+					Option_SelectChange(CFG_OPTION_TIMES_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_ENERGY_SET);
 				}else{
 					WorkStatus.SetEnum = SET_IDLE;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
+					Option_SelectChange(CFG_OPTION_ENERGY_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
 				}
 				break;
@@ -94,13 +94,13 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_SHOW_FREQUENCY_SET:
 				if(WorkStatus.SetEnum != SET_FRQ){
 					WorkStatus.SetEnum = SET_FRQ;
-					Pic_SwitchTo(CFG_PICTURE_FREQUENCY_ID);
-					WorkStatus.pic_id = CFG_PICTURE_FREQUENCY_ID;
+					Option_SelectChange(CFG_OPTION_ENERGY_ID, FALSE);
+					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, TRUE);
+					Option_SelectChange(CFG_OPTION_TIMES_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_FREQUENCY_SET);
 				}else{
 					WorkStatus.SetEnum = SET_IDLE;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
+					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
 				}
 				break;
@@ -108,13 +108,13 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_SHOW_TIMES_SET:
 				if(WorkStatus.SetEnum != SET_TIMES){
 					WorkStatus.SetEnum = SET_TIMES;
-					Pic_SwitchTo(CFG_PICTURE_TIMES_ID);
-					WorkStatus.pic_id = CFG_PICTURE_TIMES_ID;
+					Option_SelectChange(CFG_OPTION_ENERGY_ID, FALSE);
+					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, FALSE);
+					Option_SelectChange(CFG_OPTION_TIMES_ID, TRUE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_TIMES_SET);
 				}else{
 					WorkStatus.SetEnum = SET_IDLE;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_ID);
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_ID;
+					Option_SelectChange(CFG_OPTION_TIMES_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
 				}
 				break;
