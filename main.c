@@ -60,12 +60,121 @@ void Sys_RebootMCU()
 }
 
 
+
+uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
+{
+	
+	uint8_t ret = TRUE;
+	static uint8_t dewaterOpenFlag = FALSE;
+	static uint8_t dewaterCloseFlag = FALSE;
+	static uint8_t judgeflag = 0;
+
+	if(ch == MSG_LCD_COUNTER_SHOW) 
+		return TRUE;
+
+	
+	switch(ch){
+		
+		case MSG_CTRL_DEWATER_OPEN:
+			if(dewaterOpenFlag == FALSE){	
+				judgeflag = 0;
+				if(WorkStatus.EnChFlag == TRUE){
+					WorkStatus.pic_id = CFG_PICTURE_CHINESE_CONFIRM_ID;
+					Pic_SwitchTo(CFG_PICTURE_CHINESE_CONFIRM_ID);
+				}else{
+					WorkStatus.pic_id = CFG_PICTURE_ENGLISH_CONFIRM_ID;
+					Pic_SwitchTo(CFG_PICTURE_ENGLISH_CONFIRM_ID);
+				}
+				ret = FALSE;
+			}else{
+				ret = TRUE;
+			}
+			break;
+
+		case MSG_CTRL_DEWATER_STOP:
+			if(WorkStatus.pic_id == CFG_PICTURE_CHINESE_CONFIRM_ID || WorkStatus.pic_id == CFG_PICTURE_ENGLISH_CONFIRM_ID){
+				ret = FALSE;
+			}else{
+				dewaterOpenFlag = FALSE;
+				ret = TRUE;
+			}
+			break;
+			
+		case MSG_CTRL_WATERFLOODING_OPEN:
+			if(dewaterCloseFlag == FALSE){
+				judgeflag = 1;
+				if(WorkStatus.EnChFlag == TRUE){
+					WorkStatus.pic_id = CFG_PICTURE_CHINESE_CONFIRM_ID;
+					Pic_SwitchTo(CFG_PICTURE_CHINESE_CONFIRM_ID);
+				}else{
+					WorkStatus.pic_id = CFG_PICTURE_ENGLISH_CONFIRM_ID;
+					Pic_SwitchTo(CFG_PICTURE_ENGLISH_CONFIRM_ID);
+				}
+				ret = FALSE;
+			}else{
+				ret = TRUE;
+			}
+			break;
+			
+		case MSG_CTRL_WATERFLOODING_STOP:
+			if(WorkStatus.pic_id == CFG_PICTURE_CHINESE_CONFIRM_ID || WorkStatus.pic_id == CFG_PICTURE_ENGLISH_CONFIRM_ID){
+				ret = FALSE;
+			}else{
+				dewaterCloseFlag = FALSE;
+				ret = TRUE;
+			}
+			break;
+
+		case 0x01:
+			if(pic == 0x52 || pic == 0x54){
+
+				if(WorkStatus.EnChFlag == TRUE){
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+				}else{
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+				}
+				ret = FALSE;
+			}
+			break;
+
+		case 0x02:
+			if(pic == 0x52 || pic == 0x54){
+				if(judgeflag == 0){
+					dewaterOpenFlag = TRUE;
+				}else if (judgeflag == 1){
+					dewaterCloseFlag = TRUE;
+				}
+					
+				if(WorkStatus.EnChFlag == TRUE){
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+				}else{
+					WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
+					Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+				}
+				ret = FALSE;
+			}
+			break;
+
+	}
+	
+	return ret;
+}
+
+
+
+
 /******************************************************************
 	* this function complete all of cure-setting and curing operate;
 	*maybe next mode will be change
 */
 void RunCureMode(uint8_t pic, uint8_t ch)
 {
+
+	if(FALSE == Confirm_Operate(pic, ch))
+		return;
 
 	switch(ch)
 	{
