@@ -13,7 +13,9 @@
 #define MSG_LCD_COUNTER_SHOW		0X10
 
 /******************************************************/
-#define MSG_CTRL_TOGGLE_OPEN_CLOSE	0X33
+#define MSG_CTRL_TOGGLE_CLOSE	0X32
+#define MSG_CTRL_TOGGLE_OPEN	0X33
+
 
 #define MSG_CTRL_KV_OPEN			0X31
 #define MSG_CTRL_KV_CLOSE			0X30

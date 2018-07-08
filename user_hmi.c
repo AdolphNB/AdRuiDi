@@ -75,14 +75,29 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 	switch(sta)
 	{
 		case OPT_STATUS_BAR_ENERGY_SET:
-			#if VERSION_DEFINE == VER_CH
+
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xC4;StatusBar_StatusBuf[7]  = 0xDC;//
+				StatusBar_StatusBuf[8]  = 0xC1;StatusBar_StatusBuf[9]  = 0xBF;//
+				StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xE8;
+				StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"EngSet", sizeof("EngSet"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xC4;StatusBar_StatusBuf[7]  = 0xDC;//
 			StatusBar_StatusBuf[8]  = 0xC1;StatusBar_StatusBuf[9]  = 0xBF;//
 			StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xE8;
 			StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else			
+			//#else			
 			StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"EngSet", sizeof("EngSet"));
@@ -91,14 +106,27 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			break;
 			
 		case OPT_STATUS_BAR_FREQUENCY_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xC6;StatusBar_StatusBuf[7]  = 0xB5;
+				StatusBar_StatusBuf[8]  = 0xC2;StatusBar_StatusBuf[9]  = 0xCA;//
+				StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xE8;
+				StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"FrqSet", sizeof("FrqSet"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xC6;StatusBar_StatusBuf[7]  = 0xB5;
 			StatusBar_StatusBuf[8]  = 0xC2;StatusBar_StatusBuf[9]  = 0xCA;//
 			StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xE8;
 			StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"FrqSet", sizeof("FrqSet"));
@@ -106,14 +134,28 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_TIMES_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xB4;StatusBar_StatusBuf[7]  = 0xCE;
+				StatusBar_StatusBuf[8]  = 0xCA;StatusBar_StatusBuf[9]  = 0xFD;//
+				StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xE8;
+				StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Preset", sizeof("Preset"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xB4;StatusBar_StatusBuf[7]  = 0xCE;
 			StatusBar_StatusBuf[8]  = 0xCA;StatusBar_StatusBuf[9]  = 0xFD;//
 			StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xE8;
 			StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Preset", sizeof("Preset"));
@@ -121,28 +163,57 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_CLEAR_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x02;	StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
+				StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
+				StatusBar_StatusBuf[10] = 0x00;StatusBar_StatusBuf[11] = 0x00;
+				StatusBar_StatusBuf[12] = 0x00;StatusBar_StatusBuf[13] = 0x00;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x02;	//StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[5], 0, 9);
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}
+
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x02;	StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
 			StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
 			StatusBar_StatusBuf[10] = 0x00;StatusBar_StatusBuf[11] = 0x00;
 			StatusBar_StatusBuf[12] = 0x00;StatusBar_StatusBuf[13] = 0x00;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x02;	//StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[5], 0, 9);
 			SendToMonitor(StatusBar_StatusBuf,14);
 			#endif
 			break;
 		case OPT_STATUS_BAR_KVOPEN_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xB8;StatusBar_StatusBuf[7]  = 0xDF;
+				StatusBar_StatusBuf[8]  = 0xD1;StatusBar_StatusBuf[9]  = 0xB9;//
+				StatusBar_StatusBuf[10] = 0xBF;StatusBar_StatusBuf[11] = 0xAA;
+				StatusBar_StatusBuf[12] = 0xC6;StatusBar_StatusBuf[13] = 0xF4;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"KV OPEN", sizeof("KV OPEN"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xB8;StatusBar_StatusBuf[7]  = 0xDF;
 			StatusBar_StatusBuf[8]  = 0xD1;StatusBar_StatusBuf[9]  = 0xB9;//
 			StatusBar_StatusBuf[10] = 0xBF;StatusBar_StatusBuf[11] = 0xAA;
 			StatusBar_StatusBuf[12] = 0xC6;StatusBar_StatusBuf[13] = 0xF4;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"KV OPEN", sizeof("KV OPEN"));
@@ -150,14 +221,28 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_KVCLOSE_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xB8;StatusBar_StatusBuf[7]  = 0xDF;
+				StatusBar_StatusBuf[8]  = 0xD1;StatusBar_StatusBuf[9]  = 0xB9;//
+				StatusBar_StatusBuf[10] = 0xB9;StatusBar_StatusBuf[11] = 0xD8;
+				StatusBar_StatusBuf[12] = 0xB1;StatusBar_StatusBuf[13] = 0xD5;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"KV CLOSE", sizeof("KV CLOSE"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xB8;StatusBar_StatusBuf[7]  = 0xDF;
 			StatusBar_StatusBuf[8]  = 0xD1;StatusBar_StatusBuf[9]  = 0xB9;//
 			StatusBar_StatusBuf[10] = 0xB9;StatusBar_StatusBuf[11] = 0xD8;
 			StatusBar_StatusBuf[12] = 0xB1;StatusBar_StatusBuf[13] = 0xD5;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"KV CLOSE", sizeof("KV CLOSE"));
@@ -165,12 +250,24 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_ALERTING_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xBE;StatusBar_StatusBuf[7]  = 0xAF;
+				StatusBar_StatusBuf[8]  = 0xB8;StatusBar_StatusBuf[9]  = 0xE6;//
+				SendToMonitor(StatusBar_StatusBuf,10);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Warn!", sizeof("Warn!"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xBE;StatusBar_StatusBuf[7]  = 0xAF;
 			StatusBar_StatusBuf[8]  = 0xB8;StatusBar_StatusBuf[9]  = 0xE6;//
 			SendToMonitor(StatusBar_StatusBuf,10);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Warn!", sizeof("Warn!"));
@@ -178,26 +275,52 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_ALERTCLEAR_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
+				StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
+				SendToMonitor(StatusBar_StatusBuf,10);
+			}else{
+				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				SendToMonitor(StatusBar_StatusBuf,25);
+			}
+			
+			#if 0//VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
 			StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
 			SendToMonitor(StatusBar_StatusBuf,10);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			SendToMonitor(StatusBar_StatusBuf,25);
 			#endif
 			break;
 		case OPT_STATUS_BAR_ADD_WATER_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
+				StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
+				StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xCF;
+				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			}else{
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Water+", sizeof("Water+"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 			StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
 			StatusBar_StatusBuf[10] = 0xC9;StatusBar_StatusBuf[11] = 0xCF;
 			StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Water+", sizeof("Water+"));
@@ -205,14 +328,30 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_DEC_WATER_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
+				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
+				StatusBar_StatusBuf[10] = 0xCF;StatusBar_StatusBuf[11] = 0xC2;
+				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Water-", sizeof("Water-"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			
+			#if 0 // VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 			StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
 			StatusBar_StatusBuf[10] = 0xCF;StatusBar_StatusBuf[11] = 0xC2;
 			StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Water-", sizeof("Water-"));
@@ -220,14 +359,30 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break; 
 		case OPT_STATUS_BAR_WATER_INJECTION_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
+				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
+				StatusBar_StatusBuf[10] = 0xD7;StatusBar_StatusBuf[11] = 0xA2;
+				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"InFlow", sizeof("InFlow"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 			StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
 			StatusBar_StatusBuf[10] = 0xD7;StatusBar_StatusBuf[11] = 0xA2;
 			StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"InFlow", sizeof("InFlow"));
@@ -235,14 +390,30 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_DEWATERING_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
+				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
+				StatusBar_StatusBuf[10] = 0xC5;StatusBar_StatusBuf[11] = 0xC5;
+				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Drainage", sizeof("Drainage"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 			StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
 			StatusBar_StatusBuf[10] = 0xC5;StatusBar_StatusBuf[11] = 0xC5;
 			StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Drainage", sizeof("Drainage"));
@@ -250,14 +421,29 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_WATERING_CLEAR_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0x00;StatusBar_StatusBuf[7]  = 0x00;
+				StatusBar_StatusBuf[8]	= 0x00;StatusBar_StatusBuf[9]  = 0x00;//
+				StatusBar_StatusBuf[10] = 0x00;StatusBar_StatusBuf[11] = 0x00;
+				StatusBar_StatusBuf[12] = 0x00;StatusBar_StatusBuf[13] = 0x00;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			
+			#if 0 // VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
 			StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
 			StatusBar_StatusBuf[10] = 0x00;StatusBar_StatusBuf[11] = 0x00;
 			StatusBar_StatusBuf[12] = 0x00;StatusBar_StatusBuf[13] = 0x00;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			SendToMonitor(StatusBar_StatusBuf,25);
@@ -265,14 +451,30 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			break;
 
 		case OPT_STATUS_BAR_TOGGLING_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
+				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
+				StatusBar_StatusBuf[10] = 0xB4;StatusBar_StatusBuf[11] = 0xA5;
+				StatusBar_StatusBuf[12] = 0xB7;StatusBar_StatusBuf[13] = 0xA2;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Toggling", sizeof("Toggling"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			
+			#if 0 // VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x05;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 			StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
 			StatusBar_StatusBuf[10] = 0xB4;StatusBar_StatusBuf[11] = 0xA5;
 			StatusBar_StatusBuf[12] = 0xB7;StatusBar_StatusBuf[13] = 0xA2;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Toggling", sizeof("Toggling"));
@@ -280,14 +482,29 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_NO_TOGGLE_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0xCD;StatusBar_StatusBuf[7]  = 0xA3;
+				StatusBar_StatusBuf[8]	= 0xD6;StatusBar_StatusBuf[9]  = 0xB9;//
+				StatusBar_StatusBuf[10] = 0xB4;StatusBar_StatusBuf[11] = 0xA5;
+				StatusBar_StatusBuf[12] = 0xB7;StatusBar_StatusBuf[13] = 0xA2;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Stop", sizeof("Stop"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			#if 0 //VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x05;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xCD;StatusBar_StatusBuf[7]  = 0xA3;
 			StatusBar_StatusBuf[8]  = 0xD6;StatusBar_StatusBuf[9]  = 0xB9;//
 			StatusBar_StatusBuf[10] = 0xB4;StatusBar_StatusBuf[11] = 0xA5;
 			StatusBar_StatusBuf[12] = 0xB7;StatusBar_StatusBuf[13] = 0xA2;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Stop", sizeof("Stop"));
@@ -295,14 +512,29 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			#endif
 			break;
 		case OPT_STATUS_BAR_TEMP_TOGGLE_SET:
-			#if VERSION_DEFINE == VER_CH
+			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
+				StatusBar_StatusBuf[6]	= 0xD4;StatusBar_StatusBuf[7]  = 0xDD;
+				StatusBar_StatusBuf[8]	= 0xCD;StatusBar_StatusBuf[9]  = 0xA3;//
+				StatusBar_StatusBuf[10] = 0xB4;StatusBar_StatusBuf[11] = 0xA5;
+				StatusBar_StatusBuf[12] = 0xB7;StatusBar_StatusBuf[13] = 0xA2;
+				SendToMonitor(StatusBar_StatusBuf,14);
+			
+			}else{
+				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				memcpy(&StatusBar_StatusBuf[6],"Pause", sizeof("Pause"));
+				SendToMonitor(StatusBar_StatusBuf,25);
+				
+			}
+			#if 0 // VERSION_DEFINE == VER_CH
 			StatusBar_StatusBuf[4]  = 0x05;StatusBar_StatusBuf[5]  = 0x00;
 			StatusBar_StatusBuf[6]  = 0xD4;StatusBar_StatusBuf[7]  = 0xDD;
 			StatusBar_StatusBuf[8]  = 0xCD;StatusBar_StatusBuf[9]  = 0xA3;//
 			StatusBar_StatusBuf[10] = 0xB4;StatusBar_StatusBuf[11] = 0xA5;
 			StatusBar_StatusBuf[12] = 0xB7;StatusBar_StatusBuf[13] = 0xA2;
 			SendToMonitor(StatusBar_StatusBuf,14);
-			#else
+			//#else
 			StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 			memset(&StatusBar_StatusBuf[6], 0, 19);
 			memcpy(&StatusBar_StatusBuf[6],"Pause", sizeof("Pause"));

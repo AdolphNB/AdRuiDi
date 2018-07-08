@@ -76,6 +76,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 	switch(ch){
 		
 		case MSG_CTRL_DEWATER_OPEN:
+			dewaterCloseFlag = FALSE;
 			if(dewaterOpenFlag == FALSE){	
 				judgeflag = 0;
 				if(WorkStatus.EnChFlag == TRUE){
@@ -101,6 +102,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			break;
 			
 		case MSG_CTRL_WATERFLOODING_OPEN:
+			dewaterOpenFlag = FALSE;
 			if(dewaterCloseFlag == FALSE){
 				judgeflag = 1;
 				if(WorkStatus.EnChFlag == TRUE){
@@ -238,15 +240,19 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				ParamSet_Dec();
 				break;
 	/*********************************************************/
-			case MSG_CTRL_TOGGLE_OPEN_CLOSE:
+
+			case MSG_CTRL_TOGGLE_OPEN:
 				if((OPEN == WorkStatus.kv_flag) && (TROGGLE_IDLE== WorkStatus.trg)){
 					Status_SendtoMonitor(OPT_STATUS_BAR_TOGGLING_SET);
 					WorkStatus.trg = TROGGLE_TING;
-				}else {
-					Status_SendtoMonitor(OPT_STATUS_BAR_TEMP_TOGGLE_SET);
-					WorkStatus.trg = TROGGLE_IDLE;
 				}
-				break;
+			break;
+
+
+			case MSG_CTRL_TOGGLE_CLOSE:
+				Status_SendtoMonitor(OPT_STATUS_BAR_TEMP_TOGGLE_SET);
+				WorkStatus.trg = TROGGLE_IDLE;
+			break;
 
 			case MSG_CTRL_KV_OPEN:
 				Status_SendtoMonitor(OPT_STATUS_BAR_KVOPEN_SET);
@@ -401,11 +407,10 @@ int main()
 	delay_ms(500);
 	ReadCurrentDate();
 	delay_ms(500);
+	WorkStatus.EnChFlag = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);delay_ms(5);
 	InitStatus_Show();
 	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
 	delay_ms(500);
-	//InitStatus_Show();
-	WorkStatus.EnChFlag = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
 
 #if DEBUG_TEST
 	puts1("YY: ", CurDate.year);delay_ms(5);
