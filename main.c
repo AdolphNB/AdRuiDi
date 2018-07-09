@@ -407,8 +407,9 @@ int main()
 	delay_ms(500);
 	ReadCurrentDate();
 	delay_ms(500);
-	WorkStatus.EnChFlag = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);delay_ms(5);
-	InitStatus_Show();
+	WorkStatus.EnChFlag = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
+	delay_ms(5);
+	InitStatus_Show();delay_ms(5);
 	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
 	delay_ms(500);
 
@@ -465,6 +466,7 @@ int main()
 								}else{
 								
 									WorkMode = SYSTEM_WORK_MODE;
+									InitStatus_Show();delay_ms(5);
 									if(WorkStatus.EnChFlag == TRUE){
 										Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
 									}else{
@@ -550,6 +552,7 @@ int main()
                         //clear this data in eeprom that about the flag, the date.etc
                         AlreadyPaid_ClearCurrentStore();
 						WorkMode = SYSTEM_WORK_MODE;
+						InitStatus_Show();delay_ms(5);
 						if(WorkStatus.EnChFlag == TRUE){
 							Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
 						}else{
