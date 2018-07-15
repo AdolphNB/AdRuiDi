@@ -195,10 +195,12 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, FALSE);
 					Option_SelectChange(CFG_OPTION_TIMES_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_ENERGY_SET);
+					ChEn_PictureSwitch(MSG_SHOW_ENERGY_SET, WorkStatus.EnChFlag);
 				}else{
 					WorkStatus.SetEnum = SET_IDLE;
 					Option_SelectChange(CFG_OPTION_ENERGY_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
+					ChEn_PictureSwitchToMain(WorkStatus.EnChFlag);
 				}
 				break;
 				
@@ -209,10 +211,12 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, TRUE);
 					Option_SelectChange(CFG_OPTION_TIMES_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_FREQUENCY_SET);
+					ChEn_PictureSwitch(MSG_SHOW_FREQUENCY_SET, WorkStatus.EnChFlag);
 				}else{
 					WorkStatus.SetEnum = SET_IDLE;
 					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
+					ChEn_PictureSwitchToMain(WorkStatus.EnChFlag);
 				}
 				break;
 				
@@ -223,10 +227,12 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 					Option_SelectChange(CFG_OPTION_FREQUENCY_ID, FALSE);
 					Option_SelectChange(CFG_OPTION_TIMES_ID, TRUE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_TIMES_SET);
+					ChEn_PictureSwitch(MSG_SHOW_TIMES_SET, WorkStatus.EnChFlag);
 				}else{
 					WorkStatus.SetEnum = SET_IDLE;
 					Option_SelectChange(CFG_OPTION_TIMES_ID, FALSE);
 					Status_SendtoMonitor(OPT_STATUS_BAR_CLEAR_SET);
+					ChEn_PictureSwitchToMain(WorkStatus.EnChFlag);
 				}
 				break;
 			case MSG_SHOW_CLEAR_SET:

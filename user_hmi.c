@@ -33,7 +33,7 @@ void Option_SelectChange(uint8_t opt, uint8_t color)
 			if(!color){
 				tx_buff[4] = 0x10; tx_buff[5] = 0x03; tx_buff[6] = 0x00; tx_buff[7] = 0x00;
 			}else{
-				tx_buff[4] = 0x10; tx_buff[5] = 0x03; tx_buff[6] = 0xF8; tx_buff[7] = 0x00;
+				tx_buff[4] = 0x10; tx_buff[5] = 0x03;  tx_buff[6] = 0x05; tx_buff[7] = 0x1d;
 			}
 			break;
 
@@ -41,7 +41,7 @@ void Option_SelectChange(uint8_t opt, uint8_t color)
 			if(!color){
 				tx_buff[4] = 0x11; tx_buff[5] = 0x03; tx_buff[6] = 0x00; tx_buff[7] = 0x00;
 			}else{
-				tx_buff[4] = 0x11; tx_buff[5] = 0x03; tx_buff[6] = 0xF8; tx_buff[7] = 0x00;
+				tx_buff[4] = 0x11; tx_buff[5] = 0x03;  tx_buff[6] = 0x05; tx_buff[7] = 0x1d;
 			}
 			break;
 
@@ -50,7 +50,7 @@ void Option_SelectChange(uint8_t opt, uint8_t color)
 			if(!color){
 				tx_buff[4] = 0x12; tx_buff[5] = 0x03; tx_buff[6] = 0x00; tx_buff[7] = 0x00;
 			}else{
-				tx_buff[4] = 0x12; tx_buff[5] = 0x03; tx_buff[6] = 0xF8; tx_buff[7] = 0x00;
+				tx_buff[4] = 0x12; tx_buff[5] = 0x03;  tx_buff[6] = 0x05; tx_buff[7] = 0x1d;
 			}
 			break;
 			
@@ -510,6 +510,71 @@ void InitStatus_Show()
 	TOUCH_DEWATER_STOP();
 	TOUCH_WATERFLOODING_STOP();
 }
+
+
+
+
+
+
+
+
+
+void ChEn_PictureSwitchToMain(uint8_t ChEn)
+{
+	if(ChEn == TRUE){
+		Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+	}else{
+		Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+	}
+}
+
+
+
+void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn)
+{
+
+	switch(pic)
+	{
+		case MSG_SHOW_ENERGY_SET:
+			if(ChEn == TRUE){
+				Pic_SwitchTo(CFG_PICTURE_CHINESE_ENERGY_ID);
+			}else{
+				Pic_SwitchTo(CFG_PICTURE_ENGLISH_ENERGY_ID);
+			}
+			break;
+
+
+		case MSG_SHOW_FREQUENCY_SET:
+			if(ChEn == TRUE){
+				Pic_SwitchTo(CFG_PICTURE_CHINESE_FREQ_ID);
+			}else{
+				Pic_SwitchTo(CFG_PICTURE_ENGLISH_FREQ_ID);
+			}
+			break;
+
+		
+		case MSG_SHOW_TIMES_SET:
+			if(ChEn == TRUE){
+				Pic_SwitchTo(CFG_PICTURE_CHINESE_PRESET_ID);
+			}else{
+				Pic_SwitchTo(CFG_PICTURE_ENGLISH_PRESET_ID);
+			}
+			break;
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

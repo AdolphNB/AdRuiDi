@@ -40,18 +40,16 @@ void key_scan()
 ISR(TIMER1_COMPA_vect)
 {
 	MSG_BufferTypeDef q_tim;
-
-	System_Tick++;
 	
     if(tick++ > gToggleValue){
-		//q_tim.c = 0x10;
+		tick = 0;
 		q_tim.c = MSG_LCD_COUNTER_SHOW;
 		if(WorkStatus.trg == TROGGLE_TING)
 			MSG_QueuePut(&q_tim);
-		tick = 0;
 	}else if(tick > 250){
 		tick = 0;
 	}
+	System_Tick++;
 }
 volatile uint8_t usart_cnt = 0,usart_len;
 ISR(USART0_RX_vect)
