@@ -338,7 +338,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
 	puts1(">: ", MasterSwitch);delay_ms(10);
 	puts1(">: ", RemainTimes);delay_ms(10);
-	return FALSE;
+	//return FALSE;
 	if (MasterSwitch ==  0 || RemainTimes == 0){
 
 		//  the master switch is close, or the remain times is 0, that means USER don't need enter password
