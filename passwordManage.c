@@ -313,9 +313,15 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
     uCurDate = CurDate.year * 365 + GetMpnthDays[CurDate.month - 1] + CurDate.day;
     uEeDate = data.year * 365 + GetMpnthDays[data.month - 1] + data.day;
 
-	if(uCurDate < uEeDate) return FALSE;
+	puts1("C: ", uCurDate);delay_ms(10);
+	puts1("E: ", uEeDate);delay_ms(10);
+	if(uCurDate < uEeDate){
+		puts1("IF: ", 1);delay_ms(10);
+		return FALSE;
+	}
 	
     if ((uCurDate - uEeDate) >= 0){
+		puts1("C-E: ", (uCurDate - uEeDate));delay_ms(10);
         return TRUE;
     }
 
