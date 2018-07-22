@@ -128,7 +128,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			break;
 
 		case 0x01:
-			if(pic == 0x52 || pic == 0x54){
+			if(pic == 0x55){
 
 				if(WorkStatus.EnChFlag == TRUE){
 					WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
@@ -142,7 +142,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			break;
 
 		case 0x02:
-			if(pic == 0x52 || pic == 0x54){
+			if(pic == 0x55){
 				if(judgeflag == 0){
 					dewaterOpenFlag = TRUE;
 				}else if (judgeflag == 1){
