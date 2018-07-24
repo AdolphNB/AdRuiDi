@@ -52,6 +52,8 @@ uint32_t Get_SystemTick();
 
 void StartTimeout_Task(uint8_t pic, uint16_t dly);
 void DestroyTimeout_Task();
+uint8_t TimeoutTask_Status();
+
 void TimeoutTask_PutToQueue();
 void ReadCurrentDate();
 void ADC_Init(void);

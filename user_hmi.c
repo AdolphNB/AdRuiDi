@@ -522,8 +522,10 @@ void InitStatus_Show()
 void ChEn_PictureSwitchToMain(uint8_t ChEn)
 {
 	if(ChEn == TRUE){
+		WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
 		Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
 	}else{
+		WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
 		Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
 	}
 }
@@ -537,8 +539,10 @@ void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn)
 	{
 		case MSG_SHOW_ENERGY_SET:
 			if(ChEn == TRUE){
+				WorkStatus.pic_id = CFG_PICTURE_CHINESE_ENERGY_ID;
 				Pic_SwitchTo(CFG_PICTURE_CHINESE_ENERGY_ID);
 			}else{
+				WorkStatus.pic_id = CFG_PICTURE_ENGLISH_ENERGY_ID;
 				Pic_SwitchTo(CFG_PICTURE_ENGLISH_ENERGY_ID);
 			}
 			break;
@@ -546,8 +550,10 @@ void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn)
 
 		case MSG_SHOW_FREQUENCY_SET:
 			if(ChEn == TRUE){
+				WorkStatus.pic_id = CFG_PICTURE_CHINESE_FREQ_ID;
 				Pic_SwitchTo(CFG_PICTURE_CHINESE_FREQ_ID);
 			}else{
+				WorkStatus.pic_id = CFG_PICTURE_ENGLISH_FREQ_ID;
 				Pic_SwitchTo(CFG_PICTURE_ENGLISH_FREQ_ID);
 			}
 			break;
@@ -555,8 +561,10 @@ void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn)
 		
 		case MSG_SHOW_TIMES_SET:
 			if(ChEn == TRUE){
+				WorkStatus.pic_id = CFG_PICTURE_CHINESE_PRESET_ID;
 				Pic_SwitchTo(CFG_PICTURE_CHINESE_PRESET_ID);
 			}else{
+				WorkStatus.pic_id = CFG_PICTURE_ENGLISH_PRESET_ID;
 				Pic_SwitchTo(CFG_PICTURE_ENGLISH_PRESET_ID);
 			}
 			break;

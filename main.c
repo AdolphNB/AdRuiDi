@@ -59,6 +59,67 @@ void Sys_RebootMCU()
 	while(1);
 }
 
+uint8_t GetEnterReturnPictureID()
+{
+	uint8_t ret;
+
+	if(WorkStatus.EnChFlag == TRUE){
+
+		switch(WorkStatus.pic_id){
+			case 50: ret = 55; break;
+			case 52: ret = 56; break;
+			case 53: ret = 57; break;
+			case 54: ret = 58; break;
+			default: ret = WorkStatus.pic_id; break;
+		}
+		
+	}else{
+		
+		switch(WorkStatus.pic_id){
+			case 30: ret = 35; break;
+			case 32: ret = 36; break;
+			case 33: ret = 37; break;
+			case 34: ret = 28; break;
+			default: ret = WorkStatus.pic_id; break;
+		}
+	}
+
+	return ret;
+}
+
+
+
+uint8_t GetOutReturnPictureID()
+{
+	uint8_t ret;
+
+	if(WorkStatus.EnChFlag == TRUE){
+
+		switch(WorkStatus.pic_id){
+			case 55: ret = 50; break;
+			case 56: ret = 52; break;
+			case 57: ret = 53; break;
+			case 58: ret = 54; break;
+			default: ret = WorkStatus.pic_id; break;
+		}
+		
+	}else{
+		
+		switch(WorkStatus.pic_id){
+			case 35: ret = 30; break;
+			case 36: ret = 31; break;
+			case 37: ret = 32; break;
+			case 38: ret = 23; break;
+			default: ret = WorkStatus.pic_id; break;
+		}
+	}
+
+	return ret;
+}
+
+
+
+
 
 
 uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
@@ -75,22 +136,33 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 	
 	switch(ch){
 		
+		//case CFG_LOGO_PAGE_TIMEOUT_ENVET:
+		//	dewaterOpenFlag = FALSE;
+		//	dewaterCloseFlag = FALSE;
+		//	ret = FALSE;
+		//	break;
+
+
+			
 		case MSG_CTRL_DEWATER_OPEN:
 			dewaterCloseFlag = FALSE;
 			if(dewaterOpenFlag == FALSE){	
 				judgeflag = 0;
 				if(WorkStatus.EnChFlag == TRUE){
-					WorkStatus.pic_id = CFG_PICTURE_CHINESE_CONFIRM_ID;
-					Pic_SwitchTo(CFG_PICTURE_CHINESE_CONFIRM_ID);
+					WorkStatus.pic_id = GetEnterReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
+					
 				}else{
-					WorkStatus.pic_id = CFG_PICTURE_ENGLISH_CONFIRM_ID;
-					Pic_SwitchTo(CFG_PICTURE_ENGLISH_CONFIRM_ID);
+					WorkStatus.pic_id = GetEnterReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}
 				ret = FALSE;
 			}else{
 				ret = TRUE;
 			}
 			break;
+
+
 
 		case MSG_CTRL_DEWATER_STOP:
 			if(WorkStatus.pic_id == CFG_PICTURE_CHINESE_CONFIRM_ID || WorkStatus.pic_id == CFG_PICTURE_ENGLISH_CONFIRM_ID){
@@ -100,25 +172,30 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 				ret = TRUE;
 			}
 			break;
+
+
 			
 		case MSG_CTRL_WATERFLOODING_OPEN:
 			dewaterOpenFlag = FALSE;
 			if(dewaterCloseFlag == FALSE){
 				judgeflag = 1;
 				if(WorkStatus.EnChFlag == TRUE){
-					WorkStatus.pic_id = CFG_PICTURE_CHINESE_CONFIRM_ID;
-					Pic_SwitchTo(CFG_PICTURE_CHINESE_CONFIRM_ID);
+					WorkStatus.pic_id = GetEnterReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}else{
-					WorkStatus.pic_id = CFG_PICTURE_ENGLISH_CONFIRM_ID;
-					Pic_SwitchTo(CFG_PICTURE_ENGLISH_CONFIRM_ID);
+					WorkStatus.pic_id = GetEnterReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}
 				ret = FALSE;
 			}else{
 				ret = TRUE;
 			}
 			break;
+
+
 			
 		case MSG_CTRL_WATERFLOODING_STOP:
+			
 			if(WorkStatus.pic_id == CFG_PICTURE_CHINESE_CONFIRM_ID || WorkStatus.pic_id == CFG_PICTURE_ENGLISH_CONFIRM_ID){
 				ret = FALSE;
 			}else{
@@ -127,19 +204,22 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			}
 			break;
 
+
+
 		case 0x01:
 			if(pic == 0x55){
 
 				if(WorkStatus.EnChFlag == TRUE){
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+					WorkStatus.pic_id = GetOutReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}else{
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+					WorkStatus.pic_id = GetOutReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}
-				ret = FALSE;
-			}
+				ret = FALSE;			}
 			break;
+
+
 
 		case 0x02:
 			if(pic == 0x55){
@@ -150,18 +230,19 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 				}
 					
 				if(WorkStatus.EnChFlag == TRUE){
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
+					WorkStatus.pic_id = GetOutReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}else{
-					WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
-					Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
+					WorkStatus.pic_id = GetOutReturnPictureID();
+					Pic_SwitchTo(WorkStatus.pic_id);
 				}
+				//StartTimeout_Task(WorkStatus.pic_id, 800); // after 8s, if not opterate ,cancel opterate 
 				ret = FALSE;
 			}
 			break;
 
 	}
-	
+	puts1("CH: ", ch);delay_ms(5);
 	return ret;
 }
 
@@ -308,6 +389,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_CTRL_DEWATER_STOP:
 				TOUCH_DEWATER_STOP();
 				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
+				//StartTimeout_Task(WorkStatus.pic_id, 200); // after 2s, if not opterate ,cancel opterate 
 				break;
 	/***********************************************************/
 	/***********************************************************/
@@ -320,6 +402,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_CTRL_WATERFLOODING_STOP:
 				TOUCH_WATERFLOODING_STOP();
 				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
+				//StartTimeout_Task(WorkStatus.pic_id, 200); // after 2s, if not opterate ,cancel opterate 
 				break;
 	/***********************************************************/
 	/***********************************************************/
@@ -345,6 +428,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			default:
 				break;
 		}
+	puts1("P: ", WorkStatus.pic_id);delay_ms(5);
 }
 
 
@@ -474,8 +558,10 @@ int main()
 									WorkMode = SYSTEM_WORK_MODE;
 									InitStatus_Show();delay_ms(5);
 									if(WorkStatus.EnChFlag == TRUE){
+										WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
 										Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
 									}else{
+										WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
 										Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
 									}
 								}
@@ -560,8 +646,10 @@ int main()
 						WorkMode = SYSTEM_WORK_MODE;
 						InitStatus_Show();delay_ms(5);
 						if(WorkStatus.EnChFlag == TRUE){
+							WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
 							Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
 						}else{
+							WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
 							Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
 						}
 						//DevInit_TickTimer(); //start system tick timer 
