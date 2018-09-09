@@ -176,6 +176,13 @@ typedef struct{
 }Date_ReadBack_t;
 
 
+typedef struct{
+	uint8_t dewaterOpenFlag;
+	uint8_t dewaterCloseFlag;
+	uint8_t judgeflag;
+}Water_Confirm_t;
+
+
 
 
 #define EEPROM_ADDRESS_TOTAL_SWITCH				(0x0010)

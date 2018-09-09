@@ -340,7 +340,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 	delay_ms(10);
     RemainTimes = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, NULL);
 	delay_ms(10);
-	//return FALSE;
+	return FALSE;
 
 	puts1(">: ", MasterSwitch);delay_ms(10);
 	puts1(">: ", RemainTimes);delay_ms(10);

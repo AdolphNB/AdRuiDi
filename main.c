@@ -28,6 +28,11 @@ StructInput_flag_t InFlag = {
 	.temp = 0,
 };
 
+Water_Confirm_t waterConfirm = {
+	.dewaterOpenFlag = FALSE,
+	.dewaterCloseFlag = FALSE,
+	.judgeflag = 0,
+};
 
 
 
@@ -126,9 +131,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 {
 	
 	uint8_t ret = TRUE;
-	static uint8_t dewaterOpenFlag = FALSE;
-	static uint8_t dewaterCloseFlag = FALSE;
-	static uint8_t judgeflag = 0;
+	
 
 	if(ch == MSG_LCD_COUNTER_SHOW) 
 		return TRUE;
@@ -137,17 +140,23 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 	switch(ch){
 		
 		case CFG_LOGO_PAGE_TIMEOUT_ENVET:
-			dewaterOpenFlag = FALSE;
-			dewaterCloseFlag = FALSE;
+			waterConfirm.dewaterOpenFlag = FALSE;
+			waterConfirm.dewaterCloseFlag = FALSE;
 			ret = FALSE;
 			break;
 
 
-			
+		//DestroyTimeout_Task();	
 		case MSG_CTRL_DEWATER_OPEN:
-			dewaterCloseFlag = FALSE;
-			if(dewaterOpenFlag == FALSE){	
-				judgeflag = 0;
+			
+			waterConfirm.dewaterCloseFlag = FALSE;
+
+			
+			if(waterConfirm.dewaterOpenFlag == FALSE){
+				
+				waterConfirm.judgeflag = 0;
+
+				//chinese or english
 				if(WorkStatus.EnChFlag == TRUE){
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
@@ -155,9 +164,11 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 				}else{
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
-				}
+				}				
 				ret = FALSE;
+
 			}else{
+				DestroyTimeout_Task();
 				ret = TRUE;
 			}
 			break;
@@ -168,7 +179,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			if(WorkStatus.pic_id == CFG_PICTURE_CHINESE_CONFIRM_ID || WorkStatus.pic_id == CFG_PICTURE_ENGLISH_CONFIRM_ID){
 				ret = FALSE;
 			}else{
-				dewaterOpenFlag = FALSE;
+				//waterConfirm.dewaterOpenFlag = FALSE;
 				ret = TRUE;
 			}
 			break;
@@ -176,9 +187,15 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 
 			
 		case MSG_CTRL_WATERFLOODING_OPEN:
-			dewaterOpenFlag = FALSE;
-			if(dewaterCloseFlag == FALSE){
-				judgeflag = 1;
+			
+			waterConfirm.dewaterOpenFlag = FALSE;
+
+			
+			if(waterConfirm.dewaterCloseFlag == FALSE){
+				
+				waterConfirm.judgeflag = 1;
+
+				//chinese or english
 				if(WorkStatus.EnChFlag == TRUE){
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
@@ -187,7 +204,10 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 					Pic_SwitchTo(WorkStatus.pic_id);
 				}
 				ret = FALSE;
+
+				
 			}else{
+				DestroyTimeout_Task();
 				ret = TRUE;
 			}
 			break;
@@ -199,7 +219,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			if(WorkStatus.pic_id == CFG_PICTURE_CHINESE_CONFIRM_ID || WorkStatus.pic_id == CFG_PICTURE_ENGLISH_CONFIRM_ID){
 				ret = FALSE;
 			}else{
-				dewaterCloseFlag = FALSE;
+				//waterConfirm.dewaterCloseFlag = FALSE;
 				ret = TRUE;
 			}
 			break;
@@ -224,11 +244,13 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 
 		case 0x02:
 			if(pic == 0x55){
-				if(judgeflag == 0){
-					dewaterOpenFlag = TRUE;
-				}else if (judgeflag == 1){
-					dewaterCloseFlag = TRUE;
+				
+				if(waterConfirm.judgeflag == 0){
+					waterConfirm.dewaterOpenFlag = TRUE;
+				}else if (waterConfirm.judgeflag == 1){
+					waterConfirm.dewaterCloseFlag = TRUE;
 				}
+
 					
 				if(WorkStatus.EnChFlag == TRUE){
 					WorkStatus.pic_id = GetOutReturnPictureID();
@@ -390,7 +412,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_CTRL_DEWATER_STOP:
 				TOUCH_DEWATER_STOP();
 				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
-				//StartTimeout_Task(WorkStatus.pic_id, 200); // after 2s, if not opterate ,cancel opterate 
+				StartTimeout_Task(WorkStatus.pic_id, 200); // after 2s, if not opterate ,cancel opterate 
 				break;
 	/***********************************************************/
 	/***********************************************************/
@@ -403,7 +425,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_CTRL_WATERFLOODING_STOP:
 				TOUCH_WATERFLOODING_STOP();
 				Status_SendtoMonitor(OPT_STATUS_BAR_WATERING_CLEAR_SET);
-				//StartTimeout_Task(WorkStatus.pic_id, 200); // after 2s, if not opterate ,cancel opterate 
+				StartTimeout_Task(WorkStatus.pic_id, 200); // after 2s, if not opterate ,cancel opterate 
 				break;
 	/***********************************************************/
 	/***********************************************************/
