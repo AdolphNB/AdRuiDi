@@ -151,6 +151,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 	uint8_t ret = FALSE;
 	uint8_t val = 0;
 	static uint8_t setAmortize = 0;
+	static uint8_t amorrtize_flg = 0;
 	
 	switch(ch){
 
@@ -160,6 +161,7 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 		case 12:
 			
 			setAmortize = ch;
+			amorrtize_flg = TRUE;
 			//change display color;
 			
 
@@ -172,29 +174,32 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 			
 		case 0xff: //confirm completed set
-			
-			if(setAmortize == 0){
-				//all pay
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
-				delay_ms(10);
-				val = 0x00;
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
-				delay_ms(10);
-			}else{
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
-				delay_ms(10);
-				val = 0xBB;
-				EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
-				delay_ms(10);
-
-				for(i = setAmortize, j = 1; i > 0; i--, j++){
-					WriteEEprom_RepaymentDate(i, j);
+		
+			if(amorrtize_flg){
+				if(setAmortize == 0){
+					//all pay
+					EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
 					delay_ms(10);
+					val = 0x00;
+					EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
+					delay_ms(10);
+				}else{
+					EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, setAmortize);
+					delay_ms(10);
+					val = 0xBB;
+					EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, val);
+					delay_ms(10);
+
+					for(i = setAmortize, j = 1; i > 0; i--, j++){
+						WriteEEprom_RepaymentDate(i, j);
+						delay_ms(10);
+					}
 				}
 			}
 			//puts1("Qnum>: ", setAmortize);delay_ms(10);
 			//puts1("val>: ", val);delay_ms(10);
 			setAmortize = 0;
+			amorrtize_flg = 0;
 
 			ret = TRUE;;
 				
