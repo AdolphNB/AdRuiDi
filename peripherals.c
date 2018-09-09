@@ -305,6 +305,21 @@ void TimeoutTask_PutToQueue()
 	}
 }
 
+uint8_t TimeoutTask_Status()
+{
+	uint8_t ret = FALSE;
+	uint32_t systime = Get_SystemTick();
+	
+	if(TimeoutTask.flag){
+		
+		if((systime - TimeoutTask.timeStamp) < TimeoutTask.period){
+			ret = TRUE;
+		}
+	}
+
+	return ret;
+}
+
 
 
 void ReadCurrentDate()

@@ -136,11 +136,11 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 	
 	switch(ch){
 		
-		//case CFG_LOGO_PAGE_TIMEOUT_ENVET:
-		//	dewaterOpenFlag = FALSE;
-		//	dewaterCloseFlag = FALSE;
-		//	ret = FALSE;
-		//	break;
+		case CFG_LOGO_PAGE_TIMEOUT_ENVET:
+			dewaterOpenFlag = FALSE;
+			dewaterCloseFlag = FALSE;
+			ret = FALSE;
+			break;
 
 
 			
@@ -216,7 +216,8 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 					WorkStatus.pic_id = GetOutReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
 				}
-				ret = FALSE;			}
+					ret = FALSE;			
+				}
 			break;
 
 
@@ -236,7 +237,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 					WorkStatus.pic_id = GetOutReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
 				}
-				//StartTimeout_Task(WorkStatus.pic_id, 800); // after 8s, if not opterate ,cancel opterate 
+				StartTimeout_Task(WorkStatus.pic_id, 800); // after 8s, if not opterate ,cancel opterate 
 				ret = FALSE;
 			}
 			break;
