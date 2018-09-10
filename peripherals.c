@@ -267,7 +267,7 @@ TimeoutTask_t TimeoutTask = {
 };
 
 TimeoutTask_t Kv_15MinsTimeout = {
-	.flag = 0;
+	.flag = 0,
 };
 
 
@@ -342,7 +342,7 @@ void Restart_15minsCounter()
 {
 	if (WorkStatus.kv_flag == OPEN){
 		Kv_15MinsTimeout.flag = 1;
-		Kv_15MinsTimeout.period = 9000; //15mina
+		Kv_15MinsTimeout.period = 90000; //15mins
 		Kv_15MinsTimeout.timeStamp = Get_SystemTick();
 	}
 	
@@ -356,7 +356,7 @@ void Timeout_15minsHandle()
 	MSG_BufferTypeDef q;
 
 
-	if((TimeoutTask.flag) && (WorkStatus.kv_flag == OPEN)){
+	if((Kv_15MinsTimeout.flag) && (WorkStatus.kv_flag == OPEN)){
 
 		if((systime - Kv_15MinsTimeout.timeStamp) >= Kv_15MinsTimeout.period){
 
@@ -365,10 +365,10 @@ void Timeout_15minsHandle()
 			MSG_QueuePut(&q);
 
 			Kv_15MinsTimeout.flag = 0;
+			puts1("15mins", 1 );delay_ms(5);
 		}
-		
 	}
-
+	//puts1("15mins", 1 );delay_ms(5);
 }
 
 

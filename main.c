@@ -290,6 +290,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				CounterValue_SendToMonitor();
 				delay_ms(19);
 				TOGGLE_ENERGY_STOP();
+				Restart_15minsCounter();
 				break;
 	/*********************************************************/
 			case MSG_SHOW_ENERGY_SET:
@@ -368,6 +369,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				Status_SendtoMonitor(OPT_STATUS_BAR_KVOPEN_SET);
 				OPEN_KV_ENERGY();
 				WorkStatus.kv_flag = OPEN;
+				Restart_15minsCounter();
 				break;
 
 			case MSG_CTRL_KV_CLOSE:
@@ -723,6 +725,7 @@ int main()
 
 		/* this function can generate some timeout event, and  put its to queue*/
 		TimeoutTask_PutToQueue();
+		Timeout_15minsHandle();
 		wdt_reset();
 	}
 

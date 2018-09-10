@@ -36,7 +36,7 @@
 typedef struct{
 	uint8_t flag;
 	uint8_t pic;
-	uint16_t period;
+	uint32_t period;
 	uint32_t timeStamp;
 }TimeoutTask_t;
 
@@ -59,6 +59,8 @@ void ReadCurrentDate();
 void ADC_Init(void);
 unsigned short ADC_read(void);
 
+void Timeout_15minsHandle();
+void Restart_15minsCounter();
 
 
 #if DEBUG_TEST
