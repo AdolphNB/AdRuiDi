@@ -376,6 +376,11 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				CLOSE_KV_ENERGY();
 				WorkStatus.kv_flag = CLOSE;
 				WorkStatus.trg = TROGGLE_IDLE;
+
+				//toggle one time, avoid stored-energy don't be release.
+				TOGGLE_ENERGY_START();
+				delay_ms(20);
+				TOGGLE_ENERGY_STOP();
 				break;
 
 	/***********************************************************/					
