@@ -266,6 +266,9 @@ TimeoutTask_t TimeoutTask = {
 	.flag = 0,
 };
 
+TimeoutTask_t Kv_15MinsTimeout = {
+	.flag = 0;
+};
 
 
 void StartTimeout_Task(uint8_t pic, uint16_t dly)
@@ -319,6 +322,68 @@ uint8_t TimeoutTask_Status()
 
 	return ret;
 }
+
+
+
+
+
+
+
+
+/*********************************************************************************
+* 15 mines auto stop high voltage
+*  these code will be come ture the function.
+*  there will be include 2 functions :
+	void Restart_15minsCounter()
+	void Timeout_15minsHandle();
+**********************************************************************************/
+
+void Restart_15minsCounter()
+{
+	if (WorkStatus.kv_flag == OPEN){
+		Kv_15MinsTimeout.flag = 1;
+		Kv_15MinsTimeout.period = 9000; //15mina
+		Kv_15MinsTimeout.timeStamp = Get_SystemTick();
+	}
+	
+}
+
+
+
+void Timeout_15minsHandle()
+{
+	uint32_t systime = Get_SystemTick();
+	MSG_BufferTypeDef q;
+
+
+	if((TimeoutTask.flag) && (WorkStatus.kv_flag == OPEN)){
+
+		if((systime - Kv_15MinsTimeout.timeStamp) >= Kv_15MinsTimeout.period){
+
+			q.pic = WorkStatus.pic_id;
+			q.c = MSG_CTRL_KV_CLOSE;
+			MSG_QueuePut(&q);
+
+			Kv_15MinsTimeout.flag = 0;
+		}
+		
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
