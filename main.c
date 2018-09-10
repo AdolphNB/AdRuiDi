@@ -84,7 +84,7 @@ uint8_t GetEnterReturnPictureID()
 			case 30: ret = 35; break;
 			case 32: ret = 36; break;
 			case 33: ret = 37; break;
-			case 34: ret = 28; break;
+			case 34: ret = 38; break;
 			default: ret = WorkStatus.pic_id; break;
 		}
 	}
@@ -112,9 +112,9 @@ uint8_t GetOutReturnPictureID()
 		
 		switch(WorkStatus.pic_id){
 			case 35: ret = 30; break;
-			case 36: ret = 31; break;
-			case 37: ret = 32; break;
-			case 38: ret = 23; break;
+			case 36: ret = 32; break;
+			case 37: ret = 33; break;
+			case 38: ret = 34; break;
 			default: ret = WorkStatus.pic_id; break;
 		}
 	}
