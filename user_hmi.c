@@ -238,14 +238,14 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
-				StatusBar_StatusBuf[10] = 0xD7;StatusBar_StatusBuf[11] = 0xA2;
+				StatusBar_StatusBuf[10] = 0xC5;StatusBar_StatusBuf[11] = 0xC5;
 				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"InFlow", sizeof("InFlow"));
+				memcpy(&StatusBar_StatusBuf[6],"Drainage", sizeof("Drainage"));
 				SendToMonitor(StatusBar_StatusBuf,25);
 				
 			}
@@ -256,14 +256,14 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
-				StatusBar_StatusBuf[10] = 0xC5;StatusBar_StatusBuf[11] = 0xC5;
+				StatusBar_StatusBuf[10] = 0xD7;StatusBar_StatusBuf[11] = 0xA2;
 				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"Drainage", sizeof("Drainage"));
+				memcpy(&StatusBar_StatusBuf[6],"InFlow", sizeof("InFlow"));
 				SendToMonitor(StatusBar_StatusBuf,25);
 				
 			}
