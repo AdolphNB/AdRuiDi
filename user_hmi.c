@@ -103,7 +103,7 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			}else{
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"FrqSet", sizeof("FrqSet"));
+				memcpy(&StatusBar_StatusBuf[6],"FreqSet", sizeof("FreqSet"));
 				SendToMonitor(StatusBar_StatusBuf,25);
 			}
 			break;
