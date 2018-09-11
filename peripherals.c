@@ -239,26 +239,6 @@ uint8_t USART_Init(void)
 
 
 
-void ReadScreen_CurrentDate(RepayDate_t *data)
-{
-	uint8_t Buf[14];
-	
-    CurDate.flag = 1;
-
-    Buf[4]  = 0x02;Buf[5]  = 0x00;
-    Buf[6]  = 0xC4;Buf[7]  = 0xDC;//
-    Buf[8]  = 0xC1;Buf[9]  = 0xBF;//
-    Buf[10] = 0xC9;Buf[11] = 0xE8;
-    Buf[12] = 0xD6;Buf[13] = 0xC3;
-    SendToMonitor(Buf,14);
-
-	while(CurDate.flag);
-	CurDate.year = 18;
-	CurDate.month = 6;
-	CurDate.day = 2;	
-}
-
-
 
 
 
