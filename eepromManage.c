@@ -5,6 +5,9 @@
 #include "eepromManage.h"
 #include <avr/interrupt.h>
 #include "user_hmi.h"
+#include "system_setting_page.h"
+
+
 
 AmortizeDataBase_t EepromDB;
 extern RepayDate_t CurDate;
@@ -123,24 +126,6 @@ void WriteEEprom_RepaymentDate(uint8_t eepromNum, uint8_t cnt)
         case 6:
             EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)&data, 4);
             break;
-        case 7:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_7ST, (uint8_t *)&data, 4);
-            break;
-        case 8:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_8ST, (uint8_t *)&data, 4);
-            break;
-        case 9:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_9ST, (uint8_t *)&data, 4);
-            break;
-        case 10:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_10ST, (uint8_t *)&data, 4);
-            break;
-        case 11:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_11ST, (uint8_t *)&data, 4);
-            break;
-        case 12:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_12ST, (uint8_t *)&data, 4);
-            break;
         
     }
 }
@@ -205,18 +190,6 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 				
 			break;
 
-		case 0xa5:
-
-			val = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
-			if(val == TRUE){
-				EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, FALSE);
-			}else{
-				EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, TRUE);
-			}
-			Display_CheseEnglish();
-			delay_ms(1);
-			break;
-
 	}	
 
 	return ret;
@@ -224,7 +197,23 @@ uint8_t SetAmortizeAndStore(uint8_t pic, uint8_t ch)
 
 
 
+void ChEnSwitch()
+{
+	uint8_t val = 0;
+		
+	val = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
 
+	
+	if(val == TRUE){
+		EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, FALSE);
+	}else{
+		EepromWrite_Byte(EEPROM_CHINESE_ENGLISH_FLAG, TRUE);
+	}
+
+	
+	Display_CheseEnglish();
+	delay_ms(1);
+}
 
 
 

@@ -28,11 +28,20 @@
 /*  the case of pass word manage mode */
 #define CFG_PICTURE_LOGO_ID 				(0x00)
 #define CFG_PICTURE_PASSWORD_ID				(0x0a)
-#define CFG_PICTURE_PUR_SETTING_ID			(0x0b)
+#define CFG_PICTURE_PUR_SETTING_ID_1		(0x0b)
+#define CFG_PICTURE_PUR_SETTING_ID_2		(0x0c)
+#define CFG_PICTURE_PUR_SETTING_ID_3		(0x0d)
+
+#define CFG_PICTURE_DATE_PRODUCTION			(0x0e)
+#define CFG_PICTURE_DATE_AMORTIZE			(0x0F)
+
+
+
+
 
 
 #define SYSTEM_PASSWORD 	CFG_PICTURE_PASSWORD_ID
-#define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID
+#define PURCHASE_PASSWORD 	CFG_PICTURE_PUR_SETTING_ID_1
 
 
 /*  the case of amortize mode  */
@@ -196,12 +205,9 @@ typedef struct{
 #define EEPROM_ADDRESS_DATE_4ST					(0x0130)
 #define EEPROM_ADDRESS_DATE_5ST					(0x0140)
 #define EEPROM_ADDRESS_DATE_6ST					(0x0150)
-#define EEPROM_ADDRESS_DATE_7ST					(0x0160)
-#define EEPROM_ADDRESS_DATE_8ST					(0x0170)
-#define EEPROM_ADDRESS_DATE_9ST					(0x0180)
-#define EEPROM_ADDRESS_DATE_10ST				(0x0190)
-#define EEPROM_ADDRESS_DATE_11ST				(0x01A0)
-#define EEPROM_ADDRESS_DATE_12ST				(0x01B0)
+
+#define EEPROM_ADDRESS_DATE_PRODT				(0x01A0)
+
 
 
 typedef struct {

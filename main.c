@@ -6,6 +6,8 @@
 #include "eepromManage.h"
 #include "passwordManage.h"
 #include <avr/wdt.h>
+#include "system_setting_page.h"
+
 
 volatile ShowParam_Def cure = {
 	.frq = 10,
@@ -40,6 +42,7 @@ Water_Confirm_t waterConfirm = {
 typedef enum{
 	
 	PASSWORD_MANAGE_MODE,
+	SYSTEM_SETTING_MODE,
 	AMORTIZE_MANAGE_MODE,
 	SYSTEM_WORK_MODE
 	
@@ -51,7 +54,6 @@ PassWordManage_t sysPassword;
 
 //user password
 PassWordManage_t userPassword;
-
 
 //set to pass word manage mode, when start machine.
 System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE; 
@@ -599,6 +601,8 @@ int main()
 								EnterSettingPage_Login_TimeoutClear();
 
 
+
+							/* ENTER PASSWORD, if correct, enter system setting page*/
 							}else{
 							
 								if (TRUE == EnterSettingPage_Login(msg.c)){
@@ -620,8 +624,10 @@ int main()
 
 							if (val == RIGHT){
 								//enter amortsize pay page
-								Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID);
+								WorkMode = SYSTEM_SETTING_MODE;
+								Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_1);
 								Display_CheseEnglish();
+								Display_Date_Of_Production(1);
 							
 							}else if (val == WRONG){
 
@@ -639,24 +645,10 @@ int main()
 							}
 								
 							break;
-
-
-
-						case CFG_PICTURE_PUR_SETTING_ID:
-							
-							//if set seccuss ---> reboot
-							if(TRUE == SetAmortizeAndStore(msg.pic, msg.c)){
-
-								Sys_RebootMCU();
-								
-							}
-							
-							break;
-
 					}
-					
 					break;
 
+					
 
 /*******************************************************************************/
 /*******************************************************************************/
@@ -703,16 +695,24 @@ int main()
 
 
 
+					
+/*******************************************************************************/
+/*******************************************************************************/
+				case SYSTEM_SETTING_MODE:
+
+					Run_SystemSetttingPage(msg.pic, msg.c);
+					
+					break;
+
+
 /*******************************************************************************/
 /*******************************************************************************/
 				case SYSTEM_WORK_MODE:
 				/**************************************************
 					*normal work, cure mode
 				*/
-				
 					RunCureMode(msg.pic, msg.c);
 						
-				
 					break;
 
 

@@ -261,24 +261,6 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t *data)
         case 6:
             EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)data, 4);
             break;
-        case 7:
-            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_7ST, (uint8_t *)data, 4);
-            break;
-        case 8:
-            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_8ST, (uint8_t *)data, 4);
-            break;
-        case 9:
-            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_9ST, (uint8_t *)data, 4);
-            break;
-        case 10:
-            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_10ST, (uint8_t *)data, 4);
-            break;
-        case 11:
-            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_11ST, (uint8_t *)data, 4);
-            break;
-        case 12:
-            EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_12ST, (uint8_t *)data, 4);
-            break;
         
     }
     delay_ms(50);
@@ -386,24 +368,7 @@ uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t *data)
         case 6:
             EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)data, 4);
             break;
-        case 7:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_7ST, (uint8_t *)data, 4);
-            break;
-        case 8:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_8ST, (uint8_t *)data, 4);
-            break;
-        case 9:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_9ST, (uint8_t *)data, 4);
-            break;
-        case 10:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_10ST, (uint8_t *)data, 4);
-            break;
-        case 11:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_11ST, (uint8_t *)data, 4);
-            break;
-        case 12:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_12ST, (uint8_t *)data, 4);
-            break;
+        
         
     }
     

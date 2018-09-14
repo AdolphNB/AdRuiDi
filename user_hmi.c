@@ -5,6 +5,7 @@
 #include "MSG_Queue.h"
 #include "user_hmi.h"
 #include "eepromManage.h"
+#include "system_setting_page.h"
 
 
 extern ShowParam_Def cure;
@@ -346,19 +347,7 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 
 }
 
-void Display_CheseEnglish()
-{
-	uint8_t val;
-	StatusBar_StatusBuf[4]	= 0x0F;StatusBar_StatusBuf[5]  = 0x00;
-	memset(&StatusBar_StatusBuf[6], 0, 19);
-	val = EepromRead_Byte(EEPROM_CHINESE_ENGLISH_FLAG, NULL);
-	if(val == TRUE){
-		memcpy(&StatusBar_StatusBuf[6],"Chinese", sizeof("Chinese"));
-	}else{
-		memcpy(&StatusBar_StatusBuf[6],"English", sizeof("English"));
-	}
-	SendToMonitor(StatusBar_StatusBuf,25);
-}
+
 
 void Pic_SwitchTo(uint8_t pic)
 {

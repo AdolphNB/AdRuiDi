@@ -14,6 +14,12 @@ typedef struct{
 }PassWordManage_t;
 
 
+typedef struct {
+	uint8_t cnt;
+	uint8_t data[10];
+}DatePrdt_t;
+
+
 
 
 typedef enum{
