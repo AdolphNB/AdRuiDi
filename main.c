@@ -580,6 +580,8 @@ int main()
 									Pic_SwitchTo(CFG_AMORTIZE_PW_ENTER_ID);
 									DisplayPasswordCharToScreen(PURCHASE_PASSWORD,0);
 									DisplayRandomCodeToScreen();
+
+									
 									
 								}else{
 								
@@ -593,7 +595,6 @@ int main()
 										Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
 									}
 								}
-								
 								EnterSettingPage_Login_TimeoutClear();
 
 
@@ -658,18 +659,25 @@ int main()
 					val = PassWordPrase(msg.pic, &userPassword, msg.c);
 				
 					if (val == RIGHT){
+						
+						//clear this data in eeprom that about the flag, the date.etc
+						AlreadyPaid_ClearCurrentStore();
+						Sys_RebootMCU();
 
-                        //clear this data in eeprom that about the flag, the date.etc
-                        AlreadyPaid_ClearCurrentStore();
+						
+						/*
+						AlreadyPaid_ClearCurrentStore();
 						WorkMode = SYSTEM_WORK_MODE;
 						InitStatus_Show();delay_ms(5);
+
+						
 						if(WorkStatus.EnChFlag == TRUE){
 							WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
 							Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
 						}else{
 							WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
 							Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
-						}
+						}*/
 						//DevInit_TickTimer(); //start system tick timer 
 
 					}else if (val == WRONG){

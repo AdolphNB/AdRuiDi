@@ -223,7 +223,6 @@ static void Modify_DateProduction(uint8_t ch)
 {
 	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
 	uint8_t flag = 0;
-	uint8_t i = 0;
 	
 	switch(ch){
 		case 0:case 1:case 2:case 3:
@@ -315,6 +314,8 @@ static uint8_t updateAmortizeModify_Page()
 		memcpy((char*)&StatusBar_StatusBuf[6],"NO", sizeof("NO"));
 	else memcpy((char*)&StatusBar_StatusBuf[6],"NOP", sizeof("NOP"));
 	SendToMonitor(StatusBar_StatusBuf,25);	
+
+	return 0;
 }
 
 
@@ -347,7 +348,6 @@ void update_ModifyDataToEEprom(uint8_t num)
 
 static void Modify_DateAmortize(uint8_t ch)
 {
-	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
 	uint8_t flag = 0;
 	static uint8_t counter = 2;
 	

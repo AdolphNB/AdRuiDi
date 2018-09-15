@@ -26,6 +26,7 @@ void DisplayPasswordCharToScreen(uint8_t pic, uint8_t num)
 	uint8_t data[14] = {0x5a,0xa5,0x0b,0x82,0x0a,0x20,};
 	uint8_t i = 0;
 
+	//which picture be display
 	if(pic == SYSTEM_PASSWORD){
 		data[5] = 0x00;
 	}else if(pic == PURCHASE_PASSWORD){
@@ -311,7 +312,7 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 }
 
 
-
+#if 0
 uint8_t IS_Popup_AmortizePassWordPage(void)
 {
 
@@ -343,41 +344,56 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 	return TRUE;
 	
 }
+#else
 
-
-
-uint8_t ClearEEprom_DateData(uint8_t times, RepayDate_t *data)
+static Amortize_Date_t artDate[6];
+static uint8_t Amortize_PayNumber = 0;
+uint8_t IS_Popup_AmortizePassWordPage(void)
 {
-    switch(times){
+	uint8_t i;
+	uint8_t ret = FALSE;
+	uint16_t uCurDate = 0;
+    uint16_t uEeDate = 0;
+	char data[20];
 
-        case 1:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t *)data, 4);
-            break;
-        case 2:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_2ST, (uint8_t *)data, 4);
-            break;
-        case 3:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_3ST, (uint8_t *)data, 4);
-            break;
-        case 4:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_4ST, (uint8_t *)data, 4);
-            break;
-        case 5:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, (uint8_t *)data, 4);
-            break;
-        case 6:
-            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)data, 4);
-            break;
-        
-        
-    }
-    
-    return FALSE;
+	
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t*)&artDate[0], 4);
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_2ST, (uint8_t*)&artDate[1], 4);
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_3ST, (uint8_t*)&artDate[2], 4);
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_4ST, (uint8_t*)&artDate[3], 4);
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, (uint8_t*)&artDate[4], 4);
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t*)&artDate[5], 4);
+
+
+	for (i = 0; i < 6; i++){
+
+		if (artDate[i].flg != 1)
+			continue;
+
+
+		if (artDate[i].flg == 1){
+
+			uCurDate = CurDate.year * 365 + GetMpnthDays[CurDate.month - 1] + CurDate.day;
+		    uEeDate = artDate[i].year * 365 + GetMpnthDays[artDate[i].mon- 1] + artDate[i].day;
+
+
+			//sprintf(data, "f:%d-> %d-%d-%d", artDate[i].flg,artDate[i].year,artDate[i].mon, artDate[i].day);
+			//puts1(data,1);
+			if (uCurDate >= uEeDate){
+				Amortize_PayNumber = i;
+				return TRUE;
+			}
+		}
+	}
+	
+	
+	return ret;
 }
+#endif
 
 
 
-
+#if 0
 void AlreadyPaid_ClearCurrentStore(void)
 {
     uint8_t MasterSwitch;
@@ -399,7 +415,45 @@ void AlreadyPaid_ClearCurrentStore(void)
     EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_NUMBER, RemainTimes);
     
 }
+#else
+void AlreadyPaid_ClearCurrentStore(void)
+{
+	uint8_t data[4];
+	uint8_t displayData[25];
+	
 
+	artDate[Amortize_PayNumber].flg = 2;
+	memcpy((char*)data, (char*)&artDate[Amortize_PayNumber], 4);
+
+	//sprintf(displayData, "%d->%d, %d-%d-%d:",Amortize_PayNumber,data[0],data[1],data[2],data[3]);
+	//puts1(displayData,0);
+	
+	switch(Amortize_PayNumber){
+
+        case 0:
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t *)data, 4);
+            break;
+        case 1:
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_2ST, (uint8_t *)data, 4);
+            break;
+        case 2:
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_3ST, (uint8_t *)data, 4);
+            break;
+        case 3:
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_4ST, (uint8_t *)data, 4);
+            break;
+        case 4:
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, (uint8_t *)data, 4);
+            break;
+        case 5:
+            EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, (uint8_t *)data, 4);
+            break;
+        
+        
+    }
+}
+
+#endif
 
 
 
@@ -417,16 +471,6 @@ void DisplayRandomCodeToScreen()
 	}
 	
 	SendToMonitor(data,14);
-#if 0
-	puts1("0:", data[0]);delay_ms(20);
-	puts1("1:", data[1]);delay_ms(20);
-	puts1("2:", data[2]);delay_ms(20);
-	puts1("3:", data[3]);delay_ms(20);
-	puts1("4:", data[4]);delay_ms(20);
-	puts1("5:", data[5]);delay_ms(20);
-	puts1("6:", data[6]);delay_ms(20);
-	puts1("7:", data[7]);delay_ms(20);
-#endif	
 }
 
 
