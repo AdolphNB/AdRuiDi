@@ -71,7 +71,7 @@ static void update_systemSetting3Data(void)
 			
 			getDisplayAddr(&StatusBar_StatusBuf[4], i);
 			memset(&StatusBar_StatusBuf[6], 0, 19);
-			//sprintf((char*)&StatusBar_StatusBuf[6], "20%02d-%02d-%02d", amortizeDate[i].year, amortizeDate[i].mon, amortizeDate[i].day);
+			sprintf((char*)&StatusBar_StatusBuf[6], "20%02d-%02d-%02d", amortizeDate[i].year, amortizeDate[i].mon, amortizeDate[i].day);
 			SendToMonitor(StatusBar_StatusBuf,25);
 
 
