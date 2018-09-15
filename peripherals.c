@@ -14,10 +14,24 @@ volatile uint32_t System_Tick = 0;
 volatile RepayDate_t CurDate;
 
 
+
+
+void Sys_RebootMCU()
+{
+	// infinite loop, cause watch dog timer ---> timeout, and reboot
+	while(1);
+}
+
+
+
+
 uint32_t Get_SystemTick()
 {
 	return System_Tick;
 }
+
+
+
 
 
 void key_scan()
@@ -37,6 +51,9 @@ void key_scan()
 	}
 }
 
+
+
+
 ISR(TIMER1_COMPA_vect)
 {
 	MSG_BufferTypeDef q_tim;
@@ -51,6 +68,10 @@ ISR(TIMER1_COMPA_vect)
 	}
 	System_Tick++;
 }
+
+
+
+
 volatile uint8_t usart_cnt = 0,usart_len;
 ISR(USART0_RX_vect)
 {
@@ -158,11 +179,19 @@ ISR(USART0_RX_vect)
 	}
 }
 
+
+
+
+
 void USART_Transmit( unsigned char data )
 {
 	while ( !( UCSR0A & (1<<UDRE0)));
 	UDR0= data;
 }
+
+
+
+
 
 uint8_t DevInit_TickTimer(void)
 {
@@ -202,11 +231,15 @@ uint8_t DevInit_PWMOut(void)
 	return 0;
 }
 
+
+
+
 uint8_t DevInit_OutputIO(void)
 {
 	
 	return 0;	
 }
+
 
 
 
@@ -216,6 +249,7 @@ uint8_t DevInit_InputIO(void)
  	PORTD |= 0X70;//0111 0000
 	return 0;
 }
+
 
 
 
@@ -251,6 +285,8 @@ TimeoutTask_t Kv_15MinsTimeout = {
 };
 
 
+
+
 void StartTimeout_Task(uint8_t pic, uint16_t dly)
 {
 	TimeoutTask.flag =  1;
@@ -261,10 +297,12 @@ void StartTimeout_Task(uint8_t pic, uint16_t dly)
 
 
 
+
 void DestroyTimeout_Task()
 {
 	memset(&TimeoutTask, 0, sizeof(TimeoutTask_t));
 }
+
 
 
 
@@ -287,6 +325,9 @@ void TimeoutTask_PutToQueue()
 		
 	}
 }
+
+
+
 
 uint8_t TimeoutTask_Status()
 {

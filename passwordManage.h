@@ -22,6 +22,19 @@ typedef struct {
 
 
 
+typedef struct {
+	uint8_t flg;
+	uint8_t year;
+	uint8_t mon;
+	uint8_t day;
+}Amortize_Date_t;
+
+
+
+
+
+
+
 typedef enum{
 	
 	WRONG = 0,

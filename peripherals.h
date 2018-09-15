@@ -61,6 +61,7 @@ unsigned short ADC_read(void);
 
 void Timeout_15minsHandle();
 void Restart_15minsCounter();
+void Sys_RebootMCU();
 
 
 #if DEBUG_TEST

@@ -60,11 +60,7 @@ System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE;
 
 extern RepayDate_t CurDate;
 
-void Sys_RebootMCU()
-{
-	// infinite loop, cause watch dog timer ---> timeout, and reboot
-	while(1);
-}
+
 
 uint8_t GetEnterReturnPictureID()
 {
