@@ -51,7 +51,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void);
 void AlreadyPaid_ClearCurrentStore(void);
 void DisplayRandomCodeToScreen();
 void DisplayPasswordCharToScreen(uint8_t pic, uint8_t num);
-
+void DisplayPaying_AmortizeNumber(void);
 
 
 #endif

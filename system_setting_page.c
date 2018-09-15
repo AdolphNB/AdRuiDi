@@ -14,6 +14,14 @@
 
 
 
+static void update_Setting2_Counter()
+{
+	
+}
+
+
+
+
 static void getDisplayAddr(uint8_t *addr, uint8_t num)
 {
 
@@ -50,7 +58,7 @@ static void getDisplayAddr(uint8_t *addr, uint8_t num)
 
 
 static Amortize_Date_t amortizeDate[6];
-static void update_systemSetting3Data(void)
+void update_systemSetting3Data(void)
 {
 
 	uint8_t i;
@@ -116,6 +124,8 @@ static uint8_t systemSetting1_Item(uint8_t ch)
 	
 	if (ch == 0x02){
 		Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_2);
+		update_Setting2_Counter();
+		Display_Date_Of_Production(1);
 		ret = TRUE;
 		
 	}else if (ch == 0x03){
@@ -160,6 +170,8 @@ static uint8_t systemSetting3_Item(uint8_t ch)
 		
 	}else if (ch == 0x02){
 		Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_2);
+		update_Setting2_Counter();
+		Display_Date_Of_Production(1);
 		ret = TRUE;
 	}
 	

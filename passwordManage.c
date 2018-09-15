@@ -457,6 +457,20 @@ void AlreadyPaid_ClearCurrentStore(void)
 
 
 
+
+
+void DisplayPaying_AmortizeNumber()
+{
+	uint8_t tx_buff[8] = {0x5A,0xA5,0x05,0x82,0x0A,0xA0,0x00,0x00};
+	tx_buff[6] = 0;
+	tx_buff[7] =  Amortize_PayNumber+1;
+	SendToMonitor(tx_buff, 8);
+}
+
+
+
+
+
 void DisplayRandomCodeToScreen()
 {
 //5a a5 0b 82 0a 20 30 31 34 35 36 39 37 34	

@@ -578,9 +578,10 @@ int main()
 									
 									WorkMode = AMORTIZE_MANAGE_MODE;
 									Pic_SwitchTo(CFG_AMORTIZE_PW_ENTER_ID);
+									update_systemSetting3Data();
+									DisplayPaying_AmortizeNumber();
 									DisplayPasswordCharToScreen(PURCHASE_PASSWORD,0);
 									DisplayRandomCodeToScreen();
-
 									
 									
 								}else{
