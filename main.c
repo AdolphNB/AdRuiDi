@@ -469,44 +469,6 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#if 0
-
-int main()
-{
-
- 	uint8_t qqq = 0, bb = 0;
-	
-	
-	uart1_init(); 
-	
-//	EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, 155);
-	delay_ms(500);
-	qqq = EepromRead_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, &bb);
-	delay_ms(5);
-	puts1("DD: ",qqq++);
-	EepromWrite_Byte(EEPROM_ADDRESS_TOTAL_SWITCH, qqq);
-	
-	while(1);
-
-	return 0;
-}	
-#else
-
 /*******************************************************************************/
 /*******************************************************************************/
 /*******************************************************************************/
@@ -747,7 +709,6 @@ int main()
 	return 0;
 }
 
-#endif
 
 
 

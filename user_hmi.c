@@ -491,6 +491,7 @@ void InitStatus_Show()
 	Frq_SendToMonitor(cure.frq);
 	Egy_SendToMonitor(cure.egy);
 	Times_SendToMonitor(cure.times);
+	Cnt_SendToMonitor(0);
 	Status_SendtoMonitor(OPT_STATUS_BAR_KVCLOSE_SET);
 	Status_SendtoMonitor(OPT_STATUS_BAR_NO_TOGGLE_SET);
 

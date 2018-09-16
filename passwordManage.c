@@ -271,6 +271,8 @@ uint8_t ReadEEprom_DateData(uint8_t times, RepayDate_t *data)
 
 //Date_ReadBack_t CurDate;
 extern volatile RepayDate_t CurDate;
+
+#if 0
 static uint8_t Judge_PasswordTimeNode(uint8_t times)
 {
 	
@@ -310,7 +312,7 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 
 	return FALSE;
 }
-
+#endif
 
 #if 0
 uint8_t IS_Popup_AmortizePassWordPage(void)
@@ -354,7 +356,7 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 	uint8_t ret = FALSE;
 	uint16_t uCurDate = 0;
     uint16_t uEeDate = 0;
-	char data[20];
+	//char data[20];
 
 	
 	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, (uint8_t*)&artDate[0], 4);
@@ -419,7 +421,7 @@ void AlreadyPaid_ClearCurrentStore(void)
 void AlreadyPaid_ClearCurrentStore(void)
 {
 	uint8_t data[4];
-	uint8_t displayData[25];
+	//uint8_t displayData[25];
 	
 
 	artDate[Amortize_PayNumber].flg = 2;
