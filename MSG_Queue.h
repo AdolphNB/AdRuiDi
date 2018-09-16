@@ -39,6 +39,8 @@
 #define MSG_CTRL_ENERGY_OPEN		0X4A
 #define MSG_CTRL_ENERGY_CLOSE		0X4B
 
+#define MSG_EEPROM_STORE_TOGGLE_COUNTER	(0xFB)
+
 /******************************************************/
 #define MSG_PARAM_SET_ADD			0X23
 #define MSG_PARAM_SET_DEC			0X24

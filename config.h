@@ -208,7 +208,7 @@ typedef struct{
 
 #define EEPROM_ADDRESS_DATE_PRODT				(0x01A0)
 
-
+#define EEPROM_ADDRESS_TOGGLE_COUNTER			(0x01E0)
 
 typedef struct {
 

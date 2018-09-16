@@ -281,10 +281,10 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
 
 	
     ReadEEprom_DateData(times, &data);
-	puts1("1: ", data.flag);delay_ms(10);
-	puts1("2: ", data.year);delay_ms(10);
-	puts1("3: ", data.month);delay_ms(10);
-	puts1("4: ", data.day);delay_ms(10);
+	//puts1("1: ", data.flag);delay_ms(10);
+	//puts1("2: ", data.year);delay_ms(10);
+	//puts1("3: ", data.month);delay_ms(10);
+	//puts1("4: ", data.day);delay_ms(10);
 
 	/***********************************************************
 		if the date is equal to UNLOCKDate    or    more than  UNLOCKDate,
@@ -296,15 +296,15 @@ static uint8_t Judge_PasswordTimeNode(uint8_t times)
     uCurDate = CurDate.year * 365 + GetMpnthDays[CurDate.month - 1] + CurDate.day;
     uEeDate = data.year * 365 + GetMpnthDays[data.month - 1] + data.day;
 
-	puts1("C: ", uCurDate);delay_ms(10);
-	puts1("E: ", uEeDate);delay_ms(10);
+	//puts1("C: ", uCurDate);delay_ms(10);
+	//puts1("E: ", uEeDate);delay_ms(10);
 	if(uCurDate < uEeDate){
-		puts1("IF: ", 1);delay_ms(10);
+		//puts1("IF: ", 1);delay_ms(10);
 		return FALSE;
 	}
 	
     if ((uCurDate - uEeDate) >= 0){
-		puts1("C-E: ", (uCurDate - uEeDate));delay_ms(10);
+		//puts1("C-E: ", (uCurDate - uEeDate));delay_ms(10);
         return TRUE;
     }
 

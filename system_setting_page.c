@@ -12,11 +12,43 @@
 #include "system_setting_page.h"
 
 
+extern StructParam_Def WorkStatus;
+void Start_OneTime_ToggleCounterStore()
+{
+	MSG_BufferTypeDef q;
+
+	q.pic = WorkStatus.pic_id;
+	q.c = MSG_EEPROM_STORE_TOGGLE_COUNTER;
+	MSG_QueuePut(&q);
+}
+
+
+
+volatile uint32_t sysToggleCnt = 0;
+void update_EEprom_ToggleCounterValue()
+{
+	uint32_t counter = 0;
+
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_TOGGLE_COUNTER, (uint8_t*)&counter, 4);
+	counter = counter + sysToggleCnt;
+	sysToggleCnt = 0;
+	EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_TOGGLE_COUNTER, (uint8_t*)&counter, 4);
+}
+
+
 
 
 static void update_Setting2_Counter()
 {
+	uint32_t counter = 0;
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
 	
+	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_TOGGLE_COUNTER, (uint8_t*)&counter, 4);
+	
+	StatusBar_StatusBuf[4]	= 0x0F;StatusBar_StatusBuf[5]  = 0x20;
+	memset(&StatusBar_StatusBuf[6], 0, 19);
+	sprintf((char*)&StatusBar_StatusBuf[6], "%d", (int)counter);
+	SendToMonitor(StatusBar_StatusBuf,25);
 }
 
 
@@ -235,6 +267,8 @@ static void Modify_DateProduction(uint8_t ch)
 {
 	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
 	uint8_t flag = 0;
+	uint32_t counter = 0;
+
 	
 	switch(ch){
 		case 0:case 1:case 2:case 3:
@@ -271,7 +305,8 @@ static void Modify_DateProduction(uint8_t ch)
 		case 0x0c:
 			//write value to eeprom
 			EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_PRODT, (uint8_t *)&datePrdt.data, 10);
-			
+			// Clear toggle counter when setting date of production;
+			EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_TOGGLE_COUNTER, (uint8_t*)&counter, 4);
 			Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_1);
 			Display_Date_Of_Production(1);
 			break;

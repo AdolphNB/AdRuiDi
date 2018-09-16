@@ -386,7 +386,7 @@ void Timeout_15minsHandle()
 			MSG_QueuePut(&q);
 
 			Kv_15MinsTimeout.flag = 0;
-			puts1("15mins", 1 );delay_ms(5);
+			//puts1("15mins", 1 );delay_ms(5);
 		}
 	}
 	//puts1("15mins", 1 );delay_ms(5);

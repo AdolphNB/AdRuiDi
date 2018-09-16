@@ -59,6 +59,7 @@ PassWordManage_t userPassword;
 System_WorkMode_t WorkMode = PASSWORD_MANAGE_MODE; 
 
 extern RepayDate_t CurDate;
+extern uint32_t sysToggleCnt;
 
 
 
@@ -263,7 +264,7 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 			break;
 
 	}
-	puts1("CH: ", ch);delay_ms(5);
+	//puts1("CH: ", ch);delay_ms(5);
 	return ret;
 }
 
@@ -286,6 +287,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_LCD_COUNTER_SHOW:
 				TOGGLE_ENERGY_START();
 				CounterValue_SendToMonitor();
+				sysToggleCnt++;
 				delay_ms(19);
 				TOGGLE_ENERGY_STOP();
 				Restart_15minsCounter();
@@ -376,6 +378,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				CLOSE_KV_ENERGY();
 				WorkStatus.kv_flag = CLOSE;
 				WorkStatus.trg = TROGGLE_IDLE;
+				Start_OneTime_ToggleCounterStore();
 
 				//toggle one time, avoid stored-energy don't be release.
 				TOGGLE_ENERGY_START();
@@ -453,10 +456,16 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 			case MSG_CTRL_ENERGY_CLOSE:
 				break;
 	/*********************************************************/
+
+			case MSG_EEPROM_STORE_TOGGLE_COUNTER:
+				update_EEprom_ToggleCounterValue();
+				break;
+
+				
 			default:
 				break;
 		}
-	puts1("P: ", WorkStatus.pic_id);delay_ms(5);
+	//puts1("P: ", WorkStatus.pic_id);delay_ms(5);
 }
 
 
@@ -532,9 +541,10 @@ int main()
 	delay_ms(500);
 
 #if DEBUG_TEST
-	puts1("YY: ", CurDate.year);delay_ms(5);
-	puts1("MM: ", CurDate.month);delay_ms(5);
-	puts1("DD: ", CurDate.day);delay_ms(5);
+	//puts1("YY: ", sizeof(uint32_t));delay_ms(5);
+	//puts1("YY: ", CurDate.year);delay_ms(5);
+	//puts1("MM: ", CurDate.month);delay_ms(5);
+	//puts1("DD: ", CurDate.day);delay_ms(5);
 #endif
 	
 	MSG_QueueInit();
