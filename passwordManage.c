@@ -375,6 +375,9 @@ uint8_t IS_Popup_AmortizePassWordPage(void)
 
 		if (artDate[i].flg == 1){
 
+			if (artDate[i].mon < 1 || artDate[i].mon > 12)
+				continue;
+			
 			uCurDate = CurDate.year * 365 + GetMpnthDays[CurDate.month - 1] + CurDate.day;
 		    uEeDate = artDate[i].year * 365 + GetMpnthDays[artDate[i].mon- 1] + artDate[i].day;
 
