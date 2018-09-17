@@ -596,7 +596,7 @@ int main()
 								//enter amortsize pay page
 								WorkMode = SYSTEM_SETTING_MODE;
 								Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_1);
-								Display_CheseEnglish();
+								Display_ChineseEnglish();
 								Display_Date_Of_Production(1);
 							
 							}else if (val == WRONG){

@@ -239,7 +239,7 @@ void Display_Date_Of_Production(uint8_t flg)
 
 
 
-void Display_CheseEnglish()
+void Display_ChineseEnglish()
 {
 	uint8_t val;
 	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0b,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
@@ -340,7 +340,7 @@ static struct {
 }dateAmrtMdy;
 static uint8_t updateAmortizeModify_Page()
 {
-	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00};
 
 	StatusBar_StatusBuf[4]	= 0x0E;StatusBar_StatusBuf[5]  = 0xC0;
 	memset(&StatusBar_StatusBuf[6], 0, 19);
@@ -368,9 +368,10 @@ static uint8_t updateAmortizeModify_Page()
 
 
 
-void update_ModifyDataToEEprom(uint8_t num)
+uint8_t update_ModifyDataToEEprom(uint8_t num)
 {
 	uint8_t data[4];
+	uint8_t ret = FALSE;
 
 
 	data[0] = dateAmrtMdy.flag;
@@ -378,6 +379,34 @@ void update_ModifyDataToEEprom(uint8_t num)
 	data[2] = 10*(dateAmrtMdy.data[5] - '0') + (dateAmrtMdy.data[6] - '0');;
 	data[3] = 10*(dateAmrtMdy.data[8] - '0') + (dateAmrtMdy.data[9] - '0');;
 
+	switch(data[2]){
+		case 1:case 3:case 5:case 7:case 8:case 10:case 12:
+			if(data[3] >= 1 && data[3] <= 31) 
+				ret = FALSE;
+			else ret = TRUE;
+			break;
+
+		case 4:case 6:case 9:case 11:
+			if(data[3] >= 1 && data[3] <= 30) 
+				ret = FALSE;
+			else ret = TRUE;
+			break;
+
+		case 2:
+			if (((2000+ data[1]) % 4 == 0) && ((2000+ data[1]) % 100 != 0)){
+				if(data[3] >= 1 && data[3] <= 29) 
+					ret = FALSE;
+				else ret = TRUE;
+			}else{
+				if(data[3] >= 1 && data[3] <= 28) 
+					ret = FALSE;	
+				else ret = TRUE;
+			}
+			
+			break;
+
+		default: ret = TRUE;break;
+	}
 	
 	switch(num){
 		case 0:EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_1ST, data, 4);break;
@@ -387,7 +416,9 @@ void update_ModifyDataToEEprom(uint8_t num)
 		case 4:EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_5ST, data, 4);break;
 		case 5:EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_DATE_6ST, data, 4);break;
 	}
-	
+
+
+	return ret;
 }
 
 
@@ -404,9 +435,10 @@ static void Modify_DateAmortize(uint8_t ch)
 		case 8:case 9:
 
 			if(counter == 10) break;
-			
+
 			dateAmrtMdy.data[counter] = ch + '0';
 			counter++;
+
 			if (counter == 4) counter = 5;
 			if (counter == 7) counter = 8;	
 			flag = 1;
@@ -437,7 +469,9 @@ static void Modify_DateAmortize(uint8_t ch)
 
 		case 0x0C:
 			//write value to eeprom
-			update_ModifyDataToEEprom(AmortizeModifyNum);
+			if(TRUE== update_ModifyDataToEEprom(AmortizeModifyNum)){
+				break;
+			}
 			counter = 2;
 			Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_3);
 			update_systemSetting3Data();

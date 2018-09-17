@@ -211,7 +211,7 @@ void ChEnSwitch()
 	}
 
 	
-	Display_CheseEnglish();
+	Display_ChineseEnglish();
 	delay_ms(1);
 }
 
