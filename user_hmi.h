@@ -39,7 +39,8 @@ void delay_ms(unsigned int ms);
 void Option_SelectChange(uint8_t opt, uint8_t color);
 void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn);
 void ChEn_PictureSwitchToMain(uint8_t ChEn);
-
+void TankInflowConfirm_SendToMonitor();
+void TankDrainConfirm_SendToMonitor();
 
 
 #endif //__MSG_QUEUE_H__

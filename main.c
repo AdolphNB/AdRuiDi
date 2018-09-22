@@ -159,10 +159,12 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 				if(WorkStatus.EnChFlag == TRUE){
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
+					TankDrainConfirm_SendToMonitor();
 					
 				}else{
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
+					TankDrainConfirm_SendToMonitor();
 				}				
 				ret = FALSE;
 
@@ -198,9 +200,11 @@ uint8_t Confirm_Operate(uint8_t pic, uint8_t ch)
 				if(WorkStatus.EnChFlag == TRUE){
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
+					TankInflowConfirm_SendToMonitor();
 				}else{
 					WorkStatus.pic_id = GetEnterReturnPictureID();
 					Pic_SwitchTo(WorkStatus.pic_id);
+					TankInflowConfirm_SendToMonitor();
 				}
 				ret = FALSE;
 

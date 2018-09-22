@@ -370,14 +370,14 @@ void Restart_15minsCounter()
 }
 
 
-
+extern ShowParam_Def cure;
 void Timeout_15minsHandle()
 {
 	uint32_t systime = Get_SystemTick();
 	MSG_BufferTypeDef q;
 
 
-	if((Kv_15MinsTimeout.flag) && (WorkStatus.kv_flag == OPEN)){
+	if((Kv_15MinsTimeout.flag) && (WorkStatus.kv_flag == OPEN) && (cure.egy != 0)){
 
 		if((systime - Kv_15MinsTimeout.timeStamp) >= Kv_15MinsTimeout.period){
 

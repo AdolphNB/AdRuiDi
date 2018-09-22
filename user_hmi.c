@@ -16,6 +16,8 @@ const unsigned int g_energy_PWM_array[10]= {1023,900,800,700,600,500,400,300,200
 //const unsigned int g_energy_PWM_array[11]= {0,100,200,300,400,500,600,700,800,900,1000};
 
 
+
+
 void delay_ms(unsigned int ms)
 {
 	unsigned int i = 192;
@@ -24,6 +26,9 @@ void delay_ms(unsigned int ms)
 		for(i = 192; i > 0; i--);
 	}
 }
+
+
+
 
 void Option_SelectChange(uint8_t opt, uint8_t color)
 {
@@ -61,6 +66,9 @@ void Option_SelectChange(uint8_t opt, uint8_t color)
 }
 
 
+
+
+
 void SendToMonitor(uint8_t *buf, uint8_t len)
 {
 	uint8_t i;
@@ -68,16 +76,21 @@ void SendToMonitor(uint8_t *buf, uint8_t len)
 	for(i = 0; i < len; i++)
 		USART_Transmit(*buf++);
 }
-static uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0b,0x82,0x02, \
-										  0x00,0xCD,0xA3,0xCD,0xA3, \
-										  0xCD,0xA3,0xCD,0xA3};
+
+
+
+
 void Status_SendtoMonitor(StatusBar_Show_t sta)
 {
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0b,0x82,0x02, \
+										  0x00,0xCD,0xA3,0xCD,0xA3, \
+										  0xCD,0xA3,0xCD,0xA3};
 	switch(sta)
 	{
 		case OPT_STATUS_BAR_ENERGY_SET:
 
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xC4;StatusBar_StatusBuf[7]  = 0xDC;//
 				StatusBar_StatusBuf[8]  = 0xC1;StatusBar_StatusBuf[9]  = 0xBF;//
@@ -85,16 +98,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Engrgy Set") + 3;
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"EngSet", sizeof("EngSet"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"Engrgy Set", sizeof("Engrgy Set"));
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Engrgy Set") + 6);
 			}
 			
 			break;
 			
 		case OPT_STATUS_BAR_FREQUENCY_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xC6;StatusBar_StatusBuf[7]  = 0xB5;
 				StatusBar_StatusBuf[8]  = 0xC2;StatusBar_StatusBuf[9]  = 0xCA;//
@@ -102,14 +117,16 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Frequency Set") + 3;
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"FreqSet", sizeof("FreqSet"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"Frequency Set", sizeof("Frequency Set"));
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Frequency Set") + 6);
 			}
 			break;
 		case OPT_STATUS_BAR_TIMES_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xB4;StatusBar_StatusBuf[7]  = 0xCE;
 				StatusBar_StatusBuf[8]  = 0xCA;StatusBar_StatusBuf[9]  = 0xFD;//
@@ -117,15 +134,17 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0xD6;StatusBar_StatusBuf[13] = 0xC3;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
+				StatusBar_StatusBuf[2] = sizeof("Preset")+3;
 				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				memcpy(&StatusBar_StatusBuf[6],"Preset", sizeof("Preset"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Preset")+6);
 			}
 			
 			break;
 		case OPT_STATUS_BAR_CLEAR_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x02;	StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
 				StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
@@ -133,14 +152,16 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0x00;StatusBar_StatusBuf[13] = 0x00;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
-				StatusBar_StatusBuf[4]  = 0x02;	//StatusBar_StatusBuf[5]  = 0x00;
-				memset(&StatusBar_StatusBuf[5], 0, 9);
-				SendToMonitor(StatusBar_StatusBuf,14);
+				StatusBar_StatusBuf[2]  = sizeof("Frequency Set") + 3;
+				StatusBar_StatusBuf[4]  = 0x02;StatusBar_StatusBuf[5]  = 0x00;
+				memset(&StatusBar_StatusBuf[6], 0, 19);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Frequency Set") + 6);
 			}
 
 			break;
 		case OPT_STATUS_BAR_KVOPEN_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xB8;StatusBar_StatusBuf[7]  = 0xDF;
 				StatusBar_StatusBuf[8]  = 0xD1;StatusBar_StatusBuf[9]  = 0xB9;//
@@ -148,16 +169,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0xC6;StatusBar_StatusBuf[13] = 0xF4;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("KV start") + 3;
 				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"KV OPEN", sizeof("KV OPEN"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"KV start", sizeof("KV start"));
+				SendToMonitor(StatusBar_StatusBuf,sizeof("KV start") + 6);
 			}
 
 			
 			break;
 		case OPT_STATUS_BAR_KVCLOSE_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xB8;StatusBar_StatusBuf[7]  = 0xDF;
 				StatusBar_StatusBuf[8]  = 0xD1;StatusBar_StatusBuf[9]  = 0xB9;//
@@ -165,34 +188,39 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0xB1;StatusBar_StatusBuf[13] = 0xD5;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("KV stop") + 3;
 				StatusBar_StatusBuf[4]  = 0x01;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"KV CLOSE", sizeof("KV CLOSE"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"KV stop", sizeof("KV stop"));
+				SendToMonitor(StatusBar_StatusBuf,sizeof("KV stop")+6);
 			}
 			
 			break;
 		case OPT_STATUS_BAR_ALERTING_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xBE;StatusBar_StatusBuf[7]  = 0xAF;
 				StatusBar_StatusBuf[8]  = 0xB8;StatusBar_StatusBuf[9]  = 0xE6;//
 				SendToMonitor(StatusBar_StatusBuf,10);
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Warn!") + 3;
 				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				memcpy(&StatusBar_StatusBuf[6],"Warn!", sizeof("Warn!"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Warn!")+6);
 			}
 			
 			break;
 		case OPT_STATUS_BAR_ALERTCLEAR_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0x00;StatusBar_StatusBuf[7]  = 0x00;
 				StatusBar_StatusBuf[8]  = 0x00;StatusBar_StatusBuf[9]  = 0x00;//
 				SendToMonitor(StatusBar_StatusBuf,10);
 			}else{
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x03;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				SendToMonitor(StatusBar_StatusBuf,25);
@@ -201,6 +229,7 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			break;
 		case OPT_STATUS_BAR_ADD_WATER_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]  = 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]  = 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]  = 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
@@ -208,16 +237,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
 				SendToMonitor(StatusBar_StatusBuf,14);
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Water+") + 3;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				memcpy(&StatusBar_StatusBuf[6],"Water+", sizeof("Water+"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Water+")+6);
 				
 			}
 			
 			break;
 		case OPT_STATUS_BAR_DEC_WATER_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
@@ -226,16 +257,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Water-") + 3;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				memcpy(&StatusBar_StatusBuf[6],"Water-", sizeof("Water-"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Water-")+6);
 				
 			}
 			
 			break; 
 		case OPT_STATUS_BAR_WATER_INJECTION_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
@@ -244,16 +277,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("InFlow") + 3;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				memcpy(&StatusBar_StatusBuf[6],"InFlow", sizeof("InFlow"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("InFlow")+6);
 				
 			}
 			
 			break;
 		case OPT_STATUS_BAR_DEWATERING_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
@@ -262,16 +297,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Drainage") + 3;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				memcpy(&StatusBar_StatusBuf[6],"Drainage", sizeof("Drainage"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Drainage") + 6);
 				
 			}
 
 			break;
 		case OPT_STATUS_BAR_WATERING_CLEAR_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0x00;StatusBar_StatusBuf[7]  = 0x00;
 				StatusBar_StatusBuf[8]	= 0x00;StatusBar_StatusBuf[9]  = 0x00;//
@@ -280,6 +317,7 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x04;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
 				SendToMonitor(StatusBar_StatusBuf,25);
@@ -291,6 +329,7 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 
 		case OPT_STATUS_BAR_TOGGLING_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD5;StatusBar_StatusBuf[7]  = 0xFD;
 				StatusBar_StatusBuf[8]	= 0xD4;StatusBar_StatusBuf[9]  = 0xDA;//
@@ -299,16 +338,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Trigger on") + 3;
 				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"Toggling", sizeof("Toggling"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"Trigger on", sizeof("Trigger on"));
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Trigger on") + 6);
 				
 			}
 
 			break;
 		case OPT_STATUS_BAR_NO_TOGGLE_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xCD;StatusBar_StatusBuf[7]  = 0xA3;
 				StatusBar_StatusBuf[8]	= 0xD6;StatusBar_StatusBuf[9]  = 0xB9;//
@@ -317,16 +358,18 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Trigger off") + 3;
 				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"Stop", sizeof("Stop"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"Trigger off", sizeof("Trigger off"));
+				SendToMonitor(StatusBar_StatusBuf,sizeof("Trigger off") + 6);
 				
 			}
 
 			break;
 		case OPT_STATUS_BAR_TEMP_TOGGLE_SET:
 			if(WorkStatus.EnChFlag == TRUE){
+				StatusBar_StatusBuf[2]  = 0x0b;
 				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 				StatusBar_StatusBuf[6]	= 0xD4;StatusBar_StatusBuf[7]  = 0xDD;
 				StatusBar_StatusBuf[8]	= 0xCD;StatusBar_StatusBuf[9]  = 0xA3;//
@@ -335,10 +378,11 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 				SendToMonitor(StatusBar_StatusBuf,14);
 			
 			}else{
+				StatusBar_StatusBuf[2]  = sizeof("Trigger off") + 3;
 				StatusBar_StatusBuf[4]	= 0x05;StatusBar_StatusBuf[5]  = 0x00;
 				memset(&StatusBar_StatusBuf[6], 0, 19);
-				memcpy(&StatusBar_StatusBuf[6],"Pause", sizeof("Pause"));
-				SendToMonitor(StatusBar_StatusBuf,25);
+				memcpy(&StatusBar_StatusBuf[6],"Trigger off", sizeof("Trigger off"));
+				SendToMonitor(StatusBar_StatusBuf, sizeof("Trigger off") + 6);
 				
 			}
 
@@ -346,6 +390,70 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 	}
 
 }
+
+
+
+
+void TankDrainConfirm_SendToMonitor()
+{
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0b,0x82,0x02, \
+										  0x00,0xCD,0xA3,0xCD,0xA3, \
+										  0xCD,0xA3,0xCD,0xA3};
+	
+	
+	if(WorkStatus.EnChFlag == TRUE){
+		StatusBar_StatusBuf[2]	= 0x0C;
+		StatusBar_StatusBuf[4]	= 0x07;StatusBar_StatusBuf[5]  = 0x00;
+		StatusBar_StatusBuf[6]	= 0xCB;StatusBar_StatusBuf[7]  = 0xAE;
+		StatusBar_StatusBuf[8]	= 0xCF;StatusBar_StatusBuf[9]  = 0xE4;//
+		StatusBar_StatusBuf[10] = 0xC5;StatusBar_StatusBuf[11] = 0xC5;
+		StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
+		StatusBar_StatusBuf[14] = 0x3F;
+		SendToMonitor(StatusBar_StatusBuf,15);
+	
+	}else{
+		StatusBar_StatusBuf[2]	= sizeof("Water tank drain?") + 3;
+		StatusBar_StatusBuf[4]	= 0x06;StatusBar_StatusBuf[5]  = 0x00;
+		memset(&StatusBar_StatusBuf[6], 0, 19);
+		memcpy(&StatusBar_StatusBuf[6],"Water tank drain?", sizeof("Water tank drain?"));
+		SendToMonitor(StatusBar_StatusBuf, sizeof("Water tank drain?") + 6);
+		
+	}	
+
+}
+
+
+
+
+void TankInflowConfirm_SendToMonitor()
+{
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0b,0x82,0x02, \
+										  0x00,0xCD,0xA3,0xCD,0xA3, \
+										  0xCD,0xA3,0xCD,0xA3};
+	
+	
+	if(WorkStatus.EnChFlag == TRUE){
+		StatusBar_StatusBuf[2]	= 0x0C;
+		StatusBar_StatusBuf[4]	= 0x07;StatusBar_StatusBuf[5]  = 0x00;
+		StatusBar_StatusBuf[6]	= 0xCB;StatusBar_StatusBuf[7]  = 0xAE;
+		StatusBar_StatusBuf[8]	= 0xCF;StatusBar_StatusBuf[9]  = 0xE4;//
+		StatusBar_StatusBuf[10] = 0xD7;StatusBar_StatusBuf[11] = 0xA2;
+		StatusBar_StatusBuf[12] = 0xCB;StatusBar_StatusBuf[13] = 0xAE;
+		StatusBar_StatusBuf[14] = 0x3F;
+		SendToMonitor(StatusBar_StatusBuf,15);
+	
+	}else{
+		StatusBar_StatusBuf[2]	= sizeof("Water tank inflow?") + 3;
+		StatusBar_StatusBuf[4]	= 0x06;StatusBar_StatusBuf[5]  = 0x00;
+		memset(&StatusBar_StatusBuf[6], 0, 19);
+		memcpy(&StatusBar_StatusBuf[6],"Water tank inflow?", sizeof("Water tank inflow?"));
+		SendToMonitor(StatusBar_StatusBuf, sizeof("Water tank inflow?") + 6);
+		
+	}	
+
+}
+
+
 
 
 
@@ -357,18 +465,29 @@ void Pic_SwitchTo(uint8_t pic)
 	SendToMonitor(tx_buff, 7);
 }
 
+
+
+
 static void Egy_SendToMonitor(uint8_t val)
 {
 	uint8_t tx_buff[8] = {0x5A,0xA5,0x05,0x82,0x00,0x10,0x00,0x00};
 	tx_buff[7] = val;
 	SendToMonitor(tx_buff, 8);
 }
+
+
+
+
 static void Frq_SendToMonitor(uint8_t val)
 {
 	uint8_t tx_buff[8] = {0x5A,0xA5,0x05,0x82,0x00,0x11,0x00,0x00};
 	tx_buff[7] = val;
 	SendToMonitor(tx_buff, 8);
 }
+
+
+
+
 static void Times_SendToMonitor(uint16_t val)
 {
 	uint8_t tx_buff[8] = {0x5A,0xA5,0x05,0x82,0x00,0x12,0x00,0x00};
@@ -377,6 +496,9 @@ static void Times_SendToMonitor(uint16_t val)
 	SendToMonitor(tx_buff, 8);
 }
 
+
+
+
 static void Cnt_SendToMonitor(uint16_t val)
 {
 	uint8_t tx_buff[8] = {0x5A,0xA5,0x05,0x82,0x00,0x13,0x00,0x00};
@@ -384,6 +506,9 @@ static void Cnt_SendToMonitor(uint16_t val)
 	tx_buff[7] = (uint8_t)(val & 0x00ff);
 	SendToMonitor(tx_buff, 8);
 }
+
+
+
 
 void CounterValue_SendToMonitor()
 {
@@ -396,11 +521,17 @@ void CounterValue_SendToMonitor()
 	Cnt_SendToMonitor(cure.cnt);
 }
 
+
+
+
 void Key_ClearCounter()
 {
 	cure.cnt = 0;
 	Cnt_SendToMonitor(cure.cnt);
 }
+
+
+
 
 void Poweron_InitConsig(void)
 {
@@ -408,6 +539,9 @@ void Poweron_InitConsig(void)
 	ENERGY_PWM_CONFIG = g_energy_PWM_array[0];
 
 }
+
+
+
 
 
 /*****´¥ÃþÆÁ¡°¼Ó¡±{¿ØÖÆ****/
@@ -451,6 +585,10 @@ void ParamSet_Add()
 }
 
 
+
+
+
+
 /*****´¥ÃþÆÁ¡°¼õ¡±{¿ØÖÆ****/
 void ParamSet_Dec()
 {
@@ -483,6 +621,10 @@ void ParamSet_Dec()
 			break;
 	}
 }
+
+
+
+
 
 
 void InitStatus_Show()
@@ -519,6 +661,7 @@ void ChEn_PictureSwitchToMain(uint8_t ChEn)
 		Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
 	}
 }
+
 
 
 
