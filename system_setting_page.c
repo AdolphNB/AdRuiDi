@@ -54,6 +54,20 @@ static void update_Setting2_Counter()
 
 
 
+static void update_SystemVersion()
+{
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
+	
+	StatusBar_StatusBuf[2] = sizeof(SYSTEM_VERSION)+3;
+	StatusBar_StatusBuf[4]	= 0x0F;StatusBar_StatusBuf[5]  = 0x30;
+	memset(&StatusBar_StatusBuf[6], 0, 19);
+	sprintf((char*)&StatusBar_StatusBuf[6], SYSTEM_VERSION);
+	SendToMonitor(StatusBar_StatusBuf,sizeof(SYSTEM_VERSION)+6);
+}
+
+
+
+
 static void getDisplayAddr(uint8_t *addr, uint8_t num)
 {
 
@@ -158,6 +172,7 @@ static uint8_t systemSetting1_Item(uint8_t ch)
 		Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_2);
 		update_Setting2_Counter();
 		Display_Date_Of_Production(1);
+		update_SystemVersion();
 		ret = TRUE;
 		
 	}else if (ch == 0x03){
@@ -204,6 +219,7 @@ static uint8_t systemSetting3_Item(uint8_t ch)
 		Pic_SwitchTo(CFG_PICTURE_PUR_SETTING_ID_2);
 		update_Setting2_Counter();
 		Display_Date_Of_Production(1);
+		update_SystemVersion();
 		ret = TRUE;
 	}
 	
