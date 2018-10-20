@@ -30,9 +30,11 @@ void update_EEprom_ToggleCounterValue()
 	uint32_t counter = 0;
 
 	EepromRead_Block((uint16_t*)EEPROM_ADDRESS_TOGGLE_COUNTER, (uint8_t*)&counter, 4);
+	delay_ms(1);
 	counter = counter + sysToggleCnt;
 	sysToggleCnt = 0;
 	EepromWrite_Block((uint16_t*)EEPROM_ADDRESS_TOGGLE_COUNTER, (uint8_t*)&counter, 4);
+	delay_ms(1);
 }
 
 

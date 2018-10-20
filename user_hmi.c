@@ -12,7 +12,7 @@ extern ShowParam_Def cure;
 extern StructParam_Def WorkStatus;
 extern unsigned char gToggleValue;
 //const unsigned int g_energy_PWM_array[9]= {0,200,300,400,500,600,700,800,900};
-const unsigned int g_energy_PWM_array[10]= {1023,900,800,700,600,500,400,300,200,100};
+const unsigned int g_energy_PWM_array[11]= {1023,900,800,700,600,500,400,300,200,100,20};
 //const unsigned int g_energy_PWM_array[11]= {0,100,200,300,400,500,600,700,800,900,1000};
 
 
@@ -550,7 +550,7 @@ void ParamSet_Add()
 	switch(WorkStatus.SetEnum)
 	{
 		case SET_ENERGY:
-			if(cure.frq <= 20 && cure.egy < 9){
+			if(cure.frq <= 20 && cure.egy < 10){
 				cure.egy++;
 			}else if(cure.frq > 20 && cure.egy < 5){
 				cure.egy++;

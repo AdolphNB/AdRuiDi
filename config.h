@@ -5,12 +5,12 @@
 #include "avr/io.h"
 
 
-#define SYSTEM_VERSION "Ver1.5.1"
+#define SYSTEM_VERSION "VER 1.00.00.000"
 
 
 
 
-#define DEBUG_TEST (1)
+#define DEBUG_TEST (0)
 
 
 

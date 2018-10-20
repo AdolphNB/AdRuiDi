@@ -290,10 +290,10 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 	/*********************************************************/
 			case MSG_LCD_COUNTER_SHOW:
 				TOGGLE_ENERGY_START();
-				CounterValue_SendToMonitor();
-				sysToggleCnt++;
 				delay_ms(19);
 				TOGGLE_ENERGY_STOP();
+				CounterValue_SendToMonitor();
+				sysToggleCnt++;
 				Restart_15minsCounter();
 				break;
 	/*********************************************************/
@@ -383,7 +383,7 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				WorkStatus.kv_flag = CLOSE;
 				WorkStatus.trg = TROGGLE_IDLE;
 				Start_OneTime_ToggleCounterStore();
-
+				delay_ms(20);
 				//toggle one time, avoid stored-energy don't be release.
 				TOGGLE_ENERGY_START();
 				delay_ms(20);
@@ -505,14 +505,6 @@ int main()
 	InitStatus_Show();delay_ms(5);
 	Pic_SwitchTo(CFG_PICTURE_LOGO_ID);
 	delay_ms(500);
-
-#if DEBUG_TEST
-	//puts1("YY: ", sizeof(uint32_t));delay_ms(5);
-	//puts1("YY: ", CurDate.year);delay_ms(5);
-	//puts1("MM: ", CurDate.month);delay_ms(5);
-	//puts1("DD: ", CurDate.day);delay_ms(5);
-#endif
-	
 	MSG_QueueInit();
 	WorkMode = PASSWORD_MANAGE_MODE; 
 	StartTimeout_Task(CFG_PICTURE_LOGO_ID, 500);
@@ -528,8 +520,6 @@ int main()
 			//we must confirm this message come from current picture
 			//some times, may be occur interrupe or send to montor time-delay, 
 			//locate picture is change, and the screen not, because of sync need time
-			//if (msg.picture != current_picture)
-			//	continue;
 			switch(WorkMode){
 
 
@@ -632,7 +622,6 @@ int main()
 					# 1. receive char, compare pass word and decide to start next period;
 					# 2. change eeprom  flag about setting, and store to eeprom
 				*/
-				
 					val = PassWordPrase(msg.pic, &userPassword, msg.c);
 				
 					if (val == RIGHT){
@@ -640,25 +629,8 @@ int main()
 						//clear this data in eeprom that about the flag, the date.etc
 						AlreadyPaid_ClearCurrentStore();
 						Sys_RebootMCU();
-
-						
-						/*
-						AlreadyPaid_ClearCurrentStore();
-						WorkMode = SYSTEM_WORK_MODE;
-						InitStatus_Show();delay_ms(5);
-
-						
-						if(WorkStatus.EnChFlag == TRUE){
-							WorkStatus.pic_id = CFG_PICTURE_MAIN_CHINESE_ID;
-							Pic_SwitchTo(CFG_PICTURE_MAIN_CHINESE_ID);
-						}else{
-							WorkStatus.pic_id = CFG_PICTURE_MAIN_ENGLISH_ID;
-							Pic_SwitchTo(CFG_PICTURE_MAIN_ENGLISH_ID);
-						}*/
 						//DevInit_TickTimer(); //start system tick timer 
-
 					}else if (val == WRONG){
-
 						// hint error, and retry password
 						//display "ENTER ERROR, PLEASE RETRY"
 						

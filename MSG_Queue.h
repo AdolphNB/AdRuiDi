@@ -6,7 +6,7 @@
 #include "config.h"
 
 
-#define MSG_QUEUE_LEN 128
+#define MSG_QUEUE_LEN 16
 
 
 /******************************************************/

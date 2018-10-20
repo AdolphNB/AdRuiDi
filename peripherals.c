@@ -53,17 +53,15 @@ void key_scan()
 
 
 
-
+static MSG_BufferTypeDef q_tim;
 ISR(TIMER1_COMPA_vect)
-{
-	MSG_BufferTypeDef q_tim;
-	
+{	
     if(tick++ > gToggleValue){
 		tick = 0;
 		q_tim.c = MSG_LCD_COUNTER_SHOW;
 		if(WorkStatus.trg == TROGGLE_TING)
 			MSG_QueuePut(&q_tim);
-	}else if(tick > 250){
+	}else if(tick > 254){
 		tick = 0;
 	}
 	System_Tick++;
@@ -73,10 +71,10 @@ ISR(TIMER1_COMPA_vect)
 
 
 volatile uint8_t usart_cnt = 0,usart_len;
+static MSG_BufferTypeDef usart_q;
 ISR(USART0_RX_vect)
 {
 	uint8_t temp;
-	static MSG_BufferTypeDef usart_q;
 
 	
 	temp = UDR0;
@@ -280,7 +278,7 @@ TimeoutTask_t TimeoutTask = {
 	.flag = 0,
 };
 
-TimeoutTask_t Kv_15MinsTimeout = {
+volatile TimeoutTask_t Kv_15MinsTimeout = {
 	.flag = 0,
 };
 
