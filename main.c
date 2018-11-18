@@ -289,10 +289,10 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 	{
 	/*********************************************************/
 			case MSG_LCD_COUNTER_SHOW:
+				CounterValue_SendToMonitor();delay_ms(2);
 				TOGGLE_ENERGY_START();
-				delay_ms(19);
-				TOGGLE_ENERGY_STOP();
-				CounterValue_SendToMonitor();
+				delay_ms(15);
+				TOGGLE_ENERGY_STOP();delay_ms(2);
 				sysToggleCnt++;
 				Restart_15minsCounter();
 				break;
@@ -386,8 +386,9 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				delay_ms(20);
 				//toggle one time, avoid stored-energy don't be release.
 				TOGGLE_ENERGY_START();
-				delay_ms(20);
+				delay_ms(18);
 				TOGGLE_ENERGY_STOP();
+				delay_ms(20);
 				break;
 
 	/***********************************************************/					

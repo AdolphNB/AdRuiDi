@@ -28,6 +28,14 @@ void delay_ms(unsigned int ms)
 }
 
 
+void delay_us(unsigned int us)
+{
+	unsigned int i;
+	while(us--)
+	{
+		for(i = 1; i > 0; i--);
+	}
+}
 
 
 void Option_SelectChange(uint8_t opt, uint8_t color)

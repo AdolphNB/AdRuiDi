@@ -361,7 +361,7 @@ void Restart_15minsCounter()
 {
 	if (WorkStatus.kv_flag == OPEN){
 		Kv_15MinsTimeout.flag = 1;
-		Kv_15MinsTimeout.period = 93000; //15mins, there should be 90000, but sometime out of contrl.
+		Kv_15MinsTimeout.period = 92000; //15mins, there should be 90000, but sometime out of contrl.
 		Kv_15MinsTimeout.timeStamp = Get_SystemTick();
 	}
 	
