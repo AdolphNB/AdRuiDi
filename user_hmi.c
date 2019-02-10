@@ -11,9 +11,13 @@
 extern ShowParam_Def cure;
 extern StructParam_Def WorkStatus;
 extern unsigned char gToggleValue;
-//const unsigned int g_energy_PWM_array[9]= {0,200,300,400,500,600,700,800,900};
 //const unsigned int g_energy_PWM_array[11]= {1023,900,800,700,600,500,400,300,200,100,20};
-const unsigned int g_energy_PWM_array[11]= {1023,974,954,926,887,832,755,648,497,287,20};
+//												0      1    2     3     4     5     6     7     8     9    10
+//const unsigned int g_energy_PWM_array[11]  = {1023,974,954,926,887,832,755,648,497,287,20};
+//const unsigned int g_energy_PWM_array[11]  = {1023,900,865,823,771,705,623,519,388,225,10}; //exp()
+const unsigned int g_energy_PWM_array[11]  = {1023,900,865,825,780,725,653,552,420,253,15}; //adj
+
+
 
 
 
