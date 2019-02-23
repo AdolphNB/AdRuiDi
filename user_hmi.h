@@ -42,6 +42,11 @@ void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn);
 void ChEn_PictureSwitchToMain(uint8_t ChEn);
 void TankInflowConfirm_SendToMonitor();
 void TankDrainConfirm_SendToMonitor();
+void updateStatistics(void);
+void sendEnergyCounter_Show(void);
+void sendCountDown_Show(void);
+void Operate_EnergySumConter(uint8_t opt);
+void Operate_TimeLiftConter(void);
 
 
 #endif //__MSG_QUEUE_H__

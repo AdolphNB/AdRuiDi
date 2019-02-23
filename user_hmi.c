@@ -721,6 +721,72 @@ void ChEn_PictureSwitch(uint8_t pic, uint8_t ChEn)
 
 
 
+void updateStatistics(void)
+{
+	
+	MSG_BufferTypeDef q;
+
+	q.pic = WorkStatus.pic_id;
+	q.c = MSG_SHOW_UPDATE_STATISTICS;
+	MSG_QueuePut(&q);
+}
+
+
+
+static uint32_t energySumCounter = 0;
+void Operate_EnergySumConter(uint8_t opt)
+{
+	if(opt){
+		energySumCounter += energyLevel_Value[cure.egy]; //add a energy of setting
+	}else{
+		energySumCounter = 0;
+	}
+
+}
+
+
+
+
+
+const unsigned int energyLevel_Value[11]  = {0,1,2,3,4,5,6,7,8,9,10}; //adj
+void sendEnergyCounter_Show(void)
+{
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
+	
+	StatusBar_StatusBuf[4]	= 0x03;StatusBar_StatusBuf[5]  = 0x00;
+	memset(&StatusBar_StatusBuf[6], 0, 19);
+	sprintf((char*)&StatusBar_StatusBuf[6], "%d.%dkv", (int)energySumCounter/100, (int)energySumCounter%100);
+	SendToMonitor(StatusBar_StatusBuf,25);
+
+}
+
+
+
+
+
+static uint32_t timeLiftCounter = 0;
+void Operate_TimeLiftConter()
+{
+	/*timelift = (total times - current counter)  /  current frequency*/
+	timeLiftCounter = (cure.times - cure.cnt) / cure.egy; 
+
+}
+
+
+
+
+void sendCountDown_Show(void)
+{
+	
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
+
+	Operate_TimeLiftConter(1);
+	StatusBar_StatusBuf[4]	= 0x03;StatusBar_StatusBuf[5]  = 0x00;
+	memset(&StatusBar_StatusBuf[6], 0, 19);
+	sprintf((char*)&StatusBar_StatusBuf[6], "%d:%d", (int)timeLiftCounter/60, (int)timeLiftCounter%100);
+	SendToMonitor(StatusBar_StatusBuf,25);
+}
+
 
 
 

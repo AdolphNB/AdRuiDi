@@ -289,13 +289,23 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 	{
 	/*********************************************************/
 			case MSG_LCD_COUNTER_SHOW:
-				CounterValue_SendToMonitor();delay_ms(2);
+				CounterValue_SendToMonitor();
+				Operate_EnergySumConter(1);delay_ms(2);
 				TOGGLE_ENERGY_START();
+				updateStatistics(); // send a msg to queue
 				delay_ms(15);
 				TOGGLE_ENERGY_STOP();delay_ms(2);
 				sysToggleCnt++;
 				Restart_15minsCounter();
 				break;
+
+
+			case MSG_SHOW_UPDATE_STATISTICS:
+				sendEnergyCounter_Show();
+				sendCountDown_Show();
+
+				break;
+				
 	/*********************************************************/
 			case MSG_SHOW_ENERGY_SET:
 				if(WorkStatus.SetEnum != SET_ENERGY){
@@ -346,6 +356,13 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 				break;
 			case MSG_SHOW_CLEAR_SET:
 				Key_ClearCounter();
+				Operate_EnergySumConter(0); // clear energy-sum-counter
+
+				/* send message to display, include time msg and energy message
+				     put attention to it , this message just a quence message, anther 
+				     place will response it.
+				*/
+				updateStatistics(); 
 				break;
 	/*********************************************************/
 			case MSG_PARAM_SET_ADD:
