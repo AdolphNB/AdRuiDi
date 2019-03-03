@@ -290,7 +290,8 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 	/*********************************************************/
 			case MSG_LCD_COUNTER_SHOW:
 				CounterValue_SendToMonitor();
-				Operate_EnergySumConter(1);delay_ms(2);
+				Operate_EnergySumConter(1);
+				Operate_TimeLiftConter();delay_ms(1);
 				TOGGLE_ENERGY_START();
 				updateStatistics(); // send a msg to queue
 				delay_ms(15);
@@ -301,8 +302,8 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 
 
 			case MSG_SHOW_UPDATE_STATISTICS:
-				sendEnergyCounter_Show();
 				sendCountDown_Show();
+				sendEnergyCounter_Show();
 
 				break;
 				
@@ -460,15 +461,15 @@ void RunCureMode(uint8_t pic, uint8_t ch)
 	/***********************************************************/
 	/***********************************************************/
 
-			case MSG_CTRL_ALERT_OPEN:
-				OVER_TEMPERATURE_ALERT_OPEN();
-				Status_SendtoMonitor(OPT_STATUS_BAR_ALERTING_SET);
-				break;
+			//case MSG_CTRL_ALERT_OPEN:
+			//	OVER_TEMPERATURE_ALERT_OPEN();
+			//	Status_SendtoMonitor(OPT_STATUS_BAR_ALERTING_SET);
+			//	break;
 
-			case MSG_CTRL_ALERT_CLOSE:
-				OVER_TEMPERATURE_ALERT_STOP();
-				Status_SendtoMonitor(OPT_STATUS_BAR_ALERTCLEAR_SET);
-				break;
+			//case MSG_CTRL_ALERT_CLOSE:
+			//	OVER_TEMPERATURE_ALERT_STOP();
+			//	Status_SendtoMonitor(OPT_STATUS_BAR_ALERTCLEAR_SET);
+			//	break;
 	/***********************************************************/
 	/***********************************************************/
 

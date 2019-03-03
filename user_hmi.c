@@ -209,6 +209,9 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			}
 			
 			break;
+
+
+#if 0			
 		case OPT_STATUS_BAR_ALERTING_SET:
 			if(WorkStatus.EnChFlag == TRUE){
 				StatusBar_StatusBuf[2]  = 0x0b;
@@ -240,6 +243,9 @@ void Status_SendtoMonitor(StatusBar_Show_t sta)
 			}
 			
 			break;
+#endif
+
+
 		case OPT_STATUS_BAR_ADD_WATER_SET:
 			if(WorkStatus.EnChFlag == TRUE){
 				StatusBar_StatusBuf[2]  = 0x0b;
@@ -734,6 +740,8 @@ void updateStatistics(void)
 
 
 static uint32_t energySumCounter = 0;
+const unsigned long energyLevel_Value[11]  = {0,13,51,84,117,150,179,212,249,280,306}; //adj
+
 void Operate_EnergySumConter(uint8_t opt)
 {
 	if(opt){
@@ -748,15 +756,19 @@ void Operate_EnergySumConter(uint8_t opt)
 
 
 
-const unsigned int energyLevel_Value[11]  = {0,1,2,3,4,5,6,7,8,9,10}; //adj
+
 void sendEnergyCounter_Show(void)
 {
 	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
-	
-	StatusBar_StatusBuf[4]	= 0x03;StatusBar_StatusBuf[5]  = 0x00;
+	int temp1;
+	int temp2;
+
+	temp1 = (int)(energySumCounter/1000);
+	temp2 = (int)(energySumCounter%1000);
+	StatusBar_StatusBuf[4]	= 0x01;StatusBar_StatusBuf[5]  = 0x90;
 	memset(&StatusBar_StatusBuf[6], 0, 19);
-	sprintf((char*)&StatusBar_StatusBuf[6], "%d.%dkv", (int)energySumCounter/100, (int)energySumCounter%100);
-	SendToMonitor(StatusBar_StatusBuf,25);
+	sprintf((char*)&StatusBar_StatusBuf[6], "%04d.%03dmj", temp1, temp2);
+	SendToMonitor(StatusBar_StatusBuf, 25);
 
 }
 
@@ -764,11 +776,11 @@ void sendEnergyCounter_Show(void)
 
 
 
-static uint32_t timeLiftCounter = 0;
+static uint16_t timeLiftCounter = 0;
 void Operate_TimeLiftConter()
 {
 	/*timelift = (total times - current counter)  /  current frequency*/
-	timeLiftCounter = (cure.times - cure.cnt) / cure.egy; 
+	timeLiftCounter = ((cure.times - cure.cnt) * 10) / cure.frq; 
 
 }
 
@@ -778,13 +790,14 @@ void Operate_TimeLiftConter()
 void sendCountDown_Show(void)
 {
 	
-	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0d,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
+	uint8_t StatusBar_StatusBuf[25] = {0x5A,0xA5,0x0a,0x82,0x02, 0x00,0xCD,0xA3,0xCD,0xA3, 0xCD,0xA3,0xCD,0xA3};
+	uint8_t temp = 0;
 
-	Operate_TimeLiftConter(1);
-	StatusBar_StatusBuf[4]	= 0x03;StatusBar_StatusBuf[5]  = 0x00;
+	StatusBar_StatusBuf[4]	= 0x01;StatusBar_StatusBuf[5]  = 0xE0;
 	memset(&StatusBar_StatusBuf[6], 0, 19);
-	sprintf((char*)&StatusBar_StatusBuf[6], "%d:%d", (int)timeLiftCounter/60, (int)timeLiftCounter%100);
-	SendToMonitor(StatusBar_StatusBuf,25);
+
+	sprintf((char*)&StatusBar_StatusBuf[6], "%02d:%02d", timeLiftCounter / 60, timeLiftCounter % 60);
+	SendToMonitor(StatusBar_StatusBuf,20);
 }
 
 
